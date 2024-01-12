@@ -2,26 +2,486 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+
+        --primary: 210 40% 98%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+    }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+    -webkit-font-smoothing: antialiased;
+    font-smooth: antialiased;
+
+}
+
+:root {
+    --primary-bg-gray: #fdfdfe;
+    --header-height: 4rem;
+    --sidebar-width: 14rem;
+    --sidebar-mini-width: 6rem;
+}
+
+body {
+    background-color: #fff;
+}
+
+.route-active {
+    @apply flex py-2 px-2 relative text-[#4D4D4D] w-full gap-2 items-center bg-orange-300/25 rounded-md
+}
+
+.route-inactive {
+    @apply flex py-2 px-2 w-full gap-2 items-center
+}
+
+.route-active .route-icon {
+    @apply bg-orange-500 text-white
+}
+
+
+
+.route-active .route-title {
+    @apply text-orange-600 font-semibold
+}
+
+.route-inactive .route-icon {
+    @apply bg-orange-400/80 text-white
+}
+
+.route-inactive .route-title {
+    @apply !text-gray-700
+}
+
+.add-glassmorphism{
+    isolation: isolate;
+    position: relative;
+    z-index: 50;
+  
+}
+
+.add-glassmorphism::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    background-color: rgba(180, 180, 180, 0.068);
+    backdrop-filter: blur(4px) ;
+    -webkit-backdrop-filter: blur(4px) ;
+}
+
+
+.hiddenscroll::-webkit-scrollbar {
+    display: none;
+}
+
+.hiddenscroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+
+.route-list-subitem::before {
+    content: "";
+}
+
+.add-customer-bezier {
+    transition-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+    ;
+}
+
+.shadow-c-md {
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+}
+
+.shadow-c-sm {
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+
+
+.modal-sm {
+    @apply w-screen md:w-[368px]
+}
+
+.modal-md {
+    @apply w-screen md:w-[500px]
+}
+
+.modal-lg {
+    @apply w-screen md:w-[600px]
+}
+
+.modal-xl {
+    @apply w-screen md:w-[750px]
+}
+
+.modal-2xl {
+    @apply w-screen md:w-[800px]
+}
+
+.modal-full {
+    @apply w-screen
+}
+
+.button {
+    @apply rounded-md outline-none focus:outline-none w-max shadow py-2 px-3 text-sm flex items-center flex-nowrap gap-1
+}
+
+.button.primary {
+    @apply bg-orange-500 text-white
+}
+
+.button.default {
+    @apply bg-blue-500 text-white
+}
+
+.button.success {
+    @apply bg-green-500 text-white
+}
+
+.button.ghost {
+    @apply bg-white text-gray-500 border-none
+}
+
+.button.outline {
+    @apply bg-transparent border border-gray-400 text-gray-500
+}
+
+.button.danger {
+    @apply bg-red-500 text-white
+}
+
+
+
+.button.sm {
+    @apply w-[5rem]
+}
+
+.button.md {
+    @apply w-[7rem]
+}
+
+.button.lg {
+    @apply w-[9rem]
+}
+
+.button.xl {
+    @apply w-[11rem]
+}
+
+.button.full {
+    @apply w-full
+}
+
+.button.auto {
+    @apply w-auto
+}
+
+
+.bar-chart {
+    background: transparent linear-gradient(62deg, #f7f4f2 0%, #fbfbfb 53%, #fcfaf6 100%) 0% 0% no-repeat padding-box;
+    box-shadow: 0px 4px 6px #f5f1ed;
+    border-radius: 8px;
+}
+
+
+.table-tr:nth-child(odd) {
+    @apply bg-gray-50/50
+}
+
+.stepper-index {
+    position: relative;
+}
+
+.stepper-index::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 1rem;
+    background-color: red;
+    inset: 0 45%;
+}
+
+
+/* slideUp */
+@-webkit-keyframes slideUp {
+    0% {
+        -webkit-transform: translate3d(0, 10%, 0);
+    }
+
+    100% {
+        -webkit-transform: none;
+    }
+}
+
+@-moz-keyframes slideUp {
+    0% {
+        -moz-transform: translate3d(0, 10%, 0);
+    }
+
+    100% {
+        -moz-transform: none;
+    }
+}
+
+@-o-keyframes slideUp {
+    0% {
+        -o-transform: translate3d(0, 10%, 0);
+    }
+
+    100% {
+        -o-transform: none;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translate3d(0, 10%, 0);
+    }
+
+    100% {
+        transform: none;
+    }
+}
+
+.u--slideUp {
+    -webkit-animation: slideUp 0.7s cubic-bezier(0.08, 0.82, 0.17, 1);
+    -moz-animation: slideUp 0.7s cubic-bezier(0.08, 0.82, 0.17, 1);
+    -o-animation: slideUp 0.7s cubic-bezier(0.08, 0.82, 0.17, 1);
+    animation: slideUp 0.7s cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+.text-decoration-none {
+    text-decoration: none;
+}
+
+
+.login-page {
+    position: inherit;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+.login-page::before {
+    content: "";
+    position: absolute;
+    width: 30%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: #fff;
+}
+
+.login-page::after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    @apply bg-orange-400/60
+}
+
+
+.add-ts {
+    text-shadow: 2px 4px 3px rgba(99, 99, 76, 0.4);
+}
+
+@media screen and (min-width: 769px) {
+    .login-page::before {
+        content: "";
+        position: absolute;
+        width: 30%;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: -1;
+
+    }
+
+    .login-page::after {
+        content: "";
+        position: absolute;
+        width: 70%;
+        height: 100vh;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1;
+    }
+
+
+}
+
+.gradient-bg {
+    box-shadow: #fed7aa 0 0 90px 33px;
+    background: radial-gradient(circle, #ffedd5, #FFD194);
+    @apply blur-lg opacity-80
+}
+
+
+
+#checkbox {
+    display: none;
+}
+
+.toggle {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition-duration: .5s;
+}
+
+.bars {
+    width: 100%;
+    height: 3px;
+    border-radius: 4px;
+    @apply bg-gray-300
+}
+
+#bar2 {
+    transition-duration: .8s;
+}
+
+#bar1,
+#bar3 {
+    width: 70%;
+}
+
+#checkbox:checked+.toggle .bars {
+    position: absolute;
+    transition-duration: .5s;
+}
+
+#checkbox:checked+.toggle #bar2 {
+    transform: scaleX(0);
+    transition-duration: .5s;
+}
+
+#checkbox:checked+.toggle #bar1 {
+    width: 100%;
+    transform: rotate(45deg);
+    transition-duration: .5s;
+}
+
+#checkbox:checked+.toggle #bar3 {
+    width: 100%;
+    transform: rotate(-45deg);
+    transition-duration: .5s;
+}
+
+#checkbox:checked+.toggle {
+    transition-duration: .5s;
+    transform: rotate(180deg);
+}
+
+
+.sidebarclosed {
+    @apply left-[-100%] md:left-0
+}
+
+.sidebaropened {
+    @apply left-0 isolate
+}
+
+
+
+.add-sidebar-bezier {
+    transition-timing-function: cubic-bezier(.4, 0, .2, 1);
+    transition-duration: 0.5s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+        display: block;
+    }
+}
+
+.transition-fadeIn {
+    animation: fadeIn 0.4s ease-in-out;
 }
