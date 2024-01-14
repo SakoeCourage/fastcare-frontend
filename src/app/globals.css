@@ -85,7 +85,7 @@ body {
 :root {
     --primary-bg-gray: #fdfdfe;
     --header-height: 4rem;
-    --sidebar-width: 14rem;
+    --sidebar-width: 16rem;
     --sidebar-mini-width: 6rem;
 }
 
@@ -94,7 +94,7 @@ body {
 }
 
 .route-active {
-    @apply flex py-2 px-2 relative text-[#4D4D4D] w-full gap-2 items-center bg-orange-300/25 rounded-md
+    @apply flex py-2 px-2 relative text-[#4D4D4D] w-full gap-2 items-center bg-[#4880FF] rounded-md
 }
 
 .route-inactive {
@@ -102,28 +102,34 @@ body {
 }
 
 .route-active .route-icon {
-    @apply bg-orange-500 text-white
+    @apply text-white
 }
 
 
 
 .route-active .route-title {
-    @apply text-orange-600 font-semibold
+    @apply text-white font-semibold
 }
 
 .route-inactive .route-icon {
-    @apply bg-orange-400/80 text-white
+    @apply text-[#c7d2fe] bg-gray-500/10
 }
 
 .route-inactive .route-title {
-    @apply !text-gray-700
+    @apply text-[#c7d2fe]
 }
 
-.add-glassmorphism{
+.popup-glassmorphism {
+ 
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25)
+}
+
+.add-glassmorphism {
     isolation: isolate;
     position: relative;
     z-index: 50;
-  
 }
 
 .add-glassmorphism::before {
@@ -132,10 +138,10 @@ body {
     inset: 0;
     width: 100%;
     height: 100%;
-    z-index: 40;
+    z-index: 30;
     background-color: rgba(180, 180, 180, 0.068);
-    backdrop-filter: blur(4px) ;
-    -webkit-backdrop-filter: blur(4px) ;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
 }
 
 
@@ -196,7 +202,7 @@ body {
 }
 
 .button.primary {
-    @apply bg-orange-500 text-white
+    @apply bg-[#4880FF] text-white
 }
 
 .button.default {
@@ -352,7 +358,7 @@ body {
     right: 0;
     bottom: 0;
     z-index: -1;
-    @apply bg-orange-400/60
+    background-color: #2148C0;
 }
 
 
