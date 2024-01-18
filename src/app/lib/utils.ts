@@ -33,7 +33,7 @@ export function dateReformat(date: string): string | undefined {
   }
 }
 
-export const debounce = <T extends (...args: any[] ) => void>(func: T, delay: number) => {
+export const debounce = <T extends (...args: any[]) => void>(func: T, delay: number) => {
   let timeoutId: NodeJS.Timeout | null = null;
   return (...args: Parameters<T>) => {
     clearTimeout(timeoutId as NodeJS.Timeout);
@@ -43,4 +43,49 @@ export const debounce = <T extends (...args: any[] ) => void>(func: T, delay: nu
   };
 };
 
+export function updateUrlQueryParam(url: string, key: string, value: string | null): string {
+  const urlObject = new URL(url);
+  const queryParams = new URLSearchParams(urlObject.search);
 
+  if (value === null || value === "") {
+    if (queryParams.has(key)) {
+      queryParams.delete(key);
+    }
+  } else {
+    if (queryParams.has(key)) {
+      queryParams.set(key, value);
+    } else {
+      queryParams.append(key, value);
+    }
+  }
+
+  urlObject.search = queryParams.toString();
+  
+  return urlObject.toString();
+}
+
+
+
+
+export function getQueryParamValue(url: string, key: string): string | null {
+  const urlObject = new URL(url);
+  const queryParams = new URLSearchParams(urlObject.search);
+
+  const paramValue = queryParams.get(key);
+
+  return paramValue;
+}
+
+
+export function extractQueryParams(url: string): Record<string, string> | undefined {
+  if (url == null || url == undefined) return;
+  const urlObject = new URL(url);
+  const queryParams = new URLSearchParams(urlObject.search);
+  const result: Record<string, string> = {};
+
+  queryParams.forEach((value, key) => {
+    result[key] = value;
+  });
+
+  return result;
+}

@@ -26,8 +26,8 @@ type IdatePickerParams = {
 
 export default function daterangepicker({ label, required, placeholder, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: new Date(2022, 0, 20),
-        to: addDays(new Date(2022, 0, 20), 20),
+        from: undefined,
+        to: undefined,
     })
 
     return (
@@ -44,7 +44,7 @@ export default function daterangepicker({ label, required, placeholder, classNam
 
                         variant="outline"
                         className={cn(
-                            "w-[300px] justify-start text-left font-normal bg-white",
+                            "w-[300px] !py-[0.54rem] whitespace-nowrap justify-start text-left font-normal bg-white",
                             !date && "text-muted-foreground"
                         )}
                     >
@@ -59,7 +59,7 @@ export default function daterangepicker({ label, required, placeholder, classNam
                                 format(date.from, "d/M/Y")
                             )
                         ) : (
-                            <span>{placeholder ?? "Pick a date"}</span>
+                            <span >{placeholder ?? "Pick a date"}</span>
                         )}
                     </Button>
                     </nav>

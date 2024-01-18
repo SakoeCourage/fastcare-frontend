@@ -1,3 +1,23 @@
+
+type Mode = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  mode: string;
+};
+
+export type PaymentRes = {
+  id: number;
+  created_at: string;
+  updated_at: string;
+  subscriber: string;
+  mid: string;
+  amount: number;
+  status: 'pending' | 'paid';
+  payment_id: number;
+  mode: Mode;
+};
+
 export interface PaymentsListType {
     date: String;
     MID: String;

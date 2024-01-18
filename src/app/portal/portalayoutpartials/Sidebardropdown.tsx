@@ -1,6 +1,6 @@
 "use client"
 import Link from "next/link";
-import { useState, useEffect, useRef, useLayoutEffect, forwardRef, ForwardedRef } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect, forwardRef, ForwardedRef, useMemo, use } from 'react'
 import React from 'react'
 import { usePathname } from "next/navigation";
 import { Icon } from '@iconify/react'
@@ -54,12 +54,21 @@ export default function Sidebardropdown(props: params) {
 
   };
 
+  const getInitialRouteMatch: boolean = useMemo(function () {
+    const match = pathname.match(/\/([^\/]+)/);
+    if (match) {
+      const extractedValue = match[1];
+      return props.links.some(link => link.link.startsWith(`/${extractedValue}`));
+    } else {
+      return false;
+    }
+  }, [pathname])
 
   useEffect(() => {
     setScrollHeight(listitems!.current!.scrollHeight)
     let checkisIncurrentpathname = Object.values(props.links)
-    .map((value) => value.link)
-    .some(value => pathname.startsWith(value))
+      .map((value) => value.link)
+      .some(value => pathname.startsWith(value))
     setisIncurrentpathname(checkisIncurrentpathname)
     setisColapsed(!checkisIncurrentpathname)
   }, [pathname])
@@ -78,6 +87,7 @@ export default function Sidebardropdown(props: params) {
   }, [isColapsed, mini]);
 
 
+
   return (
     <div
       onMouseEnter={() => handleHover()}
@@ -87,7 +97,7 @@ export default function Sidebardropdown(props: params) {
         classNames({
           'cursor-pointer  transition-all duration-200 w-full ': true,
           '!rounded-b-none': !isColapsed && isIncurrentpathname && !mini,
-          'route-active ': isIncurrentpathname,
+          'route-active ': isIncurrentpathname || getInitialRouteMatch,
           'route-inactive ': !isIncurrentpathname,
         })
       } onClick={() => { if (mini == false) setisColapsed(!isColapsed) }}
@@ -105,7 +115,7 @@ export default function Sidebardropdown(props: params) {
           <li
             key={i}
             className=" list-none">
-          <Link
+            <Link
               onClick={props.toggleSidebar}
               href={link.link}
               className={
@@ -114,7 +124,7 @@ export default function Sidebardropdown(props: params) {
                   ' text-blue-400 rounded-md w-full font-semibold': pathname.startsWith(link.link),
                   ' text-[#c7d2fe]/80 font-normal': !pathname.startsWith(link.link)
                 })}>
-                  
+
               <svg className={`my-auto transition-all  add-customer-bezier duration-300 ${mini && 'mx-auto'}`} xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 24 24"><path fill="currentColor" d="M12 10a2 2 0 0 0-2 2a2 2 0 0 0 2 2c1.11 0 2-.89 2-2a2 2 0 0 0-2-2" /></svg>
               <nav className={`route-title my-auto pl-1  ${mini ? 'hidden' : "transition-fadeIn"}`}> {link.title}</nav>
             </Link>

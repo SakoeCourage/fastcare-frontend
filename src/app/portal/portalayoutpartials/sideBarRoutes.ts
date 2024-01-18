@@ -16,15 +16,15 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "View Payments",
-                            link: '/viewpayments'
+                            link: '/payments/viewpayments'
                         },
                         {
                             title: "Make Payment",
-                            link: '/makepayment'
+                            link: '/payments/makepayment'
                         },
                         {
                             title: "Payment Confirmation",
-                            link: '/paymentconfirmation'
+                            link: '/payments/paymentconfirmation'
                         },
                     ],
                 },
@@ -34,7 +34,7 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Call Subscibers",
-                            link: '/callsubscribers'
+                            link: '/customercare/callsubscribers'
                         }
                     ]
                 },
@@ -44,29 +44,29 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Check Mandate Details",
-                            link: '/checkmandate'
+                            link: '/autodebitoperation/checkmandate'
                         },
                         {
                             title: "Unmandated Subscribers",
-                            link: '/unmandate'
+                            link: '/autodebitoperation/unmandate'
                         }
                     ]
                 },
                 {
-                    title: "Staff & Users ",
+                    title: "Staff & Users",
                     icon: "ooui:user-group-rtl",
                     links: [
                         {
                             title: "Staff",
-                            link: '/staff'
+                            link: '/staffsandusers/staff'
                         },
                         {
                             title: "User Account",
-                            link: '/useraccount'
+                            link: '/staffsandusers/useraccount'
                         },
                         {
                             title: "Reset Password",
-                            link: '/resetpassword'
+                            link: '/staffsandusers/resetpassword'
                         },
                     ],
                 }
@@ -76,15 +76,15 @@ export let sidebarRoutes: routesListWitSections =
         {
             sectionName: "SUBSCRIPTION",
             routes: [
-                {
-                    title: "Individual Subscription",
-                    icon: "bi:person-fill-check",
-                    link: "/not found"
-                },
+                // {
+                //     title: "Individual Subscription",
+                //     icon: "bi:person-fill-check",
+                //     link: "/not found"
+                // },
                 {
                     title: "Individual And Group",
                     icon: "fa:users",
-                    link: "/not found"
+                    link: "/individual-group-subscription"
                 },
                 {
                     title: "Family Subscriptions ",

@@ -32,7 +32,7 @@ const statusOptions: Record<status, ToastOptions> = {
     Warning: warningOption,
 }
 
-export const toaster = (message: string, status: status = "Error") => {
+export const toastnotify = (message: string, status: status = "Error") => {
     return toast(message, statusOptions[status])
 }
 

@@ -10,7 +10,7 @@ import {
 import React from 'react'
 import { Label } from "./label"
 
-interface ISelectparams extends SelectProps {
+export interface ISelectparams extends SelectProps {
     label?: string,
     required?: boolean,
     options: { key: string, value: string }[],
@@ -18,18 +18,18 @@ interface ISelectparams extends SelectProps {
     className?: string
 }
 
-function selectoption(props: ISelectparams) {
+function Selectoption(props: ISelectparams) {
     const { label, options, placeholder, className, ...rest } = props
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             {label && <Label className="flex items-center gap-1">{label}
                 {props.required && <abbr className="text-red-500" title="This field is required ">*</abbr>}
             </Label>}
-            <Select {...rest}>
+            <Select {...rest} >
                 <SelectTrigger className="w-full text-gray-600 bg-white ">
                     <SelectValue className="bg-white " placeholder={placeholder} />
                 </SelectTrigger>
-                <SelectContent className="bg-white">
+                <SelectContent className="bg-white z-[70]">
                     {options.map((option, i) => {
                         return <SelectItem className="cursor-pointer hover:!bg-gray-100" key={i} value={option.value}>{option.key}</SelectItem>
                     })}
@@ -39,4 +39,4 @@ function selectoption(props: ISelectparams) {
     )
 }
 
-export default selectoption
+export default Selectoption

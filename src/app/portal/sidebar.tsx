@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useState, useRef } from "react";
-import Sidebardropdown from "./mainlayoutpartials/Sidebardropdown";
-import { sidebarRoutes as sideBarSections } from "./mainlayoutpartials/sideBarRoutes";
+import Sidebardropdown from "./portalayoutpartials/Sidebardropdown";
+import { sidebarRoutes as sideBarSections } from "./portalayoutpartials/sideBarRoutes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";

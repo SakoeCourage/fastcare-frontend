@@ -1,30 +1,56 @@
 "use client"
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown"
 import { IActionOptions } from './tabletypedefs'
 import Link from 'next/link'
+import { debounce } from 'app/app/lib/utils'
+import IconifyIcon from '../../ui/Iconsbutton'
 
 interface IOptionsProps<TData extends import("@tanstack/table-core").Table<TData>> {
     filterable?: string
     table: TData,
+    hasAction?: boolean,
     actionName?: string,
-    actionOptions: IActionOptions
+    actionOptions: IActionOptions,
+    filterablePlaceholder?: string,
     onAction?: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    handleUrlQuery: (accessor: string, value: string) => void
 }
 
 function TableFilterOptions<TData extends import("@tanstack/table-core").Table<TData>>(props: IOptionsProps<TData>): React.JSX.Element {
-    const { filterable, table, actionName, actionOptions, onAction } = props
+    const { filterable, table, hasAction, actionName, actionOptions, onAction, filterablePlaceholder, handleUrlQuery } = props
+    const searchInput = useRef<HTMLInputElement | null>(null)
+
+
+    const handleSearch = () => {
+        if (searchInput.current == null) return
+        let value = searchInput.current.value
+        handleUrlQuery("search", value)
+    }
+
+    function handleOnReset() {
+        if (searchInput.current == null) return
+        searchInput.current.value = ""
+    }
+
+    useEffect(() => {
+        document.addEventListener('tableResetEvent', handleOnReset);
+        return () => {
+            document.removeEventListener('tableResetEvent', handleOnReset);
+        };
+    }, [])
 
     return (
         <div className="flex items-center p-4">
-            {filterable && <input type='text'
-                placeholder={`Search ${filterable.toString().toLocaleLowerCase()}...`}
-                value={table.getColumn(filterable as string)?.getFilterValue() as string}
-                onChange={(event) =>
-                    table.getColumn(filterable as string)?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm border text-sm text-gray-700 border-gray-300 py-[0.6rem] px-3 outline-none focus:outline-none rounded-md"
-            />}
+            {filterable && <div className='border border-gray-300  pl-3 gap-3 flex items-center justify-center rounded-md'>
+                <input ref={searchInput} type='text'
+                    placeholder={`Search ${filterablePlaceholder ?? filterable.toString().toLocaleLowerCase()}...`}
+                    value={table.getColumn(filterable as string)?.getFilterValue() as string}
+                    onKeyUp={(e) => e.key == "Enter" && handleSearch()}
+                    className="max-w-sm  text-sm text-gray-700   outline-none focus:outline-none"
+                />
+                <button onClick={handleSearch} className=' bg-blue-400/80 rounded-r-md py-1 px-2'><IconifyIcon className=' text-white bg-transparent' icon='ep:search' /></button>
+            </div>}
             <div className=' flex items-center gap-2 ml-auto'>
                 <DropdownMenu >
                     <DropdownMenuTrigger asChild>
@@ -55,16 +81,19 @@ function TableFilterOptions<TData extends import("@tanstack/table-core").Table<T
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                {
-                    !actionOptions.asLink ? <button onClick={(e) => onAction && onAction(e)} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" /></svg>
-                        <span className=' whitespace-nowrap'>{actionName ?? "New"}</span>
-                    </button> :
-                        <Link href={actionOptions?.link} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
+                {hasAction && <>
+                    {
+                        !actionOptions.asLink ? <button onClick={(e) => onAction && onAction(e)} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" /></svg>
                             <span className=' whitespace-nowrap'>{actionName ?? "New"}</span>
-                        </Link>
+                        </button> :
+                            <Link href={actionOptions?.link} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" /></svg>
+                                <span className=' whitespace-nowrap'>{actionName ?? "New"}</span>
+                            </Link>
+                    }
 
+                </>
 
                 }
             </div>

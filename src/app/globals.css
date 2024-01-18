@@ -155,6 +155,8 @@ body {
 }
 
 
+
+
 .route-list-subitem::before {
     content: "";
 }
@@ -174,23 +176,27 @@ body {
 
 
 .modal-sm {
-    @apply w-screen md:w-[368px]
+    @apply w-screen md:max-w-[368px]
 }
 
 .modal-md {
-    @apply w-screen md:w-[500px]
+    @apply w-screen md:max-w-[500px]
 }
 
 .modal-lg {
-    @apply w-screen md:w-[600px]
+    @apply w-screen md:max-w-[600px]
 }
 
 .modal-xl {
-    @apply w-screen md:w-[750px]
+    @apply w-screen md:max-w-[750px]
 }
 
 .modal-2xl {
-    @apply w-screen md:w-[800px]
+    @apply w-screen md:max-w-[800px]
+}
+
+.modal-3xl {
+    @apply w-screen md:max-w-[1100px]
 }
 
 .modal-full {

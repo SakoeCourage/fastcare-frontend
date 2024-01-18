@@ -14,20 +14,41 @@ import {
   PopoverTrigger,
 } from "./partial/popovercomponents"
 import { space } from "postcss/lib/list"
+import { version } from "os"
+import dayjs from "dayjs"
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+dayjs.extend(customParseFormat);
 
-type IdatePickerParams = {
+export type IdatePickerParams = {
   label?: string,
   required?: boolean,
   placeholder?: string,
   className?: string,
+  onChange?: (v: string | undefined) => void
   name?: string,
+  value?: string,
 } & CalendarProps
 
 
-export default function datepicker({ label, name,required, placeholder, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
-  const [date, setDate] = React.useState<Date>()
+export default function Datepicker({ label, value, name, required, placeholder, onChange, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
+  const [date, setDate] = React.useState<Date | undefined>()
 
+  React.useEffect(() => {
+    if (value == "" || value == null) {
+      setDate(undefined)
+    } else {
+      console.log(value)
+      let dd = "23/04/2024"; 
+      let parts: string[] = value.split("/");
+      let date = new Date(`${parts[2]}, ${Number(parts[1]) - 1} , ${parts[0]}`);
+      console.log(date)
+      //TO-DO set Incomming Value
+
+      // setDate(new Date(value));
+    }
+
+  }, [value])
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -39,7 +60,7 @@ export default function datepicker({ label, name,required, placeholder, classNam
             // onClick={(e) => e.preventDefault()}
             variant="outline"
             className={cn(
-              "w-[280px] !justify-start h-10 !py-2 items-center text-left font-normal",
+              "w-[280px] !justify-start h-10 !py-[0.54rem] items-center text-left font-normal",
               !date && "text-muted-foreground"
             )}
           >
@@ -48,11 +69,11 @@ export default function datepicker({ label, name,required, placeholder, classNam
           </Button>
         </nav>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
-        <Calendar className=" bg-white"
+      <PopoverContent className="w-auto p-0 z-[70]">
+        <Calendar className=" bg-white "
           mode={"single"}
           selected={date}
-          onSelect={setDate}
+          onSelect={(v) => { onChange && onChange(format(v as Date, "d/M/Y")); setDate(v) }}
           initialFocus
           {...rest}
         />

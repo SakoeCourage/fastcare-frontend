@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import useFileUpload from 'react-use-file-upload';
 import { BlankImagePlaceholder } from './blankimageplaceholder';
 import IconifyIcon from './Iconsbutton';
-import { toaster } from 'app/app/providers/Toastserviceprovider';
+import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 
 type regularExtensions = "image/jpeg" | "image/jpg" | "image/png" | "application/pdf" | "application/msword" | "application/vnd.ms-excel" | "application/zip"
 
@@ -56,7 +56,7 @@ interface fileUploadProps {
  * @param  [maxFileSize] - in bytes default 10485760 i.e 10mb -  10240Kb
  * @returns 
  */
-const fileupload = ({ getFiles,
+const Fileupload = ({ getFiles,
     files: propFiles,
     maxNumber,
     maxFileSize = 10485760,
@@ -180,7 +180,7 @@ const fileupload = ({ getFiles,
         if (validationErrors.length > 0) {
             setlvErrors(validationErrors)
             onError && onError(validationErrors)
-            validationErrors.forEach(err => toaster(err, 'Error'))
+            validationErrors.forEach(err => toastnotify(err, 'Error'))
         }
 
         inputRef.current!.value = "";
@@ -281,4 +281,4 @@ const fileupload = ({ getFiles,
     );
 };
 
-export default fileupload
+export default Fileupload

@@ -18,7 +18,7 @@ const IconifyIcon: React.FC<IconifyIconProps> = ({
 }) => {
     return (
         <div onClick={onClick}
-            className={`p-1 rounded-full h-8 w-8 aspect-square flex items-center justify-center bg-gray-50 ${className}`}
+            className={`p-1 rounded-full h-8 w-8 aspect-square flex items-center justify-center bg-gray-100 ${className}`}
             {...rest}>
             <Icon fill={fill} icon={icon} fontSize={fontSize} />
         </div>
