@@ -92,7 +92,7 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: 'Family Subscription',
-                            link: '/settings/intermediaries/all',
+                            link: '/familysubscriptions/familysubscription',
                         },
                         {
                             title: 'Family Plan Members',
@@ -171,22 +171,22 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: 'Facility Setup',
                     icon: "mdi:gear",
-                    link:"/none"
+                    link: "/none"
                 },
                 {
                     title: 'Package Setup',
                     icon: "mdi:gear",
-                    link:"/none"
+                    link: "/none"
                 },
                 {
                     title: 'Call Commentry Category',
                     icon: "mdi:gear",
-                    link:"/none"
+                    link: "/none"
                 },
                 {
                     title: 'Groups and Associations',
                     icon: "mdi:gear",
-                    link:"/none"
+                    link: "/none"
                 },
             ]
         }

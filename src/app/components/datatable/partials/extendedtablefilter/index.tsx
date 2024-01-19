@@ -40,7 +40,7 @@ function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[],
     return activeFilters;
   }
 
-  
+
 
   return (
     <div className=' min-w-full px-4'>
@@ -54,8 +54,8 @@ function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[],
         </nav>
         <Vr className='' />
         {
-          filters!.map(({ filterType, accessor, args }) => {
-            return <div className='h-full p-1 py-2 flex items-center justify-center'>
+          filters!.map(({ filterType, accessor, args }, i) => {
+            return <div key={i} className='h-full p-1 py-2 flex items-center justify-center'>
               <RenderFilterComponent
                 filterType={filterType}
                 params={{

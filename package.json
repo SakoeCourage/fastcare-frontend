@@ -39,6 +39,7 @@
     "react-hook-form": "^7.49.2",
     "react-hot-toast": "^2.4.1",
     "react-use-file-upload": "^0.9.5",
+    "select2-react-component": "^6.1.1",
     "simplebar-react": "^3.2.4",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
