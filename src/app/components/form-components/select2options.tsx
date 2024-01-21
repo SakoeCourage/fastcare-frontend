@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Select2, Select2Data } from "select2-react-component";
 import * as common from 'select2-component';
 import "select2-component/dist/select2.min.css";
-
+import { Label } from './label';
 
 interface Iselect2classobj {
     data: common.Select2Data;
@@ -26,15 +26,32 @@ interface Iselect2classobj {
 
 interface ISelect2Params extends Iselect2classobj {
     className?: string,
+    label?: string,
+    required?: boolean,
+    onChange?: (v: any) => void,
+    searchPlaceholder?: string,
+
 }
 
 function Select2options(props: ISelect2Params) {
-    const { className, ...rest } = props;
+    const { className, onChange, label, required, searchPlaceholder, ...rest } = props;
+   
+     useEffect(() => {
+        if(searchPlaceholder){
+            document.querySelector('.select2-search__field')?.setAttribute('placeholder', searchPlaceholder)
+        }
+     }, [])
+     
     return (
-        <nav className={`w-full ${className}`}>
-            <Select2 {...rest}>
+        <div className={`flex flex-col gap-2 ${className}`}>
+            {label && <Label className="flex items-center gap-1">{label}
+                {required && <abbr className="text-red-500" title="This field is required ">*</abbr>}
+            </Label>}
+            <Select2
+                update={value => props?.onChange && props?.onChange(value)}
+                {...rest}>
             </Select2>
-        </nav>
+        </div>
     )
 }
 

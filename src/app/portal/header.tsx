@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import IconifyIcon from '../components/ui/Iconsbutton'
+import IconifyIcon from '../components/ui/iconsbutton'
 import { DropdownMenu, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuSeparator } from '../components/ui/dropdown'
 import Link from 'next/link'
 import { useSidebar } from '../providers/Sidebarserviceprovider'

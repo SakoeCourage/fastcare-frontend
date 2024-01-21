@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect } from 'react'
 import Link from 'next/link'
-import IconifyIcon from 'app/app/components/ui/Iconsbutton'
+import IconifyIcon from 'app/app/components/ui/iconsbutton'
 import { sidebarRoutes } from './sideBarRoutes'
 import { sbitemWithLinks } from 'app/app/types/portal/sidebar-typedef'
 

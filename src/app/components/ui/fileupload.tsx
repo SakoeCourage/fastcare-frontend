@@ -1,10 +1,10 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import useFileUpload from 'react-use-file-upload';
 import { BlankImagePlaceholder } from './blankimageplaceholder';
-import IconifyIcon from './Iconsbutton';
+import IconifyIcon from './iconsbutton';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 
-type regularExtensions = "image/jpeg" | "image/jpg" | "image/png" | "application/pdf" | "application/msword" | "application/vnd.ms-excel" | "application/zip"
+type regularExtensions = "image/jpeg" | "image/jpg" | "image/png" | "application/pdf" | "application/msword" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" | "application/zip" | "text/csv"
 
 const regularExtensionsArray: regularExtensions[] = [
     "image/jpeg",
@@ -12,7 +12,8 @@ const regularExtensionsArray: regularExtensions[] = [
     "image/png",
     "application/pdf",
     "application/msword",
-    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "text/csv",
     "application/zip"
 ];
 
@@ -40,7 +41,6 @@ const isValidationError = (error: validationErrors): error is hasValidationError
     return error.error !== null;
 };
 
-
 interface fileUploadProps {
     getFiles?: (files: File[]) => void;
     files?: File[] | undefined;
@@ -49,7 +49,6 @@ interface fileUploadProps {
     onError?: (error: string[]) => void;
     acceptType?: regularExtensions[]
 }
-
 
 /**
  * 
@@ -103,6 +102,7 @@ const Fileupload = ({ getFiles,
     const ruleValidator = (rules: Rule[], file: File): string[] => {
         const errors: string[] = []
         if (rules.includes('acceptType')) {
+            console.log(file.type)
             if (!acceptType?.includes(file.type as regularExtensions)) {
                 errors.push(errorMessages.acceptType)
             }
@@ -129,7 +129,7 @@ const Fileupload = ({ getFiles,
         const validatorError = ruleValidator(validationRules, file)
 
         if (!!validatorError.length) return { error: validatorError, file: null }
-        
+
         return { error: null, file: file }
     }
 
@@ -157,7 +157,7 @@ const Fileupload = ({ getFiles,
                 try {
                     handleMaxNumberValidation(Ifiles)
                     Array.from(Ifiles).forEach(handleFileValidation);
-                } catch (error){
+                } catch (error) {
                     validationErrors.push(errorMessages.maxNumber)
                 }
             }
@@ -173,7 +173,7 @@ const Fileupload = ({ getFiles,
                 }
             }
         }
-        
+
         setFiles({ dataTransfer }, 'a');
         getFiles && getFiles(files)
 
@@ -226,26 +226,32 @@ const Fileupload = ({ getFiles,
                 {files.map((file, index) => (
                     <div
                         key={index}
-                        className=" aspect-square w-full h-full border rounded-md object-cover relative"
+                        className=" aspect-square w-full h-full min-h-44 min-w-44  border rounded-md object-cover relative"
                     >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {["image/jpeg", "image/jpg", "image/png"].includes(file.type) ?
+                        {
+                        ["image/jpeg", "image/jpg", "image/png"].includes(file.type) ?
                             <img
                                 src={URL.createObjectURL(file)}
                                 alt=""
-                                width=""
-                                className=" w-full h-full object-contain aspect-square"
+                                className=" min-h-40 min-w-40 h-full w-full object-contain aspect-square"
                             /> :
                             ["application/pdf"].includes(file.type) ?
                                 <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
                                     <IconifyIcon className=' !h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-pdf2' />
                                     <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
                                 </div>
-                                :
-                                <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
-                                    <IconifyIcon className=' !h-16 !w-16 text-gray-500' fontSize="3.5rem" icon='basil:file-outline' />
-                                    <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
-                                </div>
+                                : ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    "text/csv"].includes(file.type) ?
+                                    <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
+                                        <IconifyIcon className=' !h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-excel' />
+                                        <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
+                                    </div>
+                                    :
+                                    <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
+                                        <IconifyIcon className=' !h-16 !w-16 text-gray-500' fontSize="3.5rem" icon='basil:file-outline' />
+                                        <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
+                                    </div>
 
                         }
 

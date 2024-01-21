@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { IActionOptions } from './tabletypedefs'
 import Link from 'next/link'
 import { debounce } from 'app/app/lib/utils'
-import IconifyIcon from '../../ui/Iconsbutton'
+import IconifyIcon from '../../ui/iconsbutton'
 
 interface IOptionsProps<TData extends import("@tanstack/table-core").Table<TData>> {
     filterable?: string
@@ -56,7 +56,9 @@ function TableFilterOptions<TData extends import("@tanstack/table-core").Table<T
                     <DropdownMenuTrigger asChild>
                         <button className=" border-gray-300 border rounded-md text-sm py-2 px-3 whitespace-nowrap !text-gray-600 flex-nowrap flex items-center gap-1 ml-auto">
                             <svg className='text-gray-500' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 4.5v15m6-15v15m-10.875 0h15.75c.621 0 1.125-.504 1.125-1.125V5.625c0-.621-.504-1.125-1.125-1.125H4.125C3.504 4.5 3 5.004 3 5.625v12.75c0 .621.504 1.125 1.125 1.125" /></svg>
-                            Columns
+                            <span className='hidden lg:block'>
+                                Columns
+                            </span>
                         </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className=' bg-white' align="end">
@@ -85,11 +87,11 @@ function TableFilterOptions<TData extends import("@tanstack/table-core").Table<T
                     {
                         !actionOptions.asLink ? <button onClick={(e) => onAction && onAction(e)} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" /></svg>
-                            <span className=' whitespace-nowrap'>{actionName ?? "New"}</span>
+                            <span className=' whitespace-nowrap hidden lg:block'>{actionName ?? "New"}</span>
                         </button> :
                             <Link href={actionOptions?.link} className=" border-gray-300 border rounded-md text-sm py-2 px-3  flex items-center flex-nowrap gap-1 bg-blue-400/80 text-white ml-auto">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" /></svg>
-                                <span className=' whitespace-nowrap'>{actionName ?? "New"}</span>
+                                <span className=' whitespace-nowrap hidden lg:block'>{actionName ?? "New"}</span>
                             </Link>
                     }
 

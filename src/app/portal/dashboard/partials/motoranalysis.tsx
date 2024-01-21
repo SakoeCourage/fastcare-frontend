@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import IconifyIcon from 'app/app/components/ui/Iconsbutton'
+import IconifyIcon from 'app/app/components/ui/iconsbutton'
 import { formatcurrency } from '@/lib/utils'
 
 interface ICoverType {

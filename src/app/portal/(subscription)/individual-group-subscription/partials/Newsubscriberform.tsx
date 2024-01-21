@@ -4,6 +4,7 @@ import Datepicker from 'app/app/components/form-components/datepicker'
 import Selectoption from 'app/app/components/form-components/selectoption'
 import Fileupload from 'app/app/components/ui/fileupload'
 import { Button } from 'app/app/components/form-components/button'
+
 function Newsubscriberform() {
     return (
         <div className=' grid grid-cols-1 lg:grid-cols-2  gap-4 p-2'>
@@ -34,7 +35,7 @@ function Newsubscriberform() {
                     <nav className=' flex items-center !gap-1 border-b pb-3 !px-0 font-semibold text-gray-500'>
                         <span> Client Picture</span>
                     </nav>
-                    <nav className=' grid-cols-1 grid '>
+                    <nav className=' grid-cols-1 grid h-48 w-20 '>
                         <Fileupload maxNumber={1} acceptType={['image/jpeg', 'image/jpeg', 'image/png']} />
                     </nav>
                 </div>
@@ -221,6 +222,7 @@ function Newsubscriberform() {
                         required
                         placeholder="0.00"
                     />
+                 
                 </div>
 
             </div>

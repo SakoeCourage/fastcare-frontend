@@ -87,7 +87,7 @@ export let sidebarRoutes: routesListWitSections =
                     link: "/individual-group-subscription"
                 },
                 {
-                    title: "Family Subscriptions ",
+                    title: "Family Subscriptions",
                     icon: "material-symbols:family-restroom",
                     links: [
                         {
@@ -96,29 +96,29 @@ export let sidebarRoutes: routesListWitSections =
                         },
                         {
                             title: 'Family Plan Members',
-                            link: '/settings/intermediaries/brokers',
+                            link: '/familysubscriptions/familyplanmembers',
                         },
                         {
                             title: 'View Family Subs',
-                            link: '/settings/intermediaries/brokers',
+                            link: '/familysubscriptions/viewfamilysubscription',
                         },
                     ]
                 },
                 {
-                    title: "Corporate Subscriptions ",
+                    title: "Corporate Subscriptions",
                     icon: "ic:round-corporate-fare",
                     links: [
                         {
                             title: 'Corporate Subscription',
-                            link: '/settings/intermediaries/all',
+                            link: '/corporatesubscription/corporatesubscription',
                         },
                         {
                             title: 'Corporate Plan Members',
-                            link: '/settings/intermediaries/brokers',
+                            link: '/corporatesubscription/corporateplanmembers',
                         },
                         {
                             title: 'View Corporate Subs',
-                            link: '/settings/intermediaries/brokers',
+                            link: '/corporatesubscription/viewcorporatesubscription',
                         },
                     ]
                 },

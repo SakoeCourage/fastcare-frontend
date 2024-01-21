@@ -16,7 +16,7 @@ export function BlankImagePlaceholder({
     <div
       onClick={onImageUpload}
       {...dragProps}
-      className={` active:bg-gray-50 max-w-[12rem] aspect-square mx-auto w-full max-h-[12rem]  cursor-pointer ${isDragging && "opacity-50"
+      className={` active:bg-gray-50 min-w-[12rem] w-full h-full aspect-square mx-auto  min-h-[12rem]  cursor-pointer ${isDragging && "opacity-50"
         }`}
     >
       <nav className="border-2 rounded-md overflow-hidden flex items-center justify-center h-full w-full  aspect-square  ">

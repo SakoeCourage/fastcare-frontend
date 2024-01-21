@@ -3,7 +3,7 @@ import Routelistcardrender from '../../portalayoutpartials/Routelistcardrender'
 function page() {
   return (
     <div>
-       <Routelistcardrender title="Family Subscriptions"/>
+       <Routelistcardrender title="Corporate Subscriptions"/>
     </div>
   )
 }

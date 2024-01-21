@@ -3,7 +3,7 @@ import { Input } from 'app/app/components/form-components/input'
 import { Textarea } from 'app/app/components/form-components/textarea'
 import Selectoption from 'app/app/components/form-components/selectoption'
 import { Button } from 'app/app/components/form-components/button';
-import Select2options from 'app/app/components/form-components/select2';
+import Select2options from 'app/app/components/form-components/select2options';
 
 function Newfamilysubscriptionform() {
   return (
@@ -47,10 +47,7 @@ function Newfamilysubscriptionform() {
 
           ]} name='type' label='Facility' placeholder='Select Facility' />
 
-        <Selectoption
-          options={[
-
-          ]} name='type' label='Number of Members' placeholder='Select Number of Members' />
+        <Input name='type' label='Number of Members' placeholder='Enter Number of Members' />
 
         <Input name='' label='Package Amount' placeholder='0.00' />
 
@@ -79,7 +76,7 @@ function Newfamilysubscriptionform() {
 
           ]} name='type' label='MoMo Network ' placeholder='Select MoMo Network' />
 
-        {/* <Select2options data={[{options:[{label: "New text",value:"lks"}]}]}/> */}
+
       </div>
       <nav className='flex items-center justify-end gap-3'>
         <Button variant='outline' size='sm'>

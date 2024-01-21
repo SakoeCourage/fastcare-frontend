@@ -120,7 +120,7 @@ body {
 }
 
 .popup-glassmorphism {
- 
+
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.25)
@@ -282,6 +282,33 @@ body {
     inset: 0 45%;
 }
 
+.select2-container--default .select2-selection--single {
+    height: 2.5rem !important;
+    @apply !text-gray-600 !text-sm
+}
+
+input.select2-search__field:focus{
+    @apply border-none outline-none 
+}
+
+input.select2-search__field{
+   @apply !text-gray-600 !text-sm rounded-md
+}
+
+.select2-results__option {
+    @apply !text-gray-600 !text-sm
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 100% !important;
+    right: 10px !important;
+}
 
 /* slideUp */
 @-webkit-keyframes slideUp {

@@ -23,7 +23,7 @@ export const columns: ColumnDef<FamilySubscriptionDTO>[] = [
 ]
 function Familysubscriptionstable() {
     const [showNewFamilyClientForm, setShowNewFamilyClientForm] = useState<boolean>(false)
-    const [showNewFamilySubscriptionForm, setShowNewFamilySubscriptionForm] = useState<boolean>(true)
+    const [showNewFamilySubscriptionForm, setShowNewFamilySubscriptionForm] = useState<boolean>(false)
 
     return (
         <div>
