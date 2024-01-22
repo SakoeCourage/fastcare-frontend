@@ -18,7 +18,15 @@ export const columns: ColumnDef<FamilySubscriptionDTO>[] = [
     {
         accessorKey: "contact",
         header: "Contact"
-    }
+    },
+    {
+        accessorKey: "",
+        header: "Agent"
+    },
+    {
+        accessorKey: "",
+        header: "Actions"
+    },
 
 ]
 function Familysubscriptionstable() {

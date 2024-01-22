@@ -18,7 +18,15 @@ export const columns: ColumnDef<CorporateSubscriptionDTO>[] = [
     {
         accessorKey: "contact",
         header: "Contact"
-    }
+    },
+    {
+        accessorKey: "",
+        header: "Agent"
+    },
+    {
+        accessorKey: "",
+        header: "Actions"
+    },
 
 ]
 function Corporatesubscriptionstable() {

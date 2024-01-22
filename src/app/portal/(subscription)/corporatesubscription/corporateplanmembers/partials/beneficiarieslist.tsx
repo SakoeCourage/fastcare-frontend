@@ -18,7 +18,7 @@ function Beneficiarieslist(props: IBeneficiariesProps) {
           <IconifyIcon className=' !bg-blue-400 text-blue-100' icon='material-symbols:bookmark-outline' />
           <nav className=' flex flex-col gap-1'>
             <nav className=' text-sm text-blue-500 font-medium'>Sakoe</nav>
-            <nav className=' text-sm text-gray-400 uppercase'>Family</nav>
+            <nav className=' text-sm text-gray-400 uppercase'>Corporate Name</nav>
           </nav>
         </nav>
         <nav className=' rounded-md flex gap-2  items-center '>
@@ -32,7 +32,7 @@ function Beneficiarieslist(props: IBeneficiariesProps) {
           <IconifyIcon className=' !bg-blue-400 text-blue-100' icon='material-symbols:bookmark-outline' />
           <nav className=' flex flex-col gap-1'>
             <nav className=' text-sm text-blue-500 font-medium'>FNOF10000001</nav>
-            <nav className=' text-sm text-gray-400 uppercase'>Subscription ID</nav>
+            <nav className=' text-sm text-gray-400 uppercase'>MID</nav>
           </nav>
         </nav>
         <nav className=' rounded-md flex gap-2 items-center'>

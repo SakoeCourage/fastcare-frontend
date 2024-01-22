@@ -51,7 +51,7 @@ export interface DataTableProps<TData, TValue, K extends keyof TData> {
     actionOptions?: IActionOptions,
     enablePaginator?: boolean
     enableTableFilter?: boolean,
-    heading?: string,
+    heading?: string | React.ReactNode,
     extendedFilter?:ExtendedFilterProps
 }
 

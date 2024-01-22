@@ -61,7 +61,7 @@ function TableFilterOptions<TData extends import("@tanstack/table-core").Table<T
                             </span>
                         </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className=' bg-white' align="end">
+                    <DropdownMenuContent className=' bg-white z-[60]' align="end">
                         {table
                             .getAllColumns()
                             .filter(

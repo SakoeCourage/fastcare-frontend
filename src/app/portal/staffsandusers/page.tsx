@@ -8,7 +8,7 @@ import Routelistcardrender from '../portalayoutpartials/Routelistcardrender'
 function page() {
     return (
         <div className=''>
-        <Routelistcardrender title="Staff & Users"/>
+        <Routelistcardrender title="Staff & User Onboarding"/>
         </div>
     )
 }

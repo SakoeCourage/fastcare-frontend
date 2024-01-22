@@ -25,6 +25,11 @@ function familyplanmemberstable() {
         },
         {
             accessorKey: "",
+            header: "Allowed Members",
+            cell: ({ row }) => <nav>2</nav>
+        },
+        {
+            accessorKey: "",
             header: "Subscribed Packages",
             cell: ({ row }) => <nav>3 Subscription(s)</nav>
         },
@@ -65,8 +70,11 @@ function familyplanmemberstable() {
             </Modal>
             <DataTable
                 dataSourceUrl="/familypackagemembers"
-                hasAction={false}
+                onAction={() => setShowNewFamilyMemberForm(true)}
+                filterable="family"
+                filterablePlaceholder='Search by family subscribers'
                 columns={columns}
+                hasAction={false}
             />
         </div>
     )

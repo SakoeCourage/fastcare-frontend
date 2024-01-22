@@ -27,6 +27,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   processing?: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, variant = "default", size = "auto", ...props }, ref): React.JSX.Element => {
     return (

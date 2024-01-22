@@ -48,21 +48,21 @@ export let sidebarRoutes: routesListWitSections =
                         },
                         {
                             title: "Unmandated Subscribers",
-                            link: '/autodebitoperation/unmandate'
+                            link: '/autodebitoperation/unmandatedsubscribers'
                         }
                     ]
                 },
                 {
-                    title: "Staff & Users",
+                    title: "Staff & User Onboarding",
                     icon: "ooui:user-group-rtl",
                     links: [
                         {
-                            title: "Staff",
-                            link: '/staffsandusers/staff'
+                            title: "Staff Onboarding",
+                            link: '/staffsandusers/staffonboarding'
                         },
                         {
-                            title: "User Account",
-                            link: '/staffsandusers/useraccount'
+                            title: "User Onboarding",
+                            link: '/staffsandusers/useronboarding'
                         },
                         {
                             title: "Reset Password",
@@ -123,16 +123,16 @@ export let sidebarRoutes: routesListWitSections =
                     ]
                 },
                 {
-                    title: "Data Migraion ",
+                    title: "Data Migration",
                     icon: "ep:upload-filled",
                     links: [
                         {
                             title: 'Import Data',
-                            link: '/settings/intermediaries/all',
+                            link: '/datamigration/importdata',
                         },
                         {
                             title: 'Complete Migrate Subs',
-                            link: '/settings/intermediaries/brokers',
+                            link: '/datamigration/completemigratedsubs',
                         }
                     ]
                 },
@@ -146,22 +146,22 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: "Subscribers View",
                     icon: "icon-park-solid:book",
-                    link: "/not"
+                    link: "/subscribers"
                 },
                 {
                     title: "Facility Performance",
                     icon: "icon-park-solid:book",
-                    link: "/not"
+                    link: "/facilityperformance"
                 },
                 {
                     title: "Staff Collection Perf.",
                     icon: "icon-park-solid:book",
-                    link: "/not"
+                    link: "/staffperformance"
                 },
                 {
                     title: "Agents Commision List",
                     icon: "icon-park-solid:book",
-                    link: "/not"
+                    link: "/agentscommission"
                 },
             ]
         },
@@ -171,22 +171,22 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: 'Facility Setup',
                     icon: "mdi:gear",
-                    link: "/none"
+                    link: "/facility"
                 },
                 {
                     title: 'Package Setup',
                     icon: "mdi:gear",
-                    link: "/none"
+                    link: "/package"
                 },
                 {
-                    title: 'Call Commentry Category',
+                    title: 'Call Comment Category',
                     icon: "mdi:gear",
-                    link: "/none"
+                    link: "/callcommentcategory"
                 },
                 {
                     title: 'Groups and Associations',
                     icon: "mdi:gear",
-                    link: "/none"
+                    link: "/groupsandassociations"
                 },
             ]
         }

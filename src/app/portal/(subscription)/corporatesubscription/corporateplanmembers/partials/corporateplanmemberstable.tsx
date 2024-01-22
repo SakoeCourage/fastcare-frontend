@@ -22,7 +22,12 @@ function Corporateplanmemberstable() {
     const columns: ColumnDef<ICorporatePlanMembersDTO>[] = [
         {
             accessorKey: "family",
-            header: "Family",
+            header: "Corporate Subcribers",
+        },
+        {
+            accessorKey: "",
+            header: "Allowed Members",
+            cell: ({ row }) => <nav>2</nav>
         },
         {
             accessorKey: "",
@@ -70,9 +75,9 @@ function Corporateplanmemberstable() {
             <DataTable
                 dataSourceUrl="/familypackagemembers"
                 filterable="family"
+                filterablePlaceholder='Search by Corporate Name'
                 hasAction={false}
                 columns={columns}
-                actionName='Add Family Members'
             />
         </div>
     )

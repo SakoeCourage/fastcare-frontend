@@ -23,7 +23,7 @@ export function resetTableData() {
 function DataTable<TData, TValue, K extends keyof TData>({
     columns,
     data,
-    hasAction=true,
+    hasAction = true,
     filterable,
     sortableColumns = [],
     actionName,
@@ -45,7 +45,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
     const [fetchingData, setFetchingData] = useState(false);
 
     const table = useReactTable({
-        data: data ?? tData!?.data,
+        data: data ? data : tData!?.data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -96,6 +96,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
 
 
 
+
     return (
         <div className="rounded-md border h-max min-h-[32rem] bg-white  relative overflow-hidden ">
 
@@ -104,10 +105,10 @@ function DataTable<TData, TValue, K extends keyof TData>({
                 Fetching New Data...
             </nav>}
 
-            {heading && <nav className=' px-5  flex items-center !gap-0 text-gray-600 font-semibold py-2 border-b w-full '>
+            {typeof heading == "string" ? <nav className=' px-5  flex items-center !gap-0 text-gray-600 font-semibold py-2 border-b w-full '>
                 <svg className="my-auto" xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 24 24"><path fill="currentColor" d="M12 10a2 2 0 0 0-2 2a2 2 0 0 0 2 2c1.11 0 2-.89 2-2a2 2 0 0 0-2-2" /></svg>
                 <nav className=''>{heading}</nav>
-            </nav>}
+            </nav> : heading}
 
             {enableTableFilter && <TableFilterOptions hasAction={hasAction} filterablePlaceholder={filterablePlaceholder} handleUrlQuery={handleUrlQuery} actionOptions={actionOptions} filterable={filterable as string} actionName={actionName} table={table} onAction={onAction} />}
             {extendedFilter?.enable && <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={tData?.path} filters={extendedFilter.filters} />}
@@ -146,7 +147,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
 
                 </TableHeader>
                 <TableBody >
-                    {tData && table.getRowModel().rows?.length ? (
+                    {(data || tData) && table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 className=' text-gray-500/90 font-medium table-tr'
@@ -160,8 +161,8 @@ function DataTable<TData, TValue, K extends keyof TData>({
                             </TableRow>
                         ))
                     ) : (
-                        <TableRow>
-                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                        <TableRow className=''>
+                            <TableCell colSpan={columns.length} className="h-[32rem] text-center">
                                 No results.
                             </TableCell>
                         </TableRow>
