@@ -4,6 +4,11 @@ import { Select2, Select2Data } from "select2-react-component";
 import * as common from 'select2-component';
 import "select2-component/dist/select2.min.css";
 import { Label } from './label';
+import { UserDTO } from 'app/app/types/entitiesDTO';
+
+
+
+
 
 interface Iselect2classobj {
     data: common.Select2Data;

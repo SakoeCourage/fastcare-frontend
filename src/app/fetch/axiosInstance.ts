@@ -1,25 +1,25 @@
 'use strict';
 import axios from 'axios';
+import { RequestEvents } from './apiEvent';
 
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 const Api = axios.create({
-  baseURL: `${baseURL}/api`,
+  baseURL: `${baseURL}/api/v1`,
 });
 
 Api.interceptors.request.use((config) => {
-  // Here you can start your spinner
-  console.log('Request made. Start spinner.');
+  RequestEvents.onRequestMadeEvent()
   return config;
 }, (error) => {
-  console.log('Request error. Stop spinner.');
+  RequestEvents.onRequestErrorEvent()
   return Promise.reject(error);
 });
 
 Api.interceptors.response.use((response) => {
-  console.log('Response received. Stop spinner.');
+  RequestEvents.onRequestCompleteEvent();
   return response;
 }, (error) => {
-  console.log('Response error. Stop spinner.');
+  RequestEvents.onRequestCompleteEvent();
   return Promise.reject(error);
 });
 

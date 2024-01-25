@@ -23,10 +23,11 @@
       "@/components/*": ["./src/app/components/*"],
       "@/portal/*": ["./src/app/portal/*"],
       "@/types/*": ["./src/app/types/*"],
-      "@/lib/*": ["./src/app/lib/*"]
+      "@/lib/*": ["./src/app/lib/*"],
+      "@entitiesDTO/*": ["./src/app/types/entitiesDTO/*"]
     }
   },
-  "files": ["src/app/types/global.ts"],
+  "files": ["./src/app/types/global.ts","./src/app/types/entitiesDTO/index.ts"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

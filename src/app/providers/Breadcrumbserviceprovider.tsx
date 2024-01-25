@@ -3,13 +3,13 @@ import React, { useContext, createContext, useState, useEffect, useMemo } from '
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
-interface Ibreackcrumbpaths {
+interface IBreackcrumbPaths {
     path: string;
     breadcrumbName: string;
 }
 
 interface BreadcrumbContextData {
-    breadcrumbs: Array<Ibreackcrumbpaths>;
+    breadcrumbs: Array<IBreackcrumbPaths>;
     currentPage: string;
     setShowBreadcrumbs: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -18,7 +18,7 @@ const BreadcrumbContext = createContext({});
 
 export const Breadcrumbserviceprovider = ({ children }: { children: React.ReactNode }) => {
     const currentPage = usePathname()
-    const [breadcrumbs, setBreadcrumbs] = useState<Array<Ibreackcrumbpaths>>([]);
+    const [breadcrumbs, setBreadcrumbs] = useState<Array<IBreackcrumbPaths>>([]);
     const [showBreadcrumbs, setShowBreadcrumbs] = useState<boolean>(true)
 
     useEffect(() => {
@@ -62,7 +62,6 @@ export const Breadcrumbserviceprovider = ({ children }: { children: React.ReactN
         </nav>}
         <> {children}</>
     </BreadcrumbContext.Provider>;
-
 }
 
 export function useBreadcrumb(): BreadcrumbContextData {

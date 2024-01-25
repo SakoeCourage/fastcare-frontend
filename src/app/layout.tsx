@@ -5,11 +5,14 @@ import Nprogressprovider from './providers/Nprogressprovider';
 import Toastserviceprovider from './providers/Toastserviceprovider';
 import Sidebarserviceprovider from './providers/Sidebarserviceprovider';
 
+
 export default function RootLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
+
+  
     return (
         <html lang="en">
             <body className='overflow-hidden w-full'>

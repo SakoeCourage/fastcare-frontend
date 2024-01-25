@@ -5,7 +5,7 @@ import { Breadcrumbserviceprovider } from '../providers/Breadcrumbserviceprovide
 import { useSidebar } from '../providers/Sidebarserviceprovider';
 import { useState } from 'react';
 
-export default function portalLayout({
+export default function PortalLayout({
   children,
 }: {
   children: React.ReactNode
