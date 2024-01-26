@@ -28,16 +28,16 @@ const useForm = <T extends Record<string, any>>(initialValues: T): useForm<T> =>
         const { onError, onSuccess } = options || {};
         setProcessing(true);
         setErrors({});
-
         try {
             const res = await requestFn(url, data);
-            setProcessing(false);
             reset();
             setErrors({});
             onSuccess?.(res);
         } catch (err) {
             console.log(err);
             onError?.(err);
+
+        } finally {
             setProcessing(false);
         }
     };
