@@ -16,10 +16,14 @@ export const authOptions: NextAuthOptions = {
                 const { username, password } = credentials as { username: string, password: string };
                 try {
                     const user = await authService.authenticate(username, password);
+                    if (user) {
+                        return user;
+                    }
                 } catch (err) {
                     console.log("Error:", err);
                     return null;
                 }
+                return null;
             },
         }),
     ],

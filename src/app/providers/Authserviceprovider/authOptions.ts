@@ -1,13 +1,12 @@
 import {
-    getServerSession,
-    type NextAuthOptions,
+    getServerSession, type NextAuthOptions,
 } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { authService } from "./userAuthentication";
 
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
-    // debug: process.env.NODE_ENV === "development",
+    debug: process.env.NODE_ENV === "development",
     session: {
         strategy: "jwt",
     },
@@ -18,9 +17,9 @@ export const authOptions: NextAuthOptions = {
     providers: [
         Credentials({
             name: "Credentials",
-            type :"credentials",
+            type: "credentials",
             credentials: {
-                username: { label: "Username", type: "text", placeholder: "username" },
+                username: { label: "Username", type: "text" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
@@ -31,7 +30,7 @@ export const authOptions: NextAuthOptions = {
                 };
                 try {
                     const user = await authService.authenticate(username, password);
-                    return user;
+                    if (user) return user;
                 } catch (error) {
                     console.log(error)
                 }

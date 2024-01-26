@@ -14,16 +14,13 @@ import Api from "app/app/fetch/axiosInstance";
 //   }
 // }
 function authenticate(username: string, password: string) {
-  if(username !== "admin" && password !== "admin") { //(1)
-    return null; //(2)
-  }
 
-  const user = { 
-    id: "9001",
-    name: "Web Admin", 
-    email: "admin@example.com"}; //(3)
-
-  return user; //(4) 
+  const user = {
+    id: "3",
+    name: "Test User",
+    email: "testuser@example.com"
+  };
+  return Promise.resolve(user);
 }
 
 export const authService = {
