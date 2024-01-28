@@ -1,16 +1,38 @@
-// import { NextResponse } from 'next/server'
-// import type { NextRequest } from 'next/server'
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-// export function middleware(request: NextRequest) {
-//     console.log('request', request)
-//     const currentUser = request.cookies.get('currentUser')?.value
+const authPahts = ["/login"];
 
-//     if (currentUser) {
-//         return NextResponse.redirect(new URL('/dashboard', request.url))
-//     }
-//     return NextResponse.redirect(new URL('/auth/login', request.url))
-// }
+export async function middleware(request: NextRequest) {
+    const verified = true;
+    if (verified) {
+        console.log(request.nextUrl.pathname);
+        if (authPahts.includes(request.nextUrl.pathname)) {
+            return NextResponse.redirect(new URL("/", request.url));
+        }
+        const requestHeaders = new Headers(request.headers);
+        return NextResponse.next({
+            request: {
+                headers: requestHeaders,
+            },
+        });
+    } else {
+        if (authPahts.includes(request.nextUrl.pathname)) {
+            return NextResponse.next();
+        }
+        return NextResponse.redirect(new URL("/login", request.url));
+    }
+}
 
 export const config = {
-    matcher: ['/auth/login','/login'],
-}
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - _next/image (image optimization files)
+         * - favicon.ico (favicon file)
+         */
+        "/((?!api|_next/static|_next/image|favicon.ico).*)",
+    ],
+};

@@ -58,7 +58,7 @@ export default function Sidebardropdown(props: params) {
     const match = pathname.match(/\/([^\/]+)/);
     if (match) {
       const extractedValue = match[1];
-      return props.links.some(link => link.link.startsWith(`/${extractedValue}`));
+      return props.links.some(link => link.link.startsWith(`/portal/${extractedValue}`));
     } else {
       return false;
     }

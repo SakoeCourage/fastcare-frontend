@@ -5,26 +5,21 @@ import { userDTO, staffDTO, facilityDTO, roleDTO } from "@/types/entitiesDTO";
 import { extend } from "dayjs";
 
 
-interface httpUserResponse extends userDTO {
+export interface httpUserResponse extends userDTO {
   role: roleDTO;
-  staff: staffDTO;
-  facility: facilityDTO;
 }
 
 declare module "next-auth" {
   interface Session {
-    user: {
-      id: string,
-      username: string,
-      passwordResetRequired: boolean,
-      createdAt: string,
-      updatedAt: string,
-      role: roleDTO
-    } & DefaultSession;
+    user: userDTO & httpUserResponse;
   }
-  interface User extends DefaultUser, httpUserResponse {
 
+
+  interface User extends DefaultUser, httpUserResponse {
+    accessToken: string,
+    refreshToken: string,
   }
+
 }
 
 declare module "next-auth/jwt" {
@@ -33,5 +28,6 @@ declare module "next-auth/jwt" {
     expires: string;
     accessToken: string;
     refreshToken: string;
+    user: userDTO & httpUserResponse;
   }
 }

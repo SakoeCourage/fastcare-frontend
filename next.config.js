@@ -3,24 +3,21 @@
 const nextConfig = {
     async rewrites() {
         return [
-            {
-                source: '/:path*',
-                destination: '/portal/:path*',
-            }
+
         ]
     },
     async redirects() {
         return [
             {
                 source: '/',
-                destination: '/dashboard',
+                destination: '/portal/dashboard',
                 permanent: true
             },
             {
-                source: '/login',
-                destination: '/user/login',
+                source: '/portal',
+                destination: '/portal/dashboard',
                 permanent: true
-            },
+            }
         ]
     },
 }

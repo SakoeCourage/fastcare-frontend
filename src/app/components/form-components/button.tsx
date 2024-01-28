@@ -27,6 +27,8 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   processing?: boolean;
 }
 
+
+
 // eslint-disable-next-line react/display-name
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, variant = "default", size = "auto", ...props }, ref): React.JSX.Element => {
@@ -35,10 +37,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={props.disabled || props.processing}
         {...props}
-        className={`button cursor-pointer text-center flex items-center justify-center gap-2 ${variants[variant]} ${sizes[size]} ${className}`}
+        className={`button cursor-pointer min-h-10 text-center flex items-center justify-center gap-2 ${variants[variant]} ${sizes[size]} ${className}`}
       >
-        {props.processing && <Loadingspinner className="!w-auto text-white !h-[3/4] !aspect-square" />}
-        {children}
+        {props.processing && <nav className="button-processingloader"> </nav>}
+        {!props.processing && children}
       </button>
     );
   }

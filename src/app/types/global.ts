@@ -10,3 +10,4 @@ type IPaginatedData<T> = {
     first_page_url: string | null,
     path: string,
 }
+

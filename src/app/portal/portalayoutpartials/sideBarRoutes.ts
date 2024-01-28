@@ -8,7 +8,7 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: 'Dashboard',
                     icon: "mingcute:grid-fill",
-                    link: '/dashboard',
+                    link: '/portal/dashboard',
                 },
                 {
                     title: "Payments",
@@ -16,15 +16,15 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "View Payments",
-                            link: '/payments/viewpayments'
+                            link: '/portal/payments/viewpayments'
                         },
                         {
                             title: "Make Payment",
-                            link: '/payments/makepayment'
+                            link: '/portal/payments/makepayment'
                         },
                         {
                             title: "Payment Confirmation",
-                            link: '/payments/paymentconfirmation'
+                            link: '/portal/payments/paymentconfirmation'
                         },
                     ],
                 },
@@ -34,7 +34,7 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Call Subscibers",
-                            link: '/customercare/callsubscribers'
+                            link: '/portal/customercare/callsubscribers'
                         }
                     ]
                 },
@@ -44,11 +44,11 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Check Mandate Details",
-                            link: '/autodebitoperation/checkmandate'
+                            link: '/portal/autodebitoperation/checkmandate'
                         },
                         {
                             title: "Unmandated Subscribers",
-                            link: '/autodebitoperation/unmandatedsubscribers'
+                            link: '/portal/autodebitoperation/unmandatedsubscribers'
                         }
                     ]
                 },
@@ -58,15 +58,15 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Staff Onboarding",
-                            link: '/staffsandusers/staffonboarding'
+                            link: '/portal/staffsandusers/staffonboarding'
                         },
                         {
                             title: "User Onboarding",
-                            link: '/staffsandusers/useronboarding'
+                            link: '/portal/staffsandusers/useronboarding'
                         },
                         {
                             title: "Reset Password",
-                            link: '/staffsandusers/resetpassword'
+                            link: '/portal/staffsandusers/resetpassword'
                         },
                     ],
                 }
@@ -84,7 +84,7 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: "Individual And Group",
                     icon: "fa:users",
-                    link: "/individual-group-subscription"
+                    link: "/portal/individual-group-subscription"
                 },
                 {
                     title: "Family Subscriptions",
@@ -92,15 +92,15 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: 'Family Subscription',
-                            link: '/familysubscriptions/familysubscription',
+                            link: '/portal/familysubscriptions/familysubscription',
                         },
                         {
                             title: 'Family Plan Members',
-                            link: '/familysubscriptions/familyplanmembers',
+                            link: '/portal/familysubscriptions/familyplanmembers',
                         },
                         {
                             title: 'View Family Subs',
-                            link: '/familysubscriptions/viewfamilysubscription',
+                            link: '/portal/familysubscriptions/viewfamilysubscription',
                         },
                     ]
                 },
@@ -110,15 +110,15 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: 'Corporate Subscription',
-                            link: '/corporatesubscription/corporatesubscription',
+                            link: '/portal/corporatesubscription/corporatesubscription',
                         },
                         {
                             title: 'Corporate Plan Members',
-                            link: '/corporatesubscription/corporateplanmembers',
+                            link: '/portal/corporatesubscription/corporateplanmembers',
                         },
                         {
                             title: 'View Corporate Subs',
-                            link: '/corporatesubscription/viewcorporatesubscription',
+                            link: '/portal/corporatesubscription/viewcorporatesubscription',
                         },
                     ]
                 },
@@ -128,11 +128,11 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: 'Import Data',
-                            link: '/datamigration/importdata',
+                            link: '/portal/datamigration/importdata',
                         },
                         {
                             title: 'Complete Migrate Subs',
-                            link: '/datamigration/completemigratedsubs',
+                            link: '/portal/datamigration/completemigratedsubs',
                         }
                     ]
                 },
@@ -146,22 +146,22 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: "Subscribers View",
                     icon: "icon-park-solid:book",
-                    link: "/subscribers"
+                    link: "/portal/subscribers"
                 },
                 {
                     title: "Facility Performance",
                     icon: "icon-park-solid:book",
-                    link: "/facilityperformance"
+                    link: "/portal/facilitiesperformance"
                 },
                 {
                     title: "Staff Collection Perf.",
                     icon: "icon-park-solid:book",
-                    link: "/staffperformance"
+                    link: "/portal/staffperformance"
                 },
                 {
                     title: "Agents Commision List",
                     icon: "icon-park-solid:book",
-                    link: "/agentscommission"
+                    link: "/portal/agentscommission"
                 },
             ]
         },
@@ -171,22 +171,22 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: 'Facility Setup',
                     icon: "mdi:gear",
-                    link: "/facility"
+                    link: "/portal/facility"
                 },
                 {
                     title: 'Package Setup',
                     icon: "mdi:gear",
-                    link: "/package"
+                    link: "/portal/package"
                 },
                 {
                     title: 'Call Comment Category',
                     icon: "mdi:gear",
-                    link: "/callcommentcategory"
+                    link: "/portal/callcommentcategory"
                 },
                 {
                     title: 'Groups and Associations',
                     icon: "mdi:gear",
-                    link: "/groupsandassociations"
+                    link: "/portal/groupsandassociations"
                 },
             ]
         }

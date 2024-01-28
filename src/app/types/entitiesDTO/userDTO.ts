@@ -1,10 +1,10 @@
 export interface userDTO {
-    id: number;
+    id: string;
     username: string;
     passwordResetRequired: boolean;
     createdAt: string;
     updatedAt: string;
-    createdBy: null;
-    updatedBy: null;
+    createdBy: string;
+    updatedBy: string;
 }
 

@@ -287,12 +287,12 @@ body {
     @apply !text-gray-600 !text-sm
 }
 
-input.select2-search__field:focus{
-    @apply border-none outline-none 
+input.select2-search__field:focus {
+    @apply border-none outline-none
 }
 
-input.select2-search__field{
-   @apply !text-gray-600 !text-sm rounded-md
+input.select2-search__field {
+    @apply !text-gray-600 !text-sm rounded-md
 }
 
 .select2-results__option {
@@ -523,4 +523,29 @@ input.select2-search__field{
 
 .transition-fadeIn {
     animation: fadeIn 0.4s ease-in-out;
+}
+
+.v-error-container:hover .v-error-message {
+    display: block !important;
+}
+
+
+.button-processingloader {
+    width: 20px;
+    --b: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    padding: 1px;
+    background: conic-gradient(#0000 10%, #ffff) content-box;
+    -webkit-mask: repeating-conic-gradient(#0000 0deg, #000 1deg 20deg, #0000 21deg 36deg),
+        radial-gradient(farthest-side, #0000 calc(100% - var(--b) - 1px), #000 calc(100% - var(--b)));
+    -webkit-mask-composite: destination-in;
+    mask-composite: intersect;
+    animation: l4 1s infinite steps(10);
+}
+
+@keyframes l4 {
+    to {
+        transform: rotate(1turn)
+    }
 }

@@ -16,6 +16,8 @@ function Sidebarlink(props: params) {
     const { sidebarStateOpen } = useSidebar()
     const { mini, full } = sidebarStateOpen
     const pathname = usePathname()
+
+
     return <Link
         onClick={props.toggleSidebar}
         href={props.link}

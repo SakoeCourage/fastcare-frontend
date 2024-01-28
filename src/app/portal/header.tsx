@@ -93,18 +93,21 @@ const Accountsmenu = (): React.JSX.Element => {
 function header() {
   const { setSidebarStateOpen, toggleMiniSidebar, sidebarStateOpen } = useSidebar()
   return (
-    <div className='z-20 h-[var(--header-height)] border-b flex justify-between items-center px-5 bg-white'>
-      {
-        sidebarStateOpen.full && <div className='opacity-100 md:opacity-0 block transition-all add-customer-bezier duration-300 md:hidden fixed z-40 bg-gray-800/60 inset-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 pl-[var(--sidebar-width)]'>
-          <div onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: false })} className='w-full h-full flex items-center justify-center'>
-            <IconifyIcon onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: false })} className=" cursor-pointer !text-red-200 !bg-transparent h-[3.5rem] w-[3.5rem]" fontSize="3.5rem" icon="gg:push-left" />
-          </div>
-        </div>
-      }
-      <IconifyIcon onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: true })} className=' !text-gray-500 cursor-pointer !bg-transparent md:hidden' icon='gravity-ui:bars-unaligned' />
+    <div className='bg-[#132743] md:pt-[0.2rem] z-20 h-[var(--header-height)] border-b '>
+      <div className='md:rounded-tl-[1.5rem] bg-white flex justify-between items-center px-5 h-full'>
 
-      <IconifyIcon onClick={() => toggleMiniSidebar()} className={`!text-gray-500 cursor-pointer !bg-transparent hidden md:block transform transition-transform add-customer-bezier ${!sidebarStateOpen.mini && " scale-x-[-1] "}`} icon='gravity-ui:bars-unaligned' />
-      <Accountsmenu />
+        {
+          sidebarStateOpen.full && <div className='opacity-100 md:opacity-0 block transition-all add-customer-bezier duration-300 md:hidden fixed z-40 bg-gray-800/60 inset-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 pl-[var(--sidebar-width)]'>
+            <div onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: false })} className='w-full h-full flex items-center justify-center'>
+              <IconifyIcon onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: false })} className=" cursor-pointer !text-red-200 !bg-transparent h-[3.5rem] w-[3.5rem]" fontSize="3.5rem" icon="gg:push-left" />
+            </div>
+          </div>
+        }
+        <IconifyIcon onClick={() => setSidebarStateOpen(cv => cv = { mini: cv.mini, full: true })} className=' !text-gray-500 cursor-pointer !bg-transparent md:hidden' icon='gravity-ui:bars-unaligned' />
+
+        <IconifyIcon onClick={() => toggleMiniSidebar()} className={`!text-gray-500 cursor-pointer !bg-transparent hidden md:block transform transition-transform add-customer-bezier ${!sidebarStateOpen.mini && " scale-x-[-1] "}`} icon='gravity-ui:bars-unaligned' />
+        <Accountsmenu />
+      </div>
     </div>
   )
 }
