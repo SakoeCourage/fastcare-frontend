@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const authPahts = ["/login"];
+const authPaths = ["/login"];
 
 export async function middleware(request: NextRequest) {
-    const verified = true;
-    if (verified) {
+    const userToken = request.cookies.get("userToken");
+    const sessionUser = request.cookies.get("user");
+    console.log(request.cookies)
+    if (userToken || sessionUser) {
         console.log(request.nextUrl.pathname);
-        if (authPahts.includes(request.nextUrl.pathname)) {
+        if (authPaths.includes(request.nextUrl.pathname)) {
             return NextResponse.redirect(new URL("/", request.url));
         }
         const requestHeaders = new Headers(request.headers);
@@ -17,7 +19,7 @@ export async function middleware(request: NextRequest) {
             },
         });
     } else {
-        if (authPahts.includes(request.nextUrl.pathname)) {
+        if (authPaths.includes(request.nextUrl.pathname)) {
             return NextResponse.next();
         }
         return NextResponse.redirect(new URL("/login", request.url));
