@@ -11,9 +11,15 @@ export interface httpUserResponse extends userDTO {
 
 declare module "next-auth" {
   interface Session {
-    user: userDTO & httpUserResponse;
+    user: userDTO & httpUserResponse &
+    {
+      accessToken: string
+      refreshToken: string
+      name: string
+      email: string
+    }
+    ;
   }
-
 
   interface User extends DefaultUser, httpUserResponse {
     accessToken: string,

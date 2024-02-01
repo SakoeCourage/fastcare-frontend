@@ -43,6 +43,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
     const [rowSelection, setRowSelection] = React.useState({})
     const [tData, setTData] = useState<IPaginatedData<TData> | null>(null)
     const [fetchingData, setFetchingData] = useState(false);
+    const [path, setPath] = useState<string | null>(null);
 
     const table = useReactTable({
         data: data ? data : tData!?.data,
@@ -62,6 +63,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
             if (res?.data) {
                 setTData(res.data)
                 console.log(res.data)
+                setPath(url)
             }
         } catch (error) {
             toastnotify("Failed to fetch table data", "Error");
@@ -72,13 +74,13 @@ function DataTable<TData, TValue, K extends keyof TData>({
     }
 
     function getUrlParamValue(param: string) {
-        if (tData?.path == null) return;
-        return getQueryParamValue(tData?.path, param)
+        if (path == null) return;
+        return getQueryParamValue(path, param)
     }
 
     function handleUrlQuery(accessor: string, value: string | null) {
-        if (tData?.path == null) return
-        let newQueryUrl: string = updateUrlQueryParam(tData.path, accessor, value)
+        if (path == null) return
+        let newQueryUrl: string = updateUrlQueryParam(path, accessor, value)
         fetchSourceData(newQueryUrl)
     }
 
@@ -111,7 +113,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
             </nav> : heading}
 
             {enableTableFilter && <TableFilterOptions hasAction={hasAction} filterablePlaceholder={filterablePlaceholder} handleUrlQuery={handleUrlQuery} actionOptions={actionOptions} filterable={filterable as string} actionName={actionName} table={table} onAction={onAction} />}
-            {extendedFilter?.enable && <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={tData?.path} filters={extendedFilter.filters} />}
+            {extendedFilter?.enable && <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={path} filters={extendedFilter.filters} />}
 
             <Table className=' h-max' >
                 <TableHeader className=' '>

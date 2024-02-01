@@ -23,7 +23,7 @@ function RenderFilterComponent({ filterType, params }: { filterType: ExtendedFil
   return null;
 }
 
-function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[], handleUrlQuery: (accessor: string, value: string) => void, path: string | undefined }) {
+function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[], handleUrlQuery: (accessor: string, value: string) => void, path: string | null }) {
 
   function getActiveFilters(): string[] {
     let activeFilters: string[] = []

@@ -12,13 +12,15 @@ export function BlankImagePlaceholder({
   isDragging,
   dragProps,
 }: BlankImagePlaceholderProps) {
-  return (
+  return (<div className=" grid place-items-center  w-full">
+    {/* <div className="md:">
+
+    </div> */}
     <div
       onClick={onImageUpload}
       {...dragProps}
-      className={` active:bg-gray-50 min-w-[12rem] w-full h-full aspect-square mx-auto  min-h-[12rem]  cursor-pointer ${isDragging && "opacity-50"
-        }`}
-    >
+      className={` active:bg-gray-50 aspect-square mx-auto w-1/2 lg:w-1/3  h-full  cursor-pointer ${isDragging && "opacity-50"
+        }`}>
       <nav className="border-2 rounded-md overflow-hidden flex items-center justify-center h-full w-full  aspect-square  ">
         <nav
           className={`flex flex-col text-gray-700 items-center gap-2 ${isDragging && " pointer-events-none"
@@ -37,11 +39,15 @@ export function BlankImagePlaceholder({
             />
           </svg>
           <span className="font-medium  text-center">
-            {isDragging ? "Drop files here" : "Click or drop files here"}
+            {isDragging ? "Drop files here" : "Click Add File"}
           </span>
         </nav>
       </nav>
     </div>
+    {/* <div>
+
+    </div> */}
+  </div>
   );
 }
 

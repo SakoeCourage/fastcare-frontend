@@ -44,6 +44,7 @@
     "react-use-file-upload": "^0.9.5",
     "select2-react-component": "^6.1.1",
     "simplebar-react": "^3.2.4",
+    "styled-components": "^6.1.8",
     "tailwind-merge": "^2.1.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"

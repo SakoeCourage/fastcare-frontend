@@ -11,7 +11,7 @@ export interface IBeneficiariesProps {
 function Beneficiarieslist(props: IBeneficiariesProps) {
   const { showNewFamilyMemberForm, setShowNewFamilyMemberForm } = props
   return (
-    <div >
+    <div className=' p-5'>
       <nav className=' bg-gray-50/70 p-5 rounded-md gap-5 shadow-light grid grid-cols-1 md:grid-cols-2 '>
         <nav className=' rounded-md flex gap-2  items-center md:border-r'>
           <IconifyIcon className=' !bg-blue-400 text-blue-100' icon='material-symbols:bookmark-outline' />
@@ -53,7 +53,7 @@ function Beneficiarieslist(props: IBeneficiariesProps) {
             <span className=' whitespace-nowrap hidden lg:block'>Add Family Member</span>
           </button>
         </div>
-        <SimpleBar className=' max-h-52  '>
+        <SimpleBar className=' max-h-96'>
           <div className='grid grid-cols-1 gap-3 md:grid-cols-2 '>
             {[...new Array(5)].map((ar, i) => <Beneficiarycard key={i} showNewFamilyMemberForm={showNewFamilyMemberForm} setShowNewFamilyMemberForm={setShowNewFamilyMemberForm} />)}
           </div>

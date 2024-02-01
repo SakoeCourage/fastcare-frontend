@@ -31,7 +31,7 @@ interface ITableOptionsProps {
 const Moretableoptions = ({ options }: { options: ITableOptionsProps[] }) => {
     const [isOpened, setisOpened] = useState<boolean>(false)
     return (
-        <DropdownMenu onOpenChange={setisOpened} >
+        <DropdownMenu modal={false} onOpenChange={setisOpened}  >
             <DropdownMenuTrigger>
                 <IconifyIcon
                     fontSize="1.2rem"

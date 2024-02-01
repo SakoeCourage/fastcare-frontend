@@ -4,21 +4,19 @@ import Header from './header';
 import { Breadcrumbserviceprovider } from '../providers/Breadcrumbserviceprovider';
 import { useSidebar } from '../providers/Sidebarserviceprovider';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+
 
 export default function PortalLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { status } = useSession()
+
 
   const { sidebarStateOpen } = useSidebar()
   const { mini, full } = sidebarStateOpen
 
-  useEffect(() => {
-    console.log(status)
-  }, [status])
+ 
 
   return (
     <main className='flex overflow-hidden'>

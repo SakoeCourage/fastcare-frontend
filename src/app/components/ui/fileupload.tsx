@@ -1,57 +1,16 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import useFileUpload from 'react-use-file-upload';
-import { BlankImagePlaceholder } from './blankimageplaceholder';
+import { BlankImagePlaceholder } from './fileuploadprops/blankimageplaceholder';
 import IconifyIcon from './iconsbutton';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
+import {
+    fileUploadProps, regularExtensions, regularExtensionsArray, Rule,
+    errorMessages, validationErrors, isValidationError, isBlob, isFile
+} from './fileuploadprops/fileupload';
+import Filetyperenderer from './fileuploadprops/filetyperenderer';
 
-type regularExtensions = "image/jpeg" | "image/jpg" | "image/png" | "application/pdf" | "application/msword" | "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" | "application/zip" | "text/csv"
-
-const regularExtensionsArray: regularExtensions[] = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "application/pdf",
-    "application/msword",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "text/csv",
-    "application/zip"
-];
-
-const errorMessages = {
-    maxFileSize: " One or more file exceeded recommended size",
-    maxNumber: ` Maximum number of file exceeded`,
-    acceptType: " One or more file format not supported",
-};
-
-type Rule = keyof typeof errorMessages;
-
-type hasValidationError = {
-    error: string[],
-    file: null
-}
-
-type hasValidationPass = {
-    error: null,
-    file: File
-}
-
-type validationErrors = hasValidationPass | hasValidationError
-
-const isValidationError = (error: validationErrors): error is hasValidationError => {
-    return error.error !== null;
-};
-
-interface fileUploadProps {
-    getFiles?: (files: File[]) => void;
-    files?: File[] | undefined;
-    maxNumber?: number;
-    maxFileSize?: number;
-    onError?: (error: string[]) => void;
-    acceptType?: regularExtensions[]
-}
 
 /**
- * 
+ * @author Sakoe Courage
  * @param  [maxFileSize] - in bytes default 10485760 i.e 10mb -  10240Kb
  * @returns 
  */
@@ -66,18 +25,9 @@ const Fileupload = ({ getFiles,
     const [dragOver, setIsDragOver] = useState<boolean>(false)
     const [lvErrors, setlvErrors] = useState<string[]>([])
     const inputRef = useRef<HTMLInputElement | null>(null);
-    const {
-        files,
-        fileNames,
-        fileTypes,
-        totalSize,
-        totalSizeInBytes,
-        handleDragDropEvent,
-        clearAllFiles,
-        createFormData,
-        setFiles,
-        removeFile,
-    } = useFileUpload();
+    const [files, setFiles] = useState<File[] | Blob[]>([])
+
+
 
 
     function insertUnique<T>(arr: T[], values: T[]): T[] {
@@ -133,6 +83,14 @@ const Fileupload = ({ getFiles,
         return { error: null, file: file }
     }
 
+    const removeFile = (index: number): void => {
+        if (index >= 0 && index < files.length) {
+            const updatedFiles = [...files.slice(0, index), ...files.slice(index + 1)];
+            setFiles(updatedFiles)
+            getFiles!(updatedFiles);
+        }
+    };
+
     const handleOnFileChange = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>) => {
         setlvErrors([])
         onError && onError([])
@@ -155,27 +113,35 @@ const Fileupload = ({ getFiles,
             const Ifiles: FileList | null = inputRef.current?.files as FileList;
             if (Ifiles) {
                 try {
-                    handleMaxNumberValidation(Ifiles)
+                    handleMaxNumberValidation(Ifiles);
                     Array.from(Ifiles).forEach(handleFileValidation);
                 } catch (error) {
-                    validationErrors.push(errorMessages.maxNumber)
+                    validationErrors.push(errorMessages.maxNumber);
                 }
             }
-        } else {
+        } else if (event.type === 'drop') {
+            event.preventDefault()
             const dragEvent = event as React.DragEvent;
             const Ifiles = dragEvent.dataTransfer.files;
             if (Ifiles) {
                 try {
-                    handleMaxNumberValidation(Ifiles)
+                    handleMaxNumberValidation(Ifiles);
                     Array.from(Ifiles).forEach(handleFileValidation);
                 } catch (error) {
-                    validationErrors.push(errorMessages.maxNumber)
+                    validationErrors.push(errorMessages.maxNumber);
                 }
             }
         }
 
-        setFiles({ dataTransfer }, 'a');
-        getFiles && getFiles(files)
+        try {
+            const transferFiles: File[] = [...dataTransfer.files];
+            let newFiles: File[] | Blob[] = [...transferFiles]
+            if (!!files.length) { newFiles = [...newFiles, ...files] }
+            setFiles(newFiles);
+            getFiles!(newFiles);
+        } catch (error) {
+            console.log(error)
+        }
 
         if (validationErrors.length > 0) {
             setlvErrors(validationErrors)
@@ -186,22 +152,34 @@ const Fileupload = ({ getFiles,
         inputRef.current!.value = "";
     };
 
+    useEffect(() => {
+        if (!propFiles) return
+        try {
+            let inCommingFiles: Blob[] | File[] = []
+            propFiles.forEach(file => {
+                if (isBlob(file) || isFile(file)) {
+                    inCommingFiles.push(file)
+                }
+            })
+            !!inCommingFiles.length && setFiles(inCommingFiles)
+        } catch (error) {
+            console.warn("File Upload: ", error)
+        }
+
+    }, [propFiles])
 
     return (
-        <div className=""
+        <div className="w-full"
             onDragEnter={(e) => {
                 setIsDragOver(true)
-                handleDragDropEvent(e)
             }}
             onDragLeave={(e) => {
                 setIsDragOver(false)
             }}
             onDragOver={(e) => {
                 setIsDragOver(true)
-                handleDragDropEvent(e)
             }}
             onDrop={(e) => {
-                handleDragDropEvent(e);
                 setIsDragOver(false)
                 handleOnFileChange(e)
             }}
@@ -222,57 +200,9 @@ const Fileupload = ({ getFiles,
                     onImageUpload={() => inputRef.current!.click()}
                 />
             )}
-            <div className=" grid grid-cols-2 lg:grid-cols-3 gap-5">
-                {files.map((file, index) => (
-                    <div
-                        key={index}
-                        className=" aspect-square w-full h-full min-h-44 min-w-44  border rounded-md object-cover relative"
-                    >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        {
-                        ["image/jpeg", "image/jpg", "image/png"].includes(file.type) ?
-                            <img
-                                src={URL.createObjectURL(file)}
-                                alt=""
-                                className=" min-h-40 min-w-40 h-full w-full object-contain aspect-square"
-                            /> :
-                            ["application/pdf"].includes(file.type) ?
-                                <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
-                                    <IconifyIcon className=' !h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-pdf2' />
-                                    <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
-                                </div>
-                                : ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                    "text/csv"].includes(file.type) ?
-                                    <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
-                                        <IconifyIcon className=' !h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-excel' />
-                                        <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
-                                    </div>
-                                    :
-                                    <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
-                                        <IconifyIcon className=' !h-16 !w-16 text-gray-500' fontSize="3.5rem" icon='basil:file-outline' />
-                                        <abbr title={file.name} className=' text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
-                                    </div>
-
-                        }
-
-                        <div className="absolute top-1 right-1">
-                            <button onClick={() => removeFile(file.name)}>
-                                <svg
-                                    className=" text-red-700"
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="#ff0000"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M12 2C6.49 2 2 6.49 2 12C2 17.51 6.49 22 12 22C17.51 22 22 17.51 22 12C22 6.49 17.51 2 12 2ZM15.92 12.75H7.92C7.51 12.75 7.17 12.41 7.17 12C7.17 11.59 7.51 11.25 7.92 11.25H15.92C16.33 11.25 16.67 11.59 16.67 12C16.67 12.41 16.34 12.75 15.92 12.75Z"
-                                        fill="currentColor"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
+            <div className=" grid grid-cols-2 lg:grid-cols-3 gap-5 w-full">
+                {!!files.length && files.map((file, index) => (
+                    <Filetyperenderer key={index} file={file} index={index} removeFile={removeFile} />
                 ))}
                 {Boolean(files.length) &&
                     !(Number(files.length) === maxNumber) && (

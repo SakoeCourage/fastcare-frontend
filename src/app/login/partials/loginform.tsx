@@ -7,6 +7,7 @@ import { useSearchParams } from 'next/navigation';
 import { z, ZodError } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { useRouter } from 'next/navigation';
+import { RequestEvents } from 'app/app/fetch/apiEvent';
 
 interface userLoginCredentials {
     username: string,
@@ -38,7 +39,7 @@ function Loginform() {
     })
     const handleLogin = async (e: FormEvent) => {
         e.preventDefault();
-        const callbackUrl = searchParam.get("callbackUrl");
+        const callbackUrl = window.localStorage.getItem(RequestEvents.REQUEST_CALLBACK_URL_CONSTACT);
         setErrors(initialData)
         try {
             setIsLoading(true)
@@ -51,7 +52,8 @@ function Loginform() {
             if (data) {
                 const { error, status, ok, } = data
                 if (error) throw new Error(error)
-                if (ok == true) router.push(callbackUrl ?? '/portal/dashboard')
+                if (ok == true) window.location.href = callbackUrl ?? '/portal/dashboard'
+                window.localStorage.removeItem(RequestEvents.REQUEST_CALLBACK_URL_CONSTACT)
             }
         } catch (error: unknown) {
             console.log(error)
@@ -64,8 +66,8 @@ function Loginform() {
             } else {
                 toastnotify("Sign in failed. Try again later")
             }
-        } finally {
             setIsLoading(false)
+        } finally {
         }
     }
 
