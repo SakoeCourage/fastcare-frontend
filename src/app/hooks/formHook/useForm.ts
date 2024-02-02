@@ -49,6 +49,15 @@ const useForm = <T extends Record<string, any>>(
         return error.message !== null;
     }
 
+    const checkIfShouldValidate: (param: RequestOptions<T> | undefined) => boolean
+        = (param: RequestOptions<T> | undefined) => {
+            if (typeof param == "undefined") return false
+            const { config } = param
+            if (config?.validation?.enable == false) return false
+            if (validationSchema) return true
+            return false;
+        }
+
     const handleRequest = async (
         url: string,
         requestFn: (url: string, data: any) => Promise<AxiosResponse<any>>,
@@ -58,7 +67,7 @@ const useForm = <T extends Record<string, any>>(
         setProcessing(true);
         setErrors({});
         try {
-            validationSchema && z.object(validationSchema).parse(data)
+            checkIfShouldValidate(options) && z.object(validationSchema).parse(data)
             const formData = config?.asFormData ? createFormDataFromDataObject() : data
             const res = await requestFn(url, formData);
             setErrors({});

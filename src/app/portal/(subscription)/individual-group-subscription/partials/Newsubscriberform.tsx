@@ -10,14 +10,14 @@ import { z } from 'zod'
 import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO } from 'app/app/types/entitiesDTO'
 import { AxiosResponse } from 'axios'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
-
+import DialogBox from 'app/app/components/ui/dialoguebox'
 
 function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: IFormWithDataProps<IndividualSubDTO>) {
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
 
-    const { data, setData, errors, post, patch, setValidation, processing } = useForm<Partial<IndividualSubDTO>>({
+    const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>({
     })
 
     const isFile = (value: unknown): value is File => {
@@ -85,8 +85,13 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
             const filename = "userprofile.jpg";
             file = new File([blob], filename, { type: "image/jpg" });
         }
+        console.log(subscriber)
+        try {
+            setData({ ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File })
+        } catch (error) {
+            console.warn(error)
+        }
 
-        setData({ ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File })
     }, [subscriber])
 
     const handleFormSubmission = () => {
@@ -98,13 +103,29 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         }
     }
 
+    const handleOnEntityDelete = () => {
+        DialogBox({ title: "Try", promptText: "Are You Sure You want to ", open: true, closeModal: () => void (0) })
+        return
+        if (subscriber?.id == null) return
+        del('/individual-subscribers/' + subscriber.id,
+            {
+                onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
+                onError: () => toastnotify("Failed To Remove Subscription", "Error"),
+                config: {
+                    validation: {
+                        enable: false
+                    }
+                }
+            })
+    }
+
     useEffect(() => {
         fetchSelectFieldData();
     }, [])
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+    // useEffect(() => {
+    //     console.log(data)
+    // }, [data])
 
 
 
@@ -402,6 +423,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                 <Button disabled={processing} onClick={() => handleFormSubmission()} variant='primary' size='md'>
                     Save
                 </Button>
+                {subscriber?.id && <Button onClick={() => handleOnEntityDelete()} variant="danger" size='md'>
+                    Delete
+                </Button>}
             </nav>
         </div >
 

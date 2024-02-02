@@ -30,7 +30,7 @@ export interface IndividualSubDTO {
     updatedAt: string;
     createdBy: string | null;
     updatedBy: string | null;
-    group?: groupDTO,
-    package?: packageDTO,
-    facility?: facilityDTO
+    group?: groupDTO;
+    package?: packageDTO;
+    facility?: facilityDTO;
 }

@@ -1,5 +1,4 @@
-
-export type PaymentMods = "Cash" | "Stading Order" | "CAGD" | "MOMO" | "Cheque"
+export type PaymentMods = "Cash" | "Standing Order" | "CAGD" | "MOMO" | "Cheque"
 
 export interface familyPackageDTO {
     id: number,

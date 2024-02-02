@@ -10,7 +10,10 @@ export type RequestOptions<T> = {
     onSuccess?: (res: AxiosResponse<T>) => void;
     onError?: (err: any) => void;
     config?: {
-        asFormData: boolean
+        asFormData?: boolean,
+        validation?: {
+            enable: boolean
+        }
     }
 };
 
