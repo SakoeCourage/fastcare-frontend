@@ -1,7 +1,11 @@
+
+export type PaymentMods = "Cash" | "Stading Order" | "CAGD" | "MOMO" | "Cheque"
+
 export interface familyPackageDTO {
     id: number,
+    familyId: number,
     discount: number,
-    paymentMode: "Cash" | "Stading Order" | "CAGD" | "MOMO" | "Cheque",
+    paymentMode: PaymentMods | string,
     amountToDebit: number,
     frequency: string,
     momoNetwork: string,

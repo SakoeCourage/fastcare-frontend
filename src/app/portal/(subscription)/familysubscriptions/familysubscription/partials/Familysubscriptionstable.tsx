@@ -122,13 +122,12 @@ function Familysubscriptionstable() {
 
             <Sidemodal size='xl'
                 open={!!showPaymentForm?.id}
-                // open={true}
                 title="Make Payment"
                 closeModal={() => setShowPaymentForm(null)}>
                 <Makefamilysubpayment
                     formData={showPaymentForm}
                     onCancel={() => setShowPaymentForm(null)}
-                    onNewDataSucess={() => { setShowPaymentForm(null) }} />
+                    onNewDataSucess={() => { resetTableData();setShowPaymentForm(null) }} />
             </Sidemodal>
 
             <Sidemodal className={`${showBeneficiaryForm && '!opacity-50'}`}
