@@ -10,6 +10,7 @@ export const authOptions: NextAuthOptions = {
                 username: {},
                 password: {},
             },
+            
             async authorize(credentials) {
                 const { username, password } = credentials as { username: string, password: string };
                 try {
