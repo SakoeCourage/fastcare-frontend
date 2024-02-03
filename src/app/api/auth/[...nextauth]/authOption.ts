@@ -10,8 +10,8 @@ export const authOptions: NextAuthOptions = {
                 username: {},
                 password: {},
             },
-            
-            async authorize(credentials) {
+
+            async authorize(credentials): Promise<any> {
                 const { username, password } = credentials as { username: string, password: string };
                 try {
                     const user = await authService.authenticate(username, password)
