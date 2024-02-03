@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Profile from './profile'
 import Changecredentials from './changecredentials'
 import Tooltip from 'app/app/components/ui/tooltip'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 
 export interface IComponents { [key: string]: React.FC<{ setComponent: React.Dispatch<React.SetStateAction<componentsType>> }> }
 

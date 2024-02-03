@@ -1,5 +1,5 @@
 "use client"
-import IconifyIcon from './iconsbutton';
+import IconifyIcon from './IconifyIcon';
 import React from 'react'
 import SimpleBar from 'simplebar-react';
 import {

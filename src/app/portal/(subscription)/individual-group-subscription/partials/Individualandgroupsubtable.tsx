@@ -7,7 +7,7 @@ import Newsubscriberform from './Newsubscriberform'
 import Modal from 'app/app/components/ui/modal';
 import Api from 'app/app/fetch/axiosInstance'
 import { IndividualSubDTO } from 'app/app/types/entitiesDTO'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'

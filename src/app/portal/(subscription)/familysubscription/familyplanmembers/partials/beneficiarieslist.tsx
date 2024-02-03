@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import Beneficiarycard from './beneficiarycard'
 import SimpleBar from 'simplebar-react'
 import Modal from 'app/app/components/ui/modal'

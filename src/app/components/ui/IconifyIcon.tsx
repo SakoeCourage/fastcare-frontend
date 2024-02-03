@@ -1,6 +1,5 @@
 import React, { ButtonHTMLAttributes } from "react";
 import { Icon, IconProps } from "@iconify/react";
-import classNames from "classnames";
 
 interface IconifyIconProps extends ButtonHTMLAttributes<HTMLDivElement> {
     icon: string;

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Dialog, DialogContent } from "./partials/dialoguecomponents";
-import IconifyIcon from './iconsbutton';
+import IconifyIcon from './IconifyIcon';
 import { Button } from '../form-components/button';
 import SimpleBar from 'simplebar-react';
 

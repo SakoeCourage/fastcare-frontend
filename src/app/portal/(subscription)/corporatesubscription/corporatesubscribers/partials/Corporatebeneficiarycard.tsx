@@ -1,5 +1,5 @@
 import React from 'react'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { IBeneficiariesProps } from './Corporatebeneficiarieslist'
 import Moretableoptions from 'app/app/components/datatable/moretableoptions'
 import { corporateBeneficiaryDTO } from 'app/app/types/entitiesDTO'

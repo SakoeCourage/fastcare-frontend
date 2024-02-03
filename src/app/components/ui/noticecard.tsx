@@ -1,4 +1,4 @@
-import IconifyIcon from 'app/app/components/ui/iconsbutton';
+import IconifyIcon from 'app/app/components/ui/IconifyIcon';
 import React from 'react'
 const options = {
     "info": {

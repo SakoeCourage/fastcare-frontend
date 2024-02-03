@@ -1,5 +1,5 @@
 import React, { ReactNode, MouseEvent } from 'react';
-import IconifyIcon from '../ui/iconsbutton';
+import IconifyIcon from '../ui/IconifyIcon';
 
 interface EmptyResultsProps {
     className?: string;

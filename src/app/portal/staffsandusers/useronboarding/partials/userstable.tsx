@@ -5,7 +5,7 @@ import { userDTO } from 'app/app/types/entitiesDTO'
 import Modal from 'app/app/components/ui/modal'
 import Newuserform from './newuserform'
 import DataTable from 'app/app/components/datatable/datatable'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 import { dateReformat } from 'app/app/lib/utils'
 

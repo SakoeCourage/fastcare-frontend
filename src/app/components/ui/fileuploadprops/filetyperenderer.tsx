@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import IconifyIcon from '../iconsbutton';
+import IconifyIcon from '../IconifyIcon';
 import { isBlob, isFile } from './fileupload';
 
 interface FileRendererProps {

@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import { BlankImagePlaceholder } from './fileuploadprops/blankimageplaceholder';
-import IconifyIcon from './iconsbutton';
+import IconifyIcon from './IconifyIcon';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import {
     fileUploadProps, regularExtensions, regularExtensionsArray, Rule,

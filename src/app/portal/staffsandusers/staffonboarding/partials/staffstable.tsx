@@ -5,7 +5,7 @@ import DataTable from 'app/app/components/datatable/datatable'
 import NewstaffForm from './newstaffForm'
 import Modal from 'app/app/components/ui/modal'
 import { staffDTO } from 'app/app/types/entitiesDTO'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 
 function Staffstable() {

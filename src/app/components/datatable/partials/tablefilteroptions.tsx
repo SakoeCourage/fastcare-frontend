@@ -4,7 +4,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { IActionOptions } from './tabletypedefs'
 import Link from 'next/link'
 import { debounce } from 'app/app/lib/utils'
-import IconifyIcon from '../../ui/iconsbutton'
+import IconifyIcon from '../../ui/IconifyIcon'
 
 interface IOptionsProps<TData extends import("@tanstack/table-core").Table<TData>> {
     filterable?: string

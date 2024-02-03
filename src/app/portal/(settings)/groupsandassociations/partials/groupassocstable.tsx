@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import DataTable, { resetTableData } from 'app/app/components/datatable/datatable'
 import Modal from 'app/app/components/ui/modal'
 import Newgroupassform from './newgroupassform'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { dateReformat } from 'app/app/lib/utils'
 
 function Groupassocstable() {

@@ -4,7 +4,7 @@ import {
     DropdownMenuTrigger,
     DropdownMenuItem,
 } from "app/app/components/ui/dropdown";
-import IconifyIcon from "../ui/iconsbutton";
+import IconifyIcon from "../ui/IconifyIcon";
 import { useState } from "react";
 import classNames from "classnames";
 const optionThemes = {

@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import DataTable from 'app/app/components/datatable/datatable'
 import Modal from 'app/app/components/ui/modal'
 import Newbankform from './newbankform'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 import { dateReformat } from 'app/app/lib/utils'
 

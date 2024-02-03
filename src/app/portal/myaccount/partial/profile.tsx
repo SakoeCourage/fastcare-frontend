@@ -1,6 +1,6 @@
 import React from 'react'
 import { Input } from 'app/app/components/form-components/input'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 
 function Profile() {
     return (

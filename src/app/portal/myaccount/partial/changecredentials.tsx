@@ -1,5 +1,5 @@
 import React from 'react'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { Input } from 'app/app/components/form-components/input'
 import { Button } from 'app/app/components/form-components/button'
 import { componentsType } from './index'
