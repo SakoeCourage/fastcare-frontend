@@ -6,12 +6,12 @@ import Modal from 'app/app/components/ui/modal'
 import Newfacilityform from './newfacilityform'
 import { facilityDTO } from 'app/app/types/entitiesDTO'
 import { dateReformat } from 'app/app/lib/utils'
-import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import Api from 'app/app/fetch/axiosInstance'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 
-function facilitiestable() {
+function Facilitiestable() {
     const [showNewFacilityForm, setShowNewFacilityForm] = useState<boolean>(false)
     const [facilityData, setFacilityData] = useState<facilityDTO | null>(null)
 
@@ -69,4 +69,4 @@ function facilitiestable() {
     )
 }
 
-export default facilitiestable
+export default Facilitiestable

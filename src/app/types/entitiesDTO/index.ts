@@ -14,5 +14,4 @@ export * from './corporatebeneficiaryDTO'
 export * from './corporatePackageDTO'
 export * from './agentDTO'
 export * from './callCommentDTO'
-export * from './roleDTO'
 

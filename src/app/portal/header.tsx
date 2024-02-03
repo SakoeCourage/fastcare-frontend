@@ -104,7 +104,7 @@ const Accountsmenu = (): React.JSX.Element => {
 
 }
 
-function header() {
+function Header() {
   const { setSidebarStateOpen, toggleMiniSidebar, sidebarStateOpen } = useSidebar()
   return (
     <div className='bg-[#132743] md:pt-[0.2rem] z-20 h-[var(--header-height)] border-b '>
@@ -126,4 +126,4 @@ function header() {
   )
 }
 
-export default header
+export default Header
