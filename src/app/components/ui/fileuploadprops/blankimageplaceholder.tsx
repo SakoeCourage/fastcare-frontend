@@ -5,12 +5,14 @@ interface BlankImagePlaceholderProps {
   onImageUpload: () => void;
   isDragging: boolean;
   dragProps?: Record<string, any>;
+  placeholder?: string;
 }
 
 export function BlankImagePlaceholder({
   onImageUpload,
   isDragging,
   dragProps,
+  placeholder
 }: BlankImagePlaceholderProps) {
   return (<div className=" grid place-items-center  w-full">
     {/* <div className="md:">
@@ -39,7 +41,7 @@ export function BlankImagePlaceholder({
             />
           </svg>
           <span className="font-medium  text-center">
-            {isDragging ? "Drop files here" : "Click Add File"}
+            {isDragging ? "Drop files here" : placeholder}
           </span>
         </nav>
       </nav>

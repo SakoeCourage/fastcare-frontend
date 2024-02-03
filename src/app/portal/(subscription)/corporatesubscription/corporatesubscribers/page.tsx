@@ -1,5 +1,5 @@
 import React from 'react'
-import Corporatesubscriptionstable from './partials/Corporatesubscriptionstable'
+import Coporatesubscriptiontable from './partials/Corporatesubscriptionstable'
 function page() {
   return (
     <div className=' container mx-auto p-5'>
@@ -8,7 +8,7 @@ function page() {
           Setup Corporate Subscribers
         </h1>
       </div>
-      <Corporatesubscriptionstable />
+      <Coporatesubscriptiontable />
     </div>
   )
 }

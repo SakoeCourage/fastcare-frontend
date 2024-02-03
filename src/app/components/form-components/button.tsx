@@ -37,7 +37,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={props.disabled || props.processing}
         {...props}
-        className={`button cursor-pointer min-h-10 text-center flex items-center justify-center gap-2 ${variants[variant]} ${sizes[size]} ${className}`}
+        className={`button cursor-pointer min-h-10 text-center flex items-center justify-center gap-2  ${variants[variant]} ${sizes[size]} ${className}`}
       >
         {props.processing && <nav className="button-processingloader"> </nav>}
         {!props.processing && children}

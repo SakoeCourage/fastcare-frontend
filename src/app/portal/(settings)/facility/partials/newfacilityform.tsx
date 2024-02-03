@@ -8,7 +8,7 @@ import { facilityDTO } from 'app/app/types/entitiesDTO'
 import useForm from 'app/app/hooks/formHook/useForm'
 import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
-function newfacilityform(props: IFormWithDataProps<facilityDTO>) {
+function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
     const { formData, onCancel, onNewDataSucess } = props
     const { data, setData, post, patch, errors, processing, setValidation } = useForm<Partial<facilityDTO>>(formData ? { ...formData } : {})
 
@@ -77,4 +77,4 @@ function newfacilityform(props: IFormWithDataProps<facilityDTO>) {
     )
 }
 
-export default newfacilityform
+export default Newfacilityform

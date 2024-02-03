@@ -7,16 +7,18 @@ import { Button } from 'app/app/components/form-components/button'
 import useForm from 'app/app/hooks/formHook/useForm'
 import Api from 'app/app/fetch/axiosInstance'
 import { z } from 'zod'
-import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO } from 'app/app/types/entitiesDTO'
+import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO, bankDTO } from 'app/app/types/entitiesDTO'
 import { AxiosResponse } from 'axios'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
-import DialogBox from 'app/app/components/ui/dialoguebox'
+import { dialogService } from 'app/app/providers/Dailogueserviceprovider'
+import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
 
 function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: IFormWithDataProps<IndividualSubDTO>) {
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
-
+    const [banks, setBanks] = useState<IPaginatedData<bankDTO> | null>(null)
+    const { setDialogData } = dialogService()
     const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>({
     })
 
@@ -45,26 +47,33 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         emergencyPersonPhone: z.string().min(5, "This Field is required"),
         hasNHIS: z.boolean(),
         NHISNumber: (data.hasNHIS == true) ? z.string().min(5, "This Field is required") : z.string().optional(),
-        paymentMode: z.string().min(1, "This Field is required"),
-        frequency: z.string().min(5, "This Field is required"),
-        discount: z.number().min(0, "This Field is required"),
-        momoNetwork: z.string().min(1, "This Field is required"),
-        momoNumber: z.string().min(5, "This Field is required"),
         facility: z.number().min(1, "This Field is required"),
         package: z.number().min(1, "This Field is required"),
         group: z.number().min(1, "This Field is required"),
+        paymentMode: z.string().min(1, "This Field is Required"),
+        momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        bank: data.paymentMode == "Standing Order" ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
+        discount: z.number().optional(),
+        accountNumber: data.paymentMode == "Standing Order" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        frequency: z.string().min(1, "This Field is Required"),
+        CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+
     })
 
     const getGroupAsync: () => Promise<AxiosResponse<IPaginatedData<groupDTO>>> = () => Api.get("/groups");
     const getFacilitiesAsync: () => Promise<AxiosResponse<IPaginatedData<facilityDTO>>> = () => Api.get("/facilities");
     const getPackagesAsync: () => Promise<AxiosResponse<IPaginatedData<packageDTO>>> = () => Api.get("/packages");
+    const getBanksAsync: () => Promise<AxiosResponse<IPaginatedData<bankDTO>>> = () => Api.get("/banks");
 
     const fetchSelectFieldData = async () => {
         try {
-            const [_groups, _facilities, _packages] = await Promise.all([getGroupAsync(), getFacilitiesAsync(), getPackagesAsync()]);
+            const [_groups, _facilities, _packages, _banks] = await Promise.all([getGroupAsync(), getFacilitiesAsync(), getPackagesAsync(), getBanksAsync()]);
             setGroups(_groups.data)
             setFacilities(_facilities.data)
             setPackages(_packages.data)
+            setBanks(_banks.data)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -79,15 +88,22 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         if (subscriber == null) return
         const { facility: fc, package: pckg, group: gr, passportPicture, ...rest } = subscriber;
         let file: File | null = null;
-        if (passportPicture) {
-            const base64Buffer = Buffer.from(passportPicture as string, 'base64');
+        if (typeof passportPicture === "string") {
+            const inputString = passportPicture as string;
+            const base64Data = inputString.split(",")[1];
+            const fileType = inputString.split(",")[0].replace(/^data:([^:]+):base64$/, '$1');;
+
+            const base64Buffer = Buffer.from(base64Data, 'base64');
             const blob = new Blob([base64Buffer]);
-            const filename = "userprofile.jpg";
-            file = new File([blob], filename, { type: "image/jpg" });
+            const filename = "userprofile";
+            file = new File([blob], filename, { type: fileType });
         }
-        console.log(subscriber)
+
+
         try {
-            setData({ ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File })
+            setData({
+                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File
+            })
         } catch (error) {
             console.warn(error)
         }
@@ -104,39 +120,39 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     }
 
     const handleOnEntityDelete = () => {
-        DialogBox({ title: "Try", promptText: "Are You Sure You want to ", open: true, closeModal: () => void (0) })
-        return
-        if (subscriber?.id == null) return
-        del('/individual-subscribers/' + subscriber.id,
-            {
-                onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
-                onError: () => toastnotify("Failed To Remove Subscription", "Error"),
-                config: {
-                    validation: {
-                        enable: false
+        setDialogData({
+            open: true,
+            title: "Are you sure?",
+            promptText: "This action is irreversible",
+        }).onDialogConfirm(() => {
+            if (subscriber?.id == null) return
+            del('/individual-subscribers/' + subscriber.id,
+                {
+                    onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
+                    onError: () => toastnotify("Failed To Remove Subscription", "Error"),
+                    config: {
+                        validation: {
+                            enable: false
+                        }
                     }
-                }
-            })
+                })
+        }).onDialogDecline(() => { })
     }
 
     useEffect(() => {
         fetchSelectFieldData();
     }, [])
 
-    // useEffect(() => {
-    //     console.log(data)
-    // }, [data])
-
-
 
     return (
-        <div className=' grid grid-cols-1 lg:grid-cols-2  gap-4 p-2'>
+        <div className=' '>
             {/* First Section Begins here */}
-            <div className=' col-span-1 lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-5'>
-                <div className=' grid grid-cols-1 gap-5 !bg-white pb-10 h-max pt-5 px-5 rounded-md border'>
-                    <nav className=' flex items-center !gap-1 border-b pb-3 !px-0 font-semibold text-gray-500'>
-                        <span> ID Card Selection</span>
-                    </nav>
+            <div className='  grid grid-cols-1 lg:grid-cols-2'>
+                <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>
+                    <nav className=' aspect-square flex items-center text-sm justify-center h-6 w-6 rounded-full p-1 bg-gray-500/80 text-gray-50'>1</nav>
+                    <nav className='font-semibold text-base text-gray-500'> Identification Documents</nav>
+                </nav>
+                <div className=' grid grid-cols-1 gap-5 !bg-white pb-10 h-full pt-5 px-5  border'>
                     <nav className=' grid-cols-1 grid gap-5'>
                         <Selectoption
                             value={data.idType}
@@ -160,14 +176,10 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         />
                     </nav>
                 </div>
-                <div className=' grid grid-cols-1 gap-5 !bg-white  h-full pt-2 pb-2 px-5 rounded-md border'>
-                    <nav className=' flex items-center justify-between !gap-1 border-b pb-3 !px-0 font-semibold text-gray-500'>
-                        <span> Client Picture</span>
-                        <span className="text-red-400 text-sm"> {errors?.passportPicture}</span>
-                    </nav>
+                <div className=' grid grid-cols-1 gap-5 !bg-white  h-full pt-2 pb-2 px-5 lg:py-5  border'>
                     <nav className=' grid-cols-1 grid h-full'>
-                        <Fileupload files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
-                            acceptType={['image/jpeg']}
+                        <Fileupload placeholder="Upload Passport Pic" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
+                            acceptType={['image/jpeg', 'image/jpg', 'image/png']}
                             maxNumber={1}
                         />
                     </nav>
@@ -176,8 +188,12 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
             </div>
 
             {/* Second section */}
-            <div className='col-span-1  lg:col-span-2 '>
-                <div className=' w-full border rounded-md p-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid gap-5'>
+            <div className=' '>
+                <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>
+                    <nav className=' aspect-square flex items-center text-sm justify-center h-6 w-6 rounded-full p-1 bg-gray-500/80 text-gray-50'>2</nav>
+                    <nav className='font-semibold text-base text-gray-500'> Personal Information</nav>
+                </nav>
+                <div className=' w-full border  p-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid gap-5'>
                     <Input
                         value={data?.membershipID}
                         label="MID"
@@ -251,6 +267,44 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                             { key: "Divorced", value: "Divorced" },
                             { key: "Widowed", value: "Widowed" },
                         ]} />
+
+
+                    <Selectoption
+                        error={errors?.hasNHIS}
+                        value={data.hasNHIS}
+                        onValueChange={(v) => setData('hasNHIS', v)}
+                        label='NHIS'
+                        required
+                        placeholder='Select an option'
+                        options={[
+                            { key: "Yes", value: true },
+                            { key: "No", value: false }
+                        ]} />
+
+                    <Input
+                        error={errors?.NHISNumber}
+                        value={data.NHISNumber}
+                        onChange={(e) => setData("NHISNumber", e.target.value)}
+                        label='NHIS Number'
+                        required
+                        placeholder='NHIS Number'
+                    />
+                    <Selectoption
+                        error={errors?.group}
+                        value={data.group}
+                        onValueChange={(v) => setData('group', v)}
+                        label='Ass. / Group'
+                        placeholder='Select Ass. / Group'
+                        options={groups ? [...Object.entries(groups.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
+                </div>
+
+            </div>
+            <div>
+                <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>
+                    <nav className=' aspect-square flex items-center text-sm justify-center h-6 w-6 rounded-full p-1 bg-gray-500/80 text-gray-50'>3</nav>
+                    <nav className='font-semibold text-base text-gray-500'> Contact Information</nav>
+                </nav>
+                <div className=' w-full border  p-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid gap-5'>
                     <Input
                         error={errors?.address}
                         value={data.address}
@@ -269,13 +323,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         required
                         placeholder="Enter GPS Address"
                     />
-                    <Selectoption
-                        value={data.facility}
-                        error={errors?.facility}
-                        onValueChange={(v) => setData('facility', v)}
-                        label='Facility'
-                        placeholder='Select Facility'
-                        options={facilities ? [...Object.entries(facilities.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
+
                     <Input
                         error={errors?.phoneOne}
                         value={data.phoneOne}
@@ -313,120 +361,28 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         placeholder="Enter EMG Phone"
                     />
 
-                    <Selectoption
-                        error={errors?.hasNHIS}
-                        value={data.hasNHIS}
-                        onValueChange={(v) => setData('hasNHIS', v)}
-                        label='NHIS'
-                        required
-                        placeholder='Select an option'
-                        options={[
-                            { key: "Yes", value: true },
-                            { key: "No", value: false }
-                        ]} />
-
-                    <Input
-                        error={errors?.NHISNumber}
-                        value={data.NHISNumber}
-                        onChange={(e) => setData("NHISNumber", e.target.value)}
-                        label='NHIS Number'
-                        required
-                        placeholder='NHIS Number'
-                    />
-
-                    <Selectoption
-                        error={errors?.package}
-                        value={data.package}
-                        onValueChange={(v) => setData('package', v)}
-                        required
-                        label='Package'
-                        placeholder='Select Package'
-                        options={packages ? [...Object.entries(packages.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
-                    <Selectoption
-                        error={errors?.frequency}
-                        value={data.frequency}
-                        onValueChange={(v) => setData('frequency', v)}
-                        required
-                        label='Frequency'
-                        placeholder='Select Frequency'
-                        options={[
-                            { key: "Daily", value: "Daily" },
-                            { key: "Monthly", value: "Monthly" },
-                            { key: "Weekly", value: "Weekly" },
-                        ]} />
-
-                    <Selectoption
-                        error={errors?.paymentMode}
-                        value={data.paymentMode}
-                        onValueChange={(v) => setData('paymentMode', v)}
-                        label='Payment Mode'
-                        required
-                        placeholder='Select Payment Mode'
-                        options={[
-                            { key: "Cash", value: "Cash" },
-                            { key: "MOMO", value: "MOMO" },
-                            { key: "Cheque", value: "Cheque" },
-                        ]} />
-
-                    <Selectoption
-                        error={errors?.momoNetwork}
-                        value={data.momoNetwork}
-                        onValueChange={(v) => setData('momoNetwork', v)}
-                        label='MoMo Network'
-                        required
-                        placeholder='Select MoMo Network'
-                        options={[
-                            { key: "MTN", value: "MTN" },
-                            { key: "VODAFONE", value: "VODAFONE" },
-                            { key: "AIRTEL TIGO", value: "AIRTELTIGO" },
-                        ]} />
-
-                    <Input
-                        error={errors?.momoNumber}
-                        value={data.momoNumber}
-                        onChange={(e) => setData('momoNumber', e.target.value)}
-                        label="MoMo Number"
-                        name=""
-                        required
-                        placeholder="Enter MoMo Number"
-                    />
-
-                    <Selectoption
-                        error={errors?.discount}
-                        value={data.discount}
-                        onValueChange={(v) => setData('discount', v)}
-                        required
-                        label='Discount'
-                        placeholder='Select Discount (%)'
-                        options={[
-                            { key: "0%", value: 0 },
-                            { key: "5%", value: 5 },
-                            { key: "10%", value: 10 },
-                            { key: "15%", value: 15 },
-                            { key: "20%", value: 20 },
-                            { key: "25%", value: 25 },
-                        ]} />
-                    <Selectoption
-                        error={errors?.group}
-                        value={data.group}
-                        onValueChange={(v) => setData('group', v)}
-                        label='Ass. / Group'
-                        placeholder='Select Ass. / Group'
-                        options={groups ? [...Object.entries(groups.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
                 </div>
+            </div>
+            <div>
+                <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>
+                    <nav className=' aspect-square flex items-center text-sm justify-center h-6 w-6 rounded-full p-1 bg-gray-500/80 text-gray-50'>4</nav>
+                    <nav className='font-semibold text-base text-gray-500'> Payment Information</nav>
+                </nav>
+                <Makeindividualsubscriptionpayment
+                    canDelete={!!subscriber?.id}
+                    onSubmit={handleFormSubmission}
+                    onDelete={handleOnEntityDelete}
+                    onCancel={onCancel}
+                    formData={data}
+                    banks={banks}
+                    errors={errors} setData={setData}
+                    packages={packages}
+                    groups={groups}
+                    facilities={facilities}
+                />
 
             </div>
-            <nav className='col-span-1  lg:col-span-2 flex items-center justify-end gap-3'>
-                <Button onClick={() => onCancel()} variant='outline' size='md'>
-                    Cancel
-                </Button>
-                <Button disabled={processing} onClick={() => handleFormSubmission()} variant='primary' size='md'>
-                    Save
-                </Button>
-                {subscriber?.id && <Button onClick={() => handleOnEntityDelete()} variant="danger" size='md'>
-                    Delete
-                </Button>}
-            </nav>
+
         </div >
 
 

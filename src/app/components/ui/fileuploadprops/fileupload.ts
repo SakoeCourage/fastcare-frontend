@@ -48,6 +48,7 @@ export interface fileUploadProps {
     files?: File[] | Blob[] | undefined;
     maxNumber?: number;
     maxFileSize?: number;
+    placeholder?: string,
     onError?: (error: string[]) => void;
     acceptType?: regularExtensions[]
 }

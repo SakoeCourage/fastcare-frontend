@@ -1,44 +1,49 @@
 "use client"
 import React, { useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
-import { IUserDTO } from '../usertypedef'
+import { userDTO } from 'app/app/types/entitiesDTO'
 import Modal from 'app/app/components/ui/modal'
 import Newuserform from './newuserform'
 import DataTable from 'app/app/components/datatable/datatable'
+import IconifyIcon from 'app/app/components/ui/iconsbutton'
+import { resetTableData } from 'app/app/components/datatable/datatable'
+import { dateReformat } from 'app/app/lib/utils'
 
-const columns: ColumnDef<IUserDTO>[] = [
-    {
-        accessorKey: "fullName",
-        header: "Full Name"
-    },
-    {
-        accessorKey: "email",
-        header: "Email"
-    },
-    {
-        accessorKey: "facility",
-        header: "Facility"
-    },
-    {
-        accessorKey: "role",
-        header: "Role"
-    },
-    {
-        accessorKey: "",
-        header: "Action"
-    }
-]
+function Userstable() {
+    const [showNewUserForm, setShowNewUserForm] = useState<userDTO | null>(null)
 
-function userstable() {
-    const [showNewUserForm, setShowNewUserForm] = useState<boolean>(false)
+    const columns: ColumnDef<userDTO>[] = [
+        {
+            accessorKey: "createdAt",
+            header: "Created At",
+            cell: ({ row }) => dateReformat(row.original.createdAt)
+        },
+        {
+            accessorKey: "username",
+            header: "User Name"
+        },
+        {
+            accessorKey: "",
+            header: "Action",
+            cell: ({ row }) => <IconifyIcon onClick={() => setShowNewUserForm(row.original)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+        }
+    ]
     return (
         <div>
-            <Modal size='xl' open={showNewUserForm} title='New User Onboarding' closeModal={() => setShowNewUserForm(false)} >
-                <Newuserform />
+            <Modal size='xl' open={showNewUserForm !== null} title='New User Onboarding' closeModal={() => setShowNewUserForm(null)} >
+                <Newuserform
+                    formData={showNewUserForm}
+                    onCancel={() => setShowNewUserForm(null)}
+                    onNewDataSucess={() => { resetTableData(); setShowNewUserForm(null) }}
+                />
             </Modal>
-            <DataTable filterable="fullName" filterablePlaceholder='Search Email or FullName' onAction={() => setShowNewUserForm(true)} columns={columns} actionName='Onboard New User' />
+            <DataTable
+                dataSourceUrl='/users?pageSize=10&page=1'
+                filterable="username"
+                filterablePlaceholder='Search username'
+                onAction={() => setShowNewUserForm({} as userDTO)} columns={columns} actionName='Onboard New User' />
         </div>
     )
 }
 
-export default userstable
+export default Userstable

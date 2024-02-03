@@ -11,7 +11,7 @@ import IconifyIcon from 'app/app/components/ui/iconsbutton'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
-import DialogBox from 'app/app/components/ui/dialoguebox'
+
 export const initialFormStateProp: {
     title: string | null,
     open: boolean;
@@ -72,9 +72,7 @@ function Individualandgroupsubtable() {
                     onNewDataSucess={() => { handleOnResetState(); resetTableData() }}
                     formData={subscriberData} />
             </Modal>
-
-            <DialogBox onConfirm={() => void (0)} onCancel={() => void (0)} title='Are You Sure?' variant="Danger" promptText='Are you sure you want to delete the current item' open={true} />
-
+            
             <DataTable
                 dataSourceUrl='/individual-subscribers?pageSize=10&page=1'
                 onAction={() => setShowForm({ title: "Add New Subscriber", open: true })}

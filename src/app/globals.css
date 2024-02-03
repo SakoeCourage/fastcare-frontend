@@ -204,27 +204,27 @@ body {
 }
 
 .button {
-    @apply rounded-md outline-none focus:outline-none w-max shadow py-2 px-3 text-sm flex items-center flex-nowrap gap-1
+    @apply rounded-md outline-none focus:outline-none w-max transition-all duration-300 ease-in-out shadow py-2 px-3 text-sm flex items-center flex-nowrap gap-1
 }
 
 .button.primary {
-    @apply bg-[#4880FF] text-white
+    @apply bg-[#4880FF] text-white focus:ring-2 ring-offset-1 ring-[#4880FF]
 }
 
 .button.default {
-    @apply bg-blue-500 text-white
+    @apply bg-blue-500 text-white focus:ring-2 ring-offset-1 ring-blue-500
 }
 
 .button.success {
-    @apply bg-green-500 text-white
+    @apply bg-green-500 text-white focus:ring-2 ring-offset-1 ring-green-500
 }
 
 .button.ghost {
-    @apply bg-white text-gray-500 border-none
+    @apply bg-white text-gray-500 border-none focus:ring-2 ring-offset-1 ring-gray-500
 }
 
 .button.outline {
-    @apply bg-transparent border border-gray-400 text-gray-500
+    @apply bg-transparent border border-gray-400 text-gray-500 focus:ring-2 ring-offset-1 ring-gray-500
 }
 
 .button.danger {

@@ -6,6 +6,8 @@ import Toastserviceprovider from './providers/Toastserviceprovider';
 import Sidebarserviceprovider from './providers/Sidebarserviceprovider';
 import Nextsessionprovider from './providers/Nextsessionprovider';
 import Pagepreloader from './providers/Pagepreloader';
+import { Dailogueserviceprovider } from './providers/Dailogueserviceprovider';
+
 export default function RootLayout({
     children,
 }: {
@@ -19,7 +21,9 @@ export default function RootLayout({
                         <Nprogressprovider>
                             <Toastserviceprovider>
                                 <Sidebarserviceprovider>
-                                    {children}
+                                    <Dailogueserviceprovider>
+                                        {children}
+                                    </Dailogueserviceprovider>
                                 </Sidebarserviceprovider>
                             </Toastserviceprovider>
                         </Nprogressprovider>

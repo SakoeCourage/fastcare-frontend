@@ -1,19 +1,20 @@
 "use client"
 import React, { useState } from 'react'
-import { callCommentDTO } from 'app/app/types/entitiesDTO'
+import { bankDTO } from 'app/app/types/entitiesDTO'
 import { ColumnDef } from '@tanstack/react-table'
 import DataTable from 'app/app/components/datatable/datatable'
 import Modal from 'app/app/components/ui/modal'
-import Newcallcommentform from './newcallcommentform'
+import Newbankform from './newbankform'
 import IconifyIcon from 'app/app/components/ui/iconsbutton'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 import { dateReformat } from 'app/app/lib/utils'
 
-function Callcommentstable() {
-    const [curentCallComment, setCurentCallComment] = useState<callCommentDTO | null>(null)
+
+function Banktable() {
+    const [curentCallComment, setCurentCallComment] = useState<bankDTO | null>(null)
 
 
-    const columns: ColumnDef<callCommentDTO>[] = [
+    const columns: ColumnDef<bankDTO>[] = [
         {
             accessorKey: "createdAt",
             header: "Created At",
@@ -22,10 +23,6 @@ function Callcommentstable() {
         {
             accessorKey: "name",
             header: "Name"
-        },
-        {
-            accessorKey: "description",
-            header: "Description"
         },
         {
             accessorKey: "",
@@ -37,19 +34,19 @@ function Callcommentstable() {
 
     return (
         <div>
-            <Modal open={curentCallComment !== null} title='Call Comment Setup' closeModal={() => setCurentCallComment(null)}>
-                <Newcallcommentform
+            <Modal open={curentCallComment !== null} title='Bank Setup' closeModal={() => setCurentCallComment(null)}>
+                <Newbankform
                     onCancel={() => setCurentCallComment(null)}
                     onNewDataSucess={() => { resetTableData(); setCurentCallComment(null) }}
                     formData={curentCallComment}
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/call-comment-categories?pageSize=10&page=1'
-                onAction={() => setCurentCallComment({} as callCommentDTO)}
-                columns={columns} actionName='Add Call Comment Category' />
+                dataSourceUrl='/banks?pageSize=10&page=1'
+                onAction={() => setCurentCallComment({} as bankDTO)}
+                columns={columns} actionName='Add Bank' />
         </div>
     )
 }
 
-export default Callcommentstable
+export default Banktable

@@ -1,5 +1,5 @@
 import { groupDTO, facilityDTO, packageDTO } from ".";
-
+import { PaymentMods } from ".";
 export interface IndividualSubDTO {
     id?: number;
     idType: string;
@@ -21,15 +21,20 @@ export interface IndividualSubDTO {
     emergencyPersonPhone: string;
     hasNHIS: boolean;
     NHISNumber: string;
-    paymentMode: "MOMO" | "Cash" | "Cheque";
-    frequency: "Daily" | "Weekly" | "Monthly";
-    discount: number;
-    momoNetwork: "MTN" | "VODAFONE" | "AIRTELTIGO";
+    momoNetwork: "MTN" | "VODAFONE" ;
     momoNumber: string;
     createdAt: string;
     updatedAt: string;
     createdBy: string | null;
     updatedBy: string | null;
+    discount: number,
+    paymentMode: PaymentMods | string,
+    amountToDebit: number,
+    frequency: string,
+    bank: number,
+    accountNumber?: string,
+    chequeNumber?: string,
+    CAGDStaffID?: string,
     group?: groupDTO;
     package?: packageDTO;
     facility?: facilityDTO;

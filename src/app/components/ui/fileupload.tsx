@@ -19,7 +19,8 @@ const Fileupload = ({ getFiles,
     maxNumber,
     maxFileSize = 10485760,
     onError,
-    acceptType
+    acceptType,
+    placeholder
 }: fileUploadProps) => {
 
     const [dragOver, setIsDragOver] = useState<boolean>(false)
@@ -196,6 +197,7 @@ const Fileupload = ({ getFiles,
             />
             {!files.length && (
                 <BlankImagePlaceholder
+                    placeholder={placeholder}
                     isDragging={dragOver}
                     onImageUpload={() => inputRef.current!.click()}
                 />
@@ -207,6 +209,7 @@ const Fileupload = ({ getFiles,
                 {Boolean(files.length) &&
                     !(Number(files.length) === maxNumber) && (
                         <BlankImagePlaceholder
+                            placeholder={placeholder}
                             isDragging={dragOver}
                             onImageUpload={() => inputRef.current!.click()}
                         />

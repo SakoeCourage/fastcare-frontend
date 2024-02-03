@@ -87,34 +87,30 @@ export let sidebarRoutes: routesListWitSections =
                     link: "/portal/individual-group-subscription"
                 },
                 {
-                    title: "Family Subscriptions",
+                    title: "Family Subscription",
                     icon: "material-symbols:family-restroom",
                     links: [
                         {
-                            title: 'Family Subscription',
-                            link: '/portal/familysubscriptions/familysubscription',
+                            title: 'Family Subscibers',
+                            link: '/portal/familysubscription/familysubscribers',
                         },
                         {
                             title: 'Family Plan Members',
-                            link: '/portal/familysubscriptions/familyplanmembers',
+                            link: '/portal/familysubscription/familyplanmembers',
                         },
                         {
                             title: 'View Family Subs',
-                            link: '/portal/familysubscriptions/viewfamilysubscription',
+                            link: '/portal/familysubscription/viewfamilysubscription',
                         },
                     ]
                 },
                 {
-                    title: "Corporate Subscriptions",
+                    title: "Corporate Subscription",
                     icon: "ic:round-corporate-fare",
                     links: [
                         {
-                            title: 'Corporate Subscription',
-                            link: '/portal/corporatesubscription/corporatesubscription',
-                        },
-                        {
-                            title: 'Corporate Plan Members',
-                            link: '/portal/corporatesubscription/corporateplanmembers',
+                            title: 'Corporate Subscribers',
+                            link: '/portal/corporatesubscription/corporatesubscribers',
                         },
                         {
                             title: 'View Corporate Subs',
@@ -177,6 +173,11 @@ export let sidebarRoutes: routesListWitSections =
                     title: 'Package Setup',
                     icon: "mdi:gear",
                     link: "/portal/package"
+                },
+                {
+                    title: 'Bank Setup',
+                    icon: "mdi:gear",
+                    link: "/portal/bank"
                 },
                 {
                     title: 'Call Comment Category',

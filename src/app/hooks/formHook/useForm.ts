@@ -78,6 +78,7 @@ const useForm = <T extends Record<string, any>>(
                 setErrors(
                     error.errors.reduce((acc, err) => ({ ...acc, [err.path[0] as keyof T]: err.message }), {}),
                 );
+                console.log(errors)
                 toastnotify("Failed to process " + error?.errors[0].path[0].toString().toLocaleUpperCase())
             }
             if (error instanceof AxiosError) {

@@ -51,7 +51,7 @@ const Accountsmenu = (): React.JSX.Element => {
       </div>
 
       <div className="border-b">
-        <Link href="/user/all" className="px-4 py-2 hover:bg-gray-100 flex">
+        <Link href="/portal/user/all" className="px-4 py-2 hover:bg-gray-100 flex">
           <div className="text-gray-800">
             <svg
               fill="none"
@@ -70,7 +70,7 @@ const Accountsmenu = (): React.JSX.Element => {
             <p className="text-xs text-gray-500">Add/remove users</p>
           </div>
         </Link>
-        <Link href="/myaccount" className="px-4 py-2 hover:bg-gray-100 flex">
+        <Link href="/portal/myaccount" className="px-4 py-2 hover:bg-gray-100 flex">
           <div className="text-gray-800">
             <svg
               fill="none"

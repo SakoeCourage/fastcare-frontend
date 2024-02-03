@@ -4,58 +4,64 @@ import { rejects } from 'assert';
 
 const dialogueContext = createContext({});
 
-interface IDialogueService {
-    onConfimSelect: () => Promise<any>
-    OnDeclineSelect: () => Promise<any>
-    setDialogData: (data: IDialogue | null) => void
+type dialogConfirmed = (callback: () => void) => { onDialogDecline: dialogDeclined; };
+type dialogDeclined = (callback: () => void) => { onDialogConfirm: dialogConfirmed; };
+
+interface dialogeReponse {
+    onDialogConfirm: dialogConfirmed;
+    onDialogDecline: dialogDeclined;
 }
+
+interface IDialogueService {
+    setDialogData: (data: IDialogue | null) => dialogeReponse;
+}
+
 
 interface IDialogueParam {
     children: React.ReactNode,
 
 }
 
-function Dailogueserviceprovider(params: IDialogueParam) {
+export function Dailogueserviceprovider(params: IDialogueParam) {
     const { children } = params
-    const [dialogeProps, setDialogeProps] = useState<IDialogue | null>(null)
-    const [diaLogPromise, setDialogPromise] = useState<Promise<any> | null>(null)
-
-    const onConfimSelect = () => {
-        return new Promise((resolve, reject) => {
-            const btnOK: HTMLButtonElement | null = document.querySelector("#dialog_confirm")
-            if (btnOK != null) {
-                btnOK?.addEventListener('click', () => {
-                    resolve("dialogeConfirmed")
-                })
-            } else {
-                reject("dialoge not confirmed")
-            }
-        })
-    }
-    const OnDeclineSelect = () => {
-        return new Promise((resolve, reject) => {
-            const btnOK: HTMLButtonElement | null = document.querySelector("#dialog_cancel")
-            if (btnOK != null) {
-                btnOK?.addEventListener('click', () => {
-                    resolve("dialogeConfimed")
-                })
-            } else {
-                reject("dialoge not confirmed")
-            }
-        })
-    }
+    const [dialogProps, setDialogProps] = useState<IDialogue | null>(null)
 
     const setDialogData = (dt: IDialogue | null) => {
-        setDialogeProps(dt)
+        const onDialogConfirm = (callback: () => void) => {
+            console.log("onDialogConfirm")
+            dt && setDialogProps({
+                ...dt, onConfirm: () => {
+                    callback && callback()
+                    setDialogProps(null)
+                }
+            })
+            return { onDialogDecline }
+        };
+
+        const onDialogDecline = (callback: () => void) => {
+            dt && setDialogProps((cv) => cv && ({
+                ...cv, onCancel: () => {
+                    callback && callback()
+                    setDialogProps(null)
+                }
+            }));
+            return { onDialogConfirm }
+        };
+
+        return { onDialogConfirm, onDialogDecline }
     }
 
     const values: IDialogueService = {
-        setDialogData: setDialogData,
-        OnDeclineSelect: OnDeclineSelect,
-        onConfimSelect: onConfimSelect,
+        setDialogData: setDialogData
     }
+
+
     return <dialogueContext.Provider value={values}>
-        {/* <DialogueBox {(dialogeProps != null) ? { ...dialogeProps } : null} /> */}
+        <DialogueBox {...(dialogProps !== null ? { ...dialogProps } : {
+            open: false,
+            onCancel: () => void (0),
+            onConfirm: () => void (0)
+        })} />
         {children}
     </dialogueContext.Provider>
 
@@ -65,4 +71,37 @@ function Dailogueserviceprovider(params: IDialogueParam) {
 export function dialogService(): IDialogueService {
     if (dialogueContext.Provider == null) throw ("Unable to start Dialogue Service");
     return useContext(dialogueContext) as IDialogueService
+}
+
+
+
+interface ISystemDialog {
+    title: string,
+    promptText: string,
+    onDialogConfirm?: () => void,
+    onDialogDecline?: () => void,
+}
+
+// doesnt work
+export function SystemDialog(params: ISystemDialog) {
+    const { title, promptText, onDialogConfirm, onDialogDecline } = params
+    const { setDialogData } = dialogService();
+
+    React.useEffect(() => {
+        setDialogData({
+            open: true,
+            title: title,
+            promptText: promptText,
+            onConfirm: () => {
+                onDialogConfirm && onDialogConfirm();
+                setDialogData(null)
+            },
+            onCancel: () => {
+                onDialogDecline && onDialogDecline();
+                setDialogData(null)
+            },
+        });
+    }, []);
+
+
 }
