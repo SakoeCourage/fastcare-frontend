@@ -79,7 +79,7 @@ export const columns: ColumnDef<IDataImportDTO>[] = [
         header: "Type",
     },
 ]
-function importdatatable() {
+function Importdatatable() {
     const [showFileUploadModal, setShowFileUploadModal] = useState<boolean>(false)
     return (
         <div>
@@ -91,4 +91,4 @@ function importdatatable() {
     )
 }
 
-export default importdatatable
+export default Importdatatable

@@ -9,7 +9,7 @@ import useForm from 'app/app/hooks/formHook/useForm'
 import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 
-function newpackageform(props: IFormWithDataProps<packageDTO>) {
+function Newpackageform(props: IFormWithDataProps<packageDTO>) {
     const { formData, onCancel, onNewDataSucess } = props
 
     const { data, errors, processing, post, patch, setData, setValidation } = useForm<Partial<packageDTO>>(formData ? { ...formData } : {});
@@ -71,4 +71,4 @@ function newpackageform(props: IFormWithDataProps<packageDTO>) {
     )
 }
 
-export default newpackageform
+export default Newpackageform

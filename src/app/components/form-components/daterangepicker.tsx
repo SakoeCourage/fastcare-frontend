@@ -24,7 +24,7 @@ type IdatePickerParams = {
 } & CalendarProps
 
 
-export default function daterangepicker({ label, required, placeholder, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
+export default function Daterangepicker({ label, required, placeholder, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
     const [date, setDate] = React.useState<DateRange | undefined>({
         from: undefined,
         to: undefined,

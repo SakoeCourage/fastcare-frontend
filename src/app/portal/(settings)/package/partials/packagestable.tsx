@@ -10,7 +10,7 @@ import Api from 'app/app/fetch/axiosInstance'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 
-function packagestable() {
+function Packagestable() {
     const [showNewPackageForm, setShowNewPackageForm] = useState<boolean>(false)
     const [selectedPackage, setSelectedPackage] = useState<packageDTO | null>(null)
 
@@ -64,4 +64,4 @@ function packagestable() {
     )
 }
 
-export default packagestable
+export default Packagestable

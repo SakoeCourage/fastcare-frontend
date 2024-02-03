@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect, useEffect, forwardRef, ForwardedRef } from "react";
 import classNames from "classnames";
-import { Step } from "./steppertypes";
+import type { Step as Sp } from "./steppertypes";
 import { Button } from "app/app/components/form-components/button";
 import { stepperApi } from "./steppertypes";
 import { debounce } from "app/app/lib/utils";
@@ -11,12 +11,13 @@ type stepParam = Partial<stepperApi> & {
     label: String | React.ReactNode,
     index: number,
     isCompleted: boolean,
-    steps: Step[]
+    steps: Sp[]
     currentStepIndex: number,
     setCurrentStepIndex: React.Dispatch<React.SetStateAction<number>>
 }
 
-const step = forwardRef((props: stepParam, ref: ForwardedRef<HTMLDivElement | null>) => {
+// eslint-disable-next-line react/display-name
+const Step = forwardRef((props: stepParam, ref: ForwardedRef<HTMLDivElement | null>) => {
 
     const { active, Component, currentStepIndex, index, label, steps, onNextStep, setCurrentStepIndex, isFirstStep, onPrevStep, isLastStep } = props
     const [scrollHeight, setScrollHeight] = useState(0)
@@ -150,4 +151,4 @@ const step = forwardRef((props: stepParam, ref: ForwardedRef<HTMLDivElement | nu
     )
 }
 )
-export default step
+export default Step

@@ -48,7 +48,7 @@ const columns: ColumnDef<ISubscribersDTO>[] = [
     },
 ]
 
-function page() {
+function Page() {
     const [showPaymentHistory, setShowPaymentHistory] = useState<boolean>(false)
     return (
         <div className='container mx-auto'>
@@ -99,5 +99,5 @@ function page() {
     )
 }
 
-export default page
+export default Page
 

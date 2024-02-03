@@ -10,7 +10,7 @@ import { z } from 'zod'
 import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO, bankDTO } from 'app/app/types/entitiesDTO'
 import { AxiosResponse } from 'axios'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
-import { dialogService } from 'app/app/providers/Dailogueserviceprovider'
+import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
 import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
 
 function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: IFormWithDataProps<IndividualSubDTO>) {
@@ -18,7 +18,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
     const [banks, setBanks] = useState<IPaginatedData<bankDTO> | null>(null)
-    const { setDialogData } = dialogService()
+    const { setDialogData } = DialogService()
     const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>({
     })
 

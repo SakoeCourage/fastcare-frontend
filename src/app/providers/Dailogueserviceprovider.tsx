@@ -68,7 +68,7 @@ export function Dailogueserviceprovider(params: IDialogueParam) {
 }
 
 
-export function dialogService(): IDialogueService {
+export function DialogService(): IDialogueService {
     if (dialogueContext.Provider == null) throw ("Unable to start Dialogue Service");
     return useContext(dialogueContext) as IDialogueService
 }
@@ -85,7 +85,7 @@ interface ISystemDialog {
 // doesnt work
 export function SystemDialog(params: ISystemDialog) {
     const { title, promptText, onDialogConfirm, onDialogDecline } = params
-    const { setDialogData } = dialogService();
+    const { setDialogData } = DialogService();
 
     React.useEffect(() => {
         setDialogData({

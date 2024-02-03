@@ -14,7 +14,7 @@ import Beneficiarieslist from './beneficiarieslist'
 
 
 
-function familyplanmemberstable() {
+function Familyplanmemberstable() {
     const [showNewFamilyMemberForm, setShowNewFamilyMemberForm] = useState<boolean>(false)
     const [showSubcriptionPackages, setShowSubcriptionPackages] = useState<boolean>(false)
 
@@ -80,4 +80,4 @@ function familyplanmemberstable() {
     )
 }
 
-export default familyplanmemberstable
+export default Familyplanmemberstable
