@@ -28,7 +28,6 @@ export function Dailogueserviceprovider(params: IDialogueParam) {
 
     const setDialogData = (dt: IDialogue | null) => {
         const onDialogConfirm = (callback: () => void) => {
-            console.log("onDialogConfirm")
             dt && setDialogProps({
                 ...dt, onConfirm: () => {
                     callback && callback()
@@ -37,7 +36,6 @@ export function Dailogueserviceprovider(params: IDialogueParam) {
             })
             return { onDialogDecline }
         };
-
         const onDialogDecline = (callback: () => void) => {
             dt && setDialogProps((cv) => cv && ({
                 ...cv, onCancel: () => {
@@ -50,11 +48,10 @@ export function Dailogueserviceprovider(params: IDialogueParam) {
 
         return { onDialogConfirm, onDialogDecline }
     }
-
+    
     const values: IDialogueService = {
         setDialogData: setDialogData
     }
-
 
     return <dialogueContext.Provider value={values}>
         <DialogueBox {...(dialogProps !== null ? { ...dialogProps } : {

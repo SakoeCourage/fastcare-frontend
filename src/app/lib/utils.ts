@@ -27,9 +27,9 @@ export function formatcurrency(amount: number): string | undefined {
 }
 
 
-export function dateReformat(date: string): string | undefined {
+export function dateReformat(date: string | Date): string | undefined {
   if (date) {
-    return (dayjs(date).format('DD/MM/YYYY'))
+    return (dayjs(date).format('YYYY/MM/DD'))
   }
 }
 
@@ -60,7 +60,7 @@ export function updateUrlQueryParam(url: string, key: string, value: string | nu
   }
 
   urlObject.search = queryParams.toString();
-  
+
   return urlObject.toString();
 }
 

@@ -146,7 +146,7 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
             return amount
         }
     }
-    
+
     const getAmountToDebit = useMemo(() => {
         if (formData.package || formData.discount == 0) return setOriginalAmoutToDebit()
         if (formData.discount > 0) {
@@ -351,7 +351,7 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                             Cancel
                         </Button>
                         {canDelete && <Button onClick={() => onDelete()} variant="danger" size='full'>
-                            Delete
+                            Pause Subscription
                         </Button>}
                     </nav>
                 </div>

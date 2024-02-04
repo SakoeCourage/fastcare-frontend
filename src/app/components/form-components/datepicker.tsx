@@ -8,6 +8,8 @@ import { cn } from "@/lib/utils"
 import { Button } from "./button"
 import { Calendar } from "./partial/calendarcomponents"
 import { Label } from "./label"
+import Selectoption from "./selectoption"
+import { dateReformat } from "@/lib/utils"
 import {
   Popover,
   PopoverContent,
@@ -35,17 +37,54 @@ export type IdatePickerParams = {
 export default function Datepicker({ label, value, name, required, placeholder, error, onChange, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
   const [date, setDate] = React.useState<Date | undefined>()
 
+  const handleOnDateChage = (v: Date) => {
+    onChange && onChange(dateReformat(v as Date));
+    setDate(v)
+  }
+  const handleOnMonthChange = (m: number) => {
+    let newDate = date ? date.setMonth(m) : new Date().setMonth(m);
+    handleOnDateChage(new Date(newDate))
+  }
+  const handleOnYearChange = (y: number) => {
+    let newDate = date ? date.setFullYear(y) : new Date().setFullYear(y)
+    handleOnDateChage(new Date(newDate))
+  }
+
+  function getYearsArray(endYear: string = "1900"): number[] {
+    const currentYear = new Date().getFullYear();
+    const years: number[] = [];
+
+    for (let year = currentYear; year >= parseInt(endYear, 10); year--) {
+      years.push(year);
+    }
+
+    return years;
+  }
+
+
+  function getMonthsArray(): { index: number; name: string }[] {
+    const months: { index: number; name: string }[] = [];
+
+    for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
+      const monthName = new Date(2000, monthIndex, 1).toLocaleString('en-US', { month: 'short' });
+      months.push({ index: monthIndex, name: monthName });
+    }
+
+    return months;
+  }
+
   React.useEffect(() => {
     if (value == "" || value == null) {
       setDate(undefined)
     } else {
-      console.log(value)
-      let dd = "23/04/2024";
-
-      // setDate(new Date(format(new Date(value), "M/d/Y")));
+      setDate(new Date(value))
     }
-
   }, [value])
+
+  React.useEffect(() => {
+    console.log(date)
+  }, [date])
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -71,17 +110,29 @@ export default function Datepicker({ label, value, name, required, placeholder, 
               )}
             >
               <CalendarIcon className="mr-2 h-5 w-4" />
-              {date ? <span className=" whitespace-nowrap truncate">{format(date, "d/M/Y")}</span> : <span className=" whitespace-nowrap truncate">{placeholder ?? "Pick a date"} </span>}
+              {date ? <span className=" whitespace-nowrap truncate">{dateReformat(date)}</span> : <span className=" whitespace-nowrap truncate">{placeholder ?? "Pick a date"} </span>}
             </Button>
           </div>
 
         </nav>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 z-[70]">
-        <Calendar className=" bg-white "
+        <div className="p-1 rounded-md boder-1 flex items-center w-full gap-1">
+          <Selectoption className="w-full" placeholder="Year"
+            onValueChange={(v) => handleOnYearChange(parseInt(v))}
+            value={date && date.getFullYear().toString()}
+            options={getYearsArray().map(year => ({ key: year.toString(), value: year.toString() }))}
+          />
+          <Selectoption className="w-full" placeholder="Month"
+            onValueChange={(v) => handleOnMonthChange(parseInt(v))}
+            value={date && date.getMonth().toString()}
+            options={getMonthsArray().map(({ index, name }) => ({ key: name, value: index.toString() }))}
+          />
+        </div>
+        <Calendar className=" bg-white"
           mode={"single"}
           selected={date}
-          onSelect={(v) => { onChange && onChange(format(v as Date, "d/M/Y")); setDate(v) }}
+          onSelect={(v) => handleOnDateChage(v)}
           initialFocus
           {...rest}
         />

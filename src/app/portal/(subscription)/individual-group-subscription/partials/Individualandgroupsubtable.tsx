@@ -65,6 +65,8 @@ function Individualandgroupsubtable() {
         setSubscriberData(null)
     }
 
+   
+
     return (
         <div>
             <Modal size='3xl' closeModal={() => { handleOnResetState() }} open={showForm.open} title={showForm.title ?? "Add New Subscriber"}>
@@ -72,7 +74,7 @@ function Individualandgroupsubtable() {
                     onNewDataSucess={() => { handleOnResetState(); resetTableData() }}
                     formData={subscriberData} />
             </Modal>
-            
+
             <DataTable
                 dataSourceUrl='/individual-subscribers?pageSize=10&page=1'
                 onAction={() => setShowForm({ title: "Add New Subscriber", open: true })}

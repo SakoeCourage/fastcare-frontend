@@ -64,7 +64,7 @@ const DialogBox: React.FC<IDialogue | null> = (props) => {
 
     if (props == null) return <></>
 
-    const { title = "Are you sure?", className, onCancel, onConfirm, variant = "Info", promptText, size = "lg", open, okText, cancelText } = props
+    const { title = "", className, onCancel, onConfirm, variant = "Info", promptText, size = "lg", open, okText, cancelText } = props
 
     const getPropsFromVariant = () => variantHasIcon.find(v => v.variant == variant);
     return <>
@@ -83,10 +83,10 @@ const DialogBox: React.FC<IDialogue | null> = (props) => {
                         </SimpleBar>
                         <nav className='col-span-1 h-[3.5rem] p-3  lg:col-span-2 flex items-center justify-center gap-3'>
                             <Button id='dialog_cancel' onClick={() => onCancel && onCancel()} variant='outline' size='md'>
-                                {cancelText ?? "Cancel"}
+                                {cancelText ?? ""}
                             </Button>
                             <Button id='dialog_confirm' onClick={() => onConfirm && onConfirm()} variant='primary' size='md'>
-                                {okText ?? "Ok"}
+                                {okText ?? ""}
                             </Button>
                         </nav>
                     </div>

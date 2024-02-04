@@ -122,8 +122,11 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     const handleOnEntityDelete = () => {
         setDialogData({
             open: true,
+            variant: "Warning",
             title: "Are you sure?",
-            promptText: "This action is irreversible",
+            promptText: "This action will pause users subscription",
+            okText: "Yes",
+            cancelText: "No"
         }).onDialogConfirm(() => {
             if (subscriber?.id == null) return
             del('/individual-subscribers/' + subscriber.id,
@@ -136,7 +139,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         }
                     }
                 })
-        }).onDialogDecline(() => { })
+        }).onDialogDecline(()=>{})
     }
 
     useEffect(() => {
