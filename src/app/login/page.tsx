@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import Loginform from './partials/loginform'
-
+import Loginviewsvg from './partials/loginviewsvg'
 function page() {
 
   return (
@@ -24,10 +24,10 @@ function page() {
               </div>
             </div>
             <div className="absolute z-10 inset-0  bg-gradient-to-tr from-black via-blue-600 to-black opacity-[0.55]"></div>
-            <Image className='absolute inset-0 h-full w-full object-cover' priority alt='' width={500} height={500} quality={100} src="/images/logincover.jpg" />
+            <Loginviewsvg />
           </div>
           <div className=' basis-full md:basis-[40%] h-full  items-center justify-center bg-white rounded-md '>
-            <Loginform/>
+            <Loginform />
           </div>
         </div>
       </div>
