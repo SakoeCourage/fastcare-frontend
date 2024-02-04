@@ -3,8 +3,8 @@ import type { NextRequest } from 'next/server'
 import { getSession } from 'next-auth/react'
 
 export function middleware(request: NextRequest) {
-    const currentAuthToken = request.cookies.get("next-auth.session-token")?.value
-    console.log(request.cookies)
+    const currentAuthToken = request.cookies.get("next-auth.session-token")?.value || request.cookies.get("__Secure-next-auth.session-token")?.value
+    // console.log(request.cookies)
     if (currentAuthToken === undefined) {
         if (!request.url.endsWith("/login")) {
             return NextResponse.redirect(new URL('/login', request.url))
