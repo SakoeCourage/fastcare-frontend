@@ -15,7 +15,7 @@ const Accountsmenu = (): React.JSX.Element => {
       await signOut({
         redirect: false
       })
-      window.location.reload()
+      window.location.href = "/login"
     } catch (error) {
       toastnotify("Failed to sign out")
     } finally {

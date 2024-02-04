@@ -52,8 +52,8 @@ function Loginform() {
             if (data) {
                 const { error, status, ok, } = data
                 if (error) throw new Error(error)
-                if (ok == true) window.location.href = callbackUrl ?? '/portal/dashboard'
                 window.localStorage.removeItem(RequestEvents.REQUEST_CALLBACK_URL_CONSTACT)
+                if (ok == true) window.location.href = callbackUrl ?? '/portal/dashboard'
             }
         } catch (error: unknown) {
             console.log(error)
@@ -73,6 +73,7 @@ function Loginform() {
 
     return (
         <form onSubmit={handleLogin} className='flex flex-col gap-4 items-center justify-center max-w-[20rem] mx-auto my-auto  h-full'>
+            
             <nav className=' text-xl text-orange-700 mb-3 font-medium'>
                 Sign In To Your Account
             </nav>
