@@ -29,11 +29,15 @@ declare module "next-auth" {
 }
 
 declare module "next-auth/jwt" {
+  interface User extends DefaultUser, httpUserResponse {
+    accessToken: string,
+    refreshToken: string,
+  }
   interface JWT extends DefaultJWT {
     userId: string,
     expires: string;
     accessToken: string;
     refreshToken: string;
-    user: userDTO & httpUserResponse;
+    user: User;
   }
 }
