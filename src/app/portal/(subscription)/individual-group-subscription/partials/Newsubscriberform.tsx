@@ -11,6 +11,7 @@ import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO, bankDTO } from 'ap
 import { AxiosResponse } from 'axios'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
+
 import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
 
 function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: IFormWithDataProps<IndividualSubDTO>) {
@@ -139,7 +140,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         }
                     }
                 })
-        }).onDialogDecline(()=>{})
+        }).onDialogDecline(() => { })
     }
 
     useEffect(() => {
@@ -231,14 +232,14 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         required
                         placeholder="Enter Last Name"
                     />
-                    <Datepicker
-                        value={data.dateOfBirth}
-                        error={errors?.dateOfBirth}
-                        onChange={(v) => setData('dateOfBirth', v)}
-                        label="Date of Birth"
-                        name=""
-                        placeholder="Enter Date of Birth"
-                    />
+                        <Datepicker
+                            value={data.dateOfBirth}
+                            error={errors?.dateOfBirth}
+                            onChange={(v) => setData('dateOfBirth', v)}
+                            label="Date of Birth"
+                            name=""
+                            placeholder="Enter Date of Birth"
+                        />
                     <Selectoption
                         error={errors?.gender}
                         value={data.gender}

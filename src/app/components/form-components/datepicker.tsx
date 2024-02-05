@@ -6,7 +6,6 @@ import { Calendar as CalendarIcon } from "lucide-react"
 import type { CalendarProps } from "./partial/calendarcomponents"
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
-import { Calendar } from "./partial/calendarcomponents"
 import { Label } from "./label"
 import Selectoption from "./selectoption"
 import { dateReformat } from "@/lib/utils"
@@ -15,12 +14,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "./partial/popovercomponents"
-import { space } from "postcss/lib/list"
-import { version } from "os"
 import dayjs from "dayjs"
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
 dayjs.extend(customParseFormat);
+import { Calendar } from '@natscale/react-calendar';
+import '@natscale/react-calendar/dist/main.css';
 
 export type IdatePickerParams = {
   label?: string,
@@ -44,6 +42,7 @@ export default function Datepicker({ label, value, name, required, placeholder, 
   const handleOnMonthChange = (m: number) => {
     let newDate = date ? date.setMonth(m) : new Date().setMonth(m);
     handleOnDateChage(new Date(newDate))
+
   }
   const handleOnYearChange = (y: number) => {
     let newDate = date ? date.setFullYear(y) : new Date().setFullYear(y)
@@ -117,7 +116,7 @@ export default function Datepicker({ label, value, name, required, placeholder, 
         </nav>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 z-[70]">
-        <div className="p-1 rounded-md boder-1 flex items-center w-full gap-1">
+        {/* <div className="p-1 rounded-md boder-1 flex items-center w-full gap-1">
           <Selectoption className="w-full" placeholder="Year"
             onValueChange={(v) => handleOnYearChange(parseInt(v))}
             value={date && date.getFullYear().toString()}
@@ -128,14 +127,12 @@ export default function Datepicker({ label, value, name, required, placeholder, 
             value={date && date.getMonth().toString()}
             options={getMonthsArray().map(({ index, name }) => ({ key: name, value: index.toString() }))}
           />
-        </div>
-        <Calendar className=" bg-white"
-          mode={"single"}
-          selected={date}
-          onSelect={(v) => handleOnDateChage(v)}
-          initialFocus
-          {...rest}
+        </div> */}
+        <Calendar
+          value={date}
+          onChange={handleOnDateChage}
         />
+
       </PopoverContent>
     </Popover>
   )
