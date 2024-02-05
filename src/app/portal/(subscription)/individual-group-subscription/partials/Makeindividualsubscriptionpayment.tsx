@@ -229,6 +229,15 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
 
 
                     <nav className='flex flex-col gap-3'>
+                        <Selectoption
+                            error={errors?.package}
+                            value={formData.package}
+                            onValueChange={(v) => setData('package', v)}
+                            required
+                            label='Package'
+                            placeholder='Select Package'
+                            options={packages ? [...Object.entries(packages.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
+
                         {
                             formData.paymentMode == "MOMO" &&
                             <motion.nav
@@ -244,7 +253,15 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                                     placeholder='(00) (0000) (0000)' />
                             </motion.nav>
                         }
-
+                        {(["Cheque", "Standing Order"].includes(formData.paymentMode)) &&
+                            <Selectoption required
+                                value={formData.bank}
+                                onValueChange={(v) => setData('bank', v)}
+                                error={errors?.bank}
+                                label='Bank'
+                                options={banks ? [...Object.entries(banks.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []}
+                                placeholder='Select Bank' />
+                        }
                         {
                             formData.paymentMode == "Standing Order" &&
                             <motion.nav
@@ -252,13 +269,7 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit' className=' flex flex-col gap-3'>
-                                <Selectoption required
-                                    value={formData.bank}
-                                    onValueChange={(v) => setData('bank', v)}
-                                    error={errors?.bank}
-                                    label='Bank'
-                                    options={banks ? [...Object.entries(banks.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []}
-                                    placeholder='Select Bank' />
+
                                 <Input required
                                     value={formData.accountNumber}
                                     onChange={(e) => setData('accountNumber', e.target.value)}
@@ -298,16 +309,9 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                             </motion.nav>
                         }
 
+
                     </nav>
                     <nav className=' flex flex-col gap-3 pt-3 w-full'>
-                        <Selectoption
-                            error={errors?.package}
-                            value={formData.package}
-                            onValueChange={(v) => setData('package', v)}
-                            required
-                            label='Package'
-                            placeholder='Select Package'
-                            options={packages ? [...Object.entries(packages.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
 
                         <Selectoption
                             error={errors?.discount}

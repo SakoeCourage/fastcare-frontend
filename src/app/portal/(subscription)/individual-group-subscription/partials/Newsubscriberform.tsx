@@ -55,9 +55,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        bank: data.paymentMode == "Standing Order" ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
+        bank:  ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
-        accountNumber: data.paymentMode == "Standing Order" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        accountNumber: data.paymentMode == ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
         frequency: z.string().min(1, "This Field is Required"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
 
@@ -81,7 +81,13 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     }
 
     const handleOnsucess = () => {
-        toastnotify("New Subscriber Added", "Success")
+        if (subscriber.id) {
+            toastnotify("Subscriber Updated ", "Success")
+
+        } else {
+            toastnotify("New Subscriber Added", "Success")
+
+        }
         onNewDataSucess();
     }
 
@@ -99,8 +105,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
             const filename = "userprofile";
             file = new File([blob], filename, { type: fileType });
         }
-
-
         try {
             setData({
                 ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File
@@ -112,8 +116,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     }, [subscriber])
 
     const handleFormSubmission = () => {
-        console.log(data)
-        if (subscriber) {
+        if (subscriber?.id) {
             patch("/individual-subscribers/" + subscriber.id, { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
         if (!subscriber) {
@@ -183,7 +186,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                 </div>
                 <div className=' grid grid-cols-1 gap-5 !bg-white  h-full pt-2 pb-2 px-5 lg:py-5  border'>
                     <nav className=' grid-cols-1 grid h-full'>
-                        <Fileupload placeholder="Upload Passport Pic" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
+                        <Fileupload placeholder="Click To Add Image" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
                             acceptType={['image/jpeg', 'image/jpg', 'image/png']}
                             maxNumber={1}
                         />
@@ -278,7 +281,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         error={errors?.hasNHIS}
                         value={data.hasNHIS}
                         onValueChange={(v) => setData('hasNHIS', v)}
-                        label='NHIS'
+                        label='Has NHIS'
                         required
                         placeholder='Select an option'
                         options={[
