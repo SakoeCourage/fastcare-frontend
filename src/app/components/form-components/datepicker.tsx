@@ -3,7 +3,6 @@
 import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import type { CalendarProps } from "./partial/calendarcomponents"
 import { cn } from "@/lib/utils"
 import { Button } from "./button"
 import { Label } from "./label"
@@ -19,6 +18,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(customParseFormat);
 import { Calendar } from '@natscale/react-calendar';
 import '@natscale/react-calendar/dist/main.css';
+import { CalendarProps, CalendarRef } from "@natscale/react-calendar/dist/utils/types"
 
 export type IdatePickerParams = {
   label?: string,
@@ -32,7 +32,7 @@ export type IdatePickerParams = {
 } & CalendarProps
 
 
-export default function Datepicker({ label, value, name, required, placeholder, error, onChange, className, onSelect, selected, mode, ...rest }: IdatePickerParams) {
+export default function Datepicker({ label, value, name, required, placeholder, error, onChange, className, ...rest }: IdatePickerParams) {
   const [date, setDate] = React.useState<Date | undefined>()
 
   const handleOnDateChage = (v: Date) => {
@@ -116,21 +116,12 @@ export default function Datepicker({ label, value, name, required, placeholder, 
         </nav>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 z-[70]">
-        {/* <div className="p-1 rounded-md boder-1 flex items-center w-full gap-1">
-          <Selectoption className="w-full" placeholder="Year"
-            onValueChange={(v) => handleOnYearChange(parseInt(v))}
-            value={date && date.getFullYear().toString()}
-            options={getYearsArray().map(year => ({ key: year.toString(), value: year.toString() }))}
-          />
-          <Selectoption className="w-full" placeholder="Month"
-            onValueChange={(v) => handleOnMonthChange(parseInt(v))}
-            value={date && date.getMonth().toString()}
-            options={getMonthsArray().map(({ index, name }) => ({ key: name, value: index.toString() }))}
-          />
-        </div> */}
         <Calendar
           value={date}
           onChange={handleOnDateChage}
+          
+          {...rest}
+          
         />
 
       </PopoverContent>

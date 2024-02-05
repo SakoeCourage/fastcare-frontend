@@ -21,7 +21,7 @@ function Newbankform(props: IFormWithDataProps<bankDTO>) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (formData?.id) {
-            patch("/banks", { onSuccess: () => { toastnotify("Bank Updated Successfully", "Success"); onNewDataSucess() } })
+            patch("/banks/" + formData.id, { onSuccess: () => { toastnotify("Bank Updated Successfully", "Success"); onNewDataSucess() } })
         } else {
             post("/banks", { onSuccess: () => { toastnotify("Bank Created Successfully", "Success"); onNewDataSucess() } })
         }

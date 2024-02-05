@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useEffect } from 'react'
 import { Input } from 'app/app/components/form-components/input'
 import { Textarea } from 'app/app/components/form-components/textarea'
 import Selectoption from 'app/app/components/form-components/selectoption'
@@ -16,17 +16,21 @@ function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
         name: z.string().min(1, "This Field Is Required"),
         phoneNumber: z.string().min(1, "This Field Is Required"),
         address: z.string().min(1, "This Field Is Required"),
-        gpsAdress: z.string().min(1, "This Field Is Required")
+        gpsAdress: z.string().optional().nullable()
     })
 
     const handleFormSubmission = (e: FormEvent) => {
         e.preventDefault();
-        if (formData) {
+        if (formData.id) {
             patch('/facilities/' + formData.id, { onSuccess: () => { toastnotify("Facility Has Been Updated", "Success"); onNewDataSucess() } })
         } else {
             post('/facilities/', { onSuccess: () => { toastnotify("Facility Has Been Created", "Success"); onNewDataSucess() } })
         }
     }
+    useEffect(() => {
+      console.log(formData)
+    }, [formData])
+    
     return (
         <form onSubmit={handleFormSubmission} className=' max-w-xl w-full p-5 mx-auto'>
             <nav className='grid grid-cols-1 gap-4'>

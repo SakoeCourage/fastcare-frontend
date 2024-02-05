@@ -20,7 +20,7 @@ function Newgroupassocform(props: IFormWithDataProps<groupDTO>) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (formData?.id) {
-            patch("/groups", { onSuccess: () => { toastnotify("Call Comment Category Updated Successfully", "Success"); onNewDataSucess() } })
+            patch("/groups/" + formData.id, { onSuccess: () => { toastnotify("Call Comment Category Updated Successfully", "Success"); onNewDataSucess() } })
 
         } else {
             post("/groups", { onSuccess: () => { toastnotify("Call Comment Category Created Successfully", "Success"); onNewDataSucess() } })

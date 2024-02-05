@@ -22,7 +22,7 @@ function Newpackageform(props: IFormWithDataProps<packageDTO>) {
 
     const handleFormSubmission = (e: React.FormEvent) => {
         e.preventDefault();
-        if (formData) {
+        if (formData?.id) {
             patch('/packages/' + formData.id, { onSuccess: () => { toastnotify("Package Has Been Updated", "Success"); onNewDataSucess() } })
         } else {
             post('/packages/', { onSuccess: () => { toastnotify("Package Has Been Created", "Success"); onNewDataSucess() } })

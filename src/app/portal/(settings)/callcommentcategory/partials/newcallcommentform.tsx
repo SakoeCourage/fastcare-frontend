@@ -20,7 +20,7 @@ function Newfacilityform(props: IFormWithDataProps<callCommentDTO>) {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (formData?.id) {
-            patch("/call-comment-categories", { onSuccess: () => { toastnotify("Call Comment Category Updated Successfully", "Success"); onNewDataSucess() } })
+            patch("/call-comment-categories/" + formData.id, { onSuccess: () => { toastnotify("Call Comment Category Updated Successfully", "Success"); onNewDataSucess() } })
 
         } else {
             post("/call-comment-categories", { onSuccess: () => { toastnotify("Call Comment Category Created Successfully", "Success"); onNewDataSucess() } })

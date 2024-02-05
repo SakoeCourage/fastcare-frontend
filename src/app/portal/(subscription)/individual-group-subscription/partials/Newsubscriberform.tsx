@@ -52,11 +52,11 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         package: z.number().min(1, "This Field is required"),
         group: z.number().min(1, "This Field is required"),
         paymentMode: z.string().min(1, "This Field is Required"),
-        momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: data.paymentMode == "Standing Order" ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
-        discount: z.number().optional(),
+        discount: z.number().min(0, "This Field is Requred"),
         accountNumber: data.paymentMode == "Standing Order" ? z.string().min(1, "This Field is Required") : z.string().optional(),
         frequency: z.string().min(1, "This Field is Required"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
@@ -112,6 +112,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
     }, [subscriber])
 
     const handleFormSubmission = () => {
+        console.log(data)
         if (subscriber) {
             patch("/individual-subscribers/" + subscriber.id, { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
@@ -232,14 +233,14 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         required
                         placeholder="Enter Last Name"
                     />
-                        <Datepicker
-                            value={data.dateOfBirth}
-                            error={errors?.dateOfBirth}
-                            onChange={(v) => setData('dateOfBirth', v)}
-                            label="Date of Birth"
-                            name=""
-                            placeholder="Enter Date of Birth"
-                        />
+                    <Datepicker
+                        value={data.dateOfBirth}
+                        error={errors?.dateOfBirth}
+                        onChange={(v) => setData('dateOfBirth', v)}
+                        label="Date of Birth"
+                        name=""
+                        placeholder="Enter Date of Birth"
+                    />
                     <Selectoption
                         error={errors?.gender}
                         value={data.gender}

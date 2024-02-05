@@ -59,7 +59,12 @@ function DataTable<TData, TValue, K extends keyof TData>({
         if (!url) return;
         setFetchingData(true)
         try {
-            const res = await Api.get<IPaginatedData<TData>>(url);
+            const res = await Api.get<IPaginatedData<TData>>(url, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept":"application/json"
+                }
+            });
             if (res?.data) {
                 setTData(res.data)
                 console.log(res.data)
@@ -95,9 +100,6 @@ function DataTable<TData, TValue, K extends keyof TData>({
             document.removeEventListener('tableResetEvent', handleOnReset);
         };
     }, []);
-
-
-
 
     return (
         <div className="rounded-md border h-max min-h-[32rem] bg-white  relative overflow-hidden ">
@@ -150,7 +152,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
 
                 </TableHeader>
                 <TableBody >
-                    {(data || tData) && table.getRowModel().rows?.length ? (
+                    {(data || tData) && table?.getRowModel()?.rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 className=' text-gray-500/90 font-medium table-tr'
