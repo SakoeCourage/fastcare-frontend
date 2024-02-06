@@ -1,5 +1,5 @@
 "use client"
-import React, { FormEvent, useEffect, useState } from 'react'
+import React, { FormEvent, useEffect, useState, useMemo } from 'react'
 import { Input } from 'app/app/components/form-components/input'
 import { Textarea } from 'app/app/components/form-components/textarea'
 import Selectoption from 'app/app/components/form-components/selectoption'
@@ -12,6 +12,7 @@ import { packageDTO, facilityDTO } from 'app/app/types/entitiesDTO'
 import Api from 'app/app/fetch/axiosInstance'
 import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
+import { formatcurrency } from 'app/app/lib/utils'
 
 function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiaryDTO> & { corporateID: number | undefined }) {
     const { onCancel, onNewDataSucess, formData, corporateID: prfId } = props
@@ -74,12 +75,24 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
         }
     }, [formData, packages])
 
-
+    const getAmountToDebit = useMemo(() => {
+        if (packages == null && typeof data.package != 'number') return 0
+        const _amount = packages.data.find(p => p.id == data.package)?.amount
+        return _amount
+    }, [packages, data.package])
 
 
 
     return (
         <form onSubmit={handleFormSubmission} className=' max-w-xl w-full p-5 mx-auto'>
+            <nav className="flex items-center justify-between  mb-5 py-3 px-2 bg-blue-50 border-l-2 border-l-blue-400">
+                <nav className=' text-sm text-gray-600'>
+                    Amount To Debit:
+                </nav>
+                <nav className='font-semibold text-gray-600'>
+                    {packages ? formatcurrency(getAmountToDebit) : "..."}
+                </nav>
+            </nav>
             <nav className='grid grid-cols-1 gap-4'>
                 <Input
                     value={data.name}

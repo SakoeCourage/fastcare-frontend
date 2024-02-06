@@ -1,3 +1,5 @@
+import { bankDTO } from "."
+
 export type PaymentMods = "Cash" | "Standing Order" | "CAGD" | "MOMO" | "Cheque"
 
 export interface familyPackageDTO {
@@ -10,7 +12,7 @@ export interface familyPackageDTO {
     momoNetwork: string,
     momoNumber: string,
     createdBy: string,
-    bank: number,
+    bank: number | bankDTO,
     accountNumber?: string,
     chequeNumber?: string,
     CAGDStaffID?: string,

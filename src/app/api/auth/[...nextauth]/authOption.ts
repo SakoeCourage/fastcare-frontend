@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { authService } from "app/app/providers/Authserviceprovider/userAuthentication";
-
+import { cookies } from "next/headers";
 export const authOptions: NextAuthOptions = {
     providers: [
         CredentialsProvider({
@@ -35,6 +35,7 @@ export const authOptions: NextAuthOptions = {
                 token.accessToken = user.accessToken;
                 token.refreshToken = user.refreshToken;
                 token.user = user;
+
             }
             return token;
         },
@@ -49,8 +50,11 @@ export const authOptions: NextAuthOptions = {
             session.user.name = token.user.username
             session.user.email = token.user.username
             session.expires = token.expires
+            cookies().set("passwordResetRequired", String(token.user.passwordResetRequired))
+            cookies().set("apiToken", String(token.accessToken))
             return session;
-        }
+        },
+
     },
     secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV == "development",

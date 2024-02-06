@@ -1,3 +1,4 @@
+import { AgentDTO } from ".";
 import { familyBeneficiaryDTO } from "./familybeneficiaryDTO";
 import { familyPackageDTO } from "./familyPackageDTO";
 
@@ -14,6 +15,7 @@ export interface familySubsciberDTO {
     updatedAt: string;
     createdBy: string;
     updatedBy: string | null;
+    agent: AgentDTO
     familyPackage?: familyPackageDTO;
     beneficiaries?: familyBeneficiaryDTO[];
 }

@@ -66,7 +66,7 @@ export let sidebarRoutes: routesListWitSections =
                         },
                         {
                             title: "Reset Password",
-                            link: '/portal/staffsandusers/resetpassword'
+                            link: '/portal/myaccount'
                         },
                     ],
                 }

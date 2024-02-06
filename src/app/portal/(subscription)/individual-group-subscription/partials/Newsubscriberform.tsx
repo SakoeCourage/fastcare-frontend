@@ -50,14 +50,14 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         NHISNumber: (data.hasNHIS == true) ? z.string().min(5, "This Field is required") : z.string().optional(),
         facility: z.number().min(1, "This Field is required"),
         package: z.number().min(1, "This Field is required"),
-        group: z.number().min(1, "This Field is required"),
+        group: z.number().min(1, "This Field is required").optional().nullable(),
         paymentMode: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        bank:  ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
+        bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
-        accountNumber: data.paymentMode == ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
         frequency: z.string().min(1, "This Field is Required"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
 
@@ -133,17 +133,17 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
             okText: "Yes",
             cancelText: "No"
         }).onDialogConfirm(() => {
-            if (subscriber?.id == null) return
-            del('/individual-subscribers/' + subscriber.id,
-                {
-                    onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
-                    onError: () => toastnotify("Failed To Remove Subscription", "Error"),
-                    config: {
-                        validation: {
-                            enable: false
-                        }
-                    }
-                })
+            // if (subscriber?.id == null) return
+            // del('/individual-subscribers/' + subscriber.id,
+            //     {
+            //         onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
+            //         onError: () => toastnotify("Failed To Remove Subscription", "Error"),
+            //         config: {
+            //             validation: {
+            //                 enable: false
+            //             }
+            //         }
+            //     })
         }).onDialogDecline(() => { })
     }
 
@@ -385,7 +385,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                     banks={banks}
                     errors={errors} setData={setData}
                     packages={packages}
-                    groups={groups}
                     facilities={facilities}
                 />
 

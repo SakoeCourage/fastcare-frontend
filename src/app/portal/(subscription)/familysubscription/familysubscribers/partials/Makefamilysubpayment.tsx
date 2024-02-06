@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { familySubsciberDTO, familyPackageDTO } from 'app/app/types/entitiesDTO'
+import { familySubsciberDTO, familyPackageDTO, bankDTO } from 'app/app/types/entitiesDTO'
 import Image from 'next/image';
 import Selectoption from 'app/app/components/form-components/selectoption';
 import { Input } from 'app/app/components/form-components/input';
@@ -10,7 +10,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { z } from 'zod'
 import { formatcurrency } from 'app/app/lib/utils';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
-
+import { AxiosResponse } from 'axios';
+import Api from 'app/app/fetch/axiosInstance';
 
 export const SlideUpAndDownAnimation = {
     initial: { opacity: 0, translateY: "10px" },
@@ -86,7 +87,6 @@ function PaymentmethodCard(param: IAvailablePaymentMethod & {
 }): React.ReactNode {
     const { name, accessor, value, hints, icon, onChange, isActive } = param
 
-
     return <nav onClick={() => onChange(param)} className={classNames({
         "flex items-start  cursor-pointer p-2 gap-1 border transition-all duration-500 rounded-md": true,
         "border-gray-400/60 hover:bg-blue-50  text-gray-700": isActive == false,
@@ -110,6 +110,8 @@ function PaymentmethodCard(param: IAvailablePaymentMethod & {
 
 
 function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
+    const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
+
     const { formData, onCancel, onNewDataSucess } = props
     const { data, setData, processing, errors, setValidation, post, patch } = useForm<Partial<familyPackageDTO>>({
         familyId: formData?.id,
@@ -117,20 +119,27 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
 
     setValidation({
         paymentMode: z.string().min(1, "This Field is Required"),
-        momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional(),
-        chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional(),
-        bank: data.paymentMode == "Standing Order" ? z.string().min(1, "This Field is Required") : z.string().optional(),
-        discount: z.number().optional(),
+        momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
+        discount: z.number().min(0, "This Field is Requred"),
+        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
         amountToDebit: z.number().min(1, "Failed to Debit"),
-        accountNumber: data.paymentMode == "Standing Order" ? z.string().min(1, "This Field is Required") : z.string().optional(),
         frequency: z.string().min(1, "This Field is Required"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
     })
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+    const getBanksAsync: () => Promise<AxiosResponse<IPaginatedData<bankDTO>>> = () => Api.get("/banks");
+
+    const fetchSelectFieldData = async () => {
+        try {
+            const [_banks] = await Promise.all([getBanksAsync()]);
+            setBanks(_banks.data)
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    }
 
     useEffect(() => {
         if (data.discount == 0) setOriginalAmoutToDebit()
@@ -151,20 +160,31 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
         }
     }
 
+
+    const handleFormSubmission = () => {
+        if (formData?.familyPackage) {
+            patch(`/family-subscribers/package/${formData?.familyPackage?.id}`, { onSuccess: () => { { toastnotify("Payment Subscription Updated", "Success"); onNewDataSucess() } } })
+        } else {
+            post("/family-subscribers/package", { onSuccess: () => { toastnotify("Payment Subscription Added", "Success"); onNewDataSucess() } })
+        }
+    }
+
     useEffect(() => {
         if (formData?.familyPackage) {
             setData({ ...formData.familyPackage })
         }
+        if (formData?.familyPackage && formData?.familyPackage.bank) {
+            if (typeof formData?.familyPackage.bank == 'object') {
+                setData('bank', formData?.familyPackage.bank.id)
+            }
+        }
         setOriginalAmoutToDebit()
+        console.log(formData)
     }, [formData])
 
-    const handleFormSubmission = () => {
-        if (formData?.familyPackage) {
-            patch(`/family-subscribers/package/${formData?.familyPackage?.id}`,{onSuccess:()=>{{ toastnotify("Payment Subscription Update","Success");onNewDataSucess() }}})
-        } else {
-            post("/family-subscribers/package",{onSuccess:()=>{toastnotify("Payment Subscription Updated","Success");onNewDataSucess()}})
-        }
-    }
+    useEffect(() => {
+        fetchSelectFieldData();
+    }, [])
 
 
 
@@ -252,6 +272,16 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
                             </motion.nav>
                         }
 
+                        {(["Cheque", "Standing Order"].includes(data.paymentMode)) &&
+                            <Selectoption required
+                                value={data.bank}
+                                onValueChange={(v) => setData('bank', v)}
+                                error={errors?.bank}
+                                options={banks ? [...Object.entries(banks.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []}
+                                label='Bank'
+                                placeholder='Select Bank' />
+                        }
+
                         {
                             data.paymentMode == "Standing Order" &&
                             <motion.nav
@@ -259,13 +289,6 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit' className=' flex flex-col gap-3'>
-                                <Selectoption required
-                                    options={[]}
-                                    value={data.bank}
-                                    onValueChange={(v) => setData('bank', v)}
-                                    error={errors?.bank}
-                                    label='Bank'
-                                    placeholder='Select Bank' />
                                 <Input required
                                     value={data.accountNumber}
                                     onChange={(e) => setData('accountNumber', e.target.value)}
@@ -334,10 +357,10 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
                             label='Frequency' placeholder='Select Frequency' />
                     </nav>
                     <nav className='flex items-center justify-end flex-col gap-1 w-full mt-4 pb-2'>
-                        <Button onClick={()=>handleFormSubmission()} variant='primary' size='full'>
+                        <Button onClick={() => handleFormSubmission()} variant='primary' size='full'>
                             Save & Make Payment
                         </Button>
-                        <Button onClick={()=>onCancel()} className=' !bg-white' variant='outline' size='full'>
+                        <Button onClick={() => onCancel()} className=' !bg-white' variant='outline' size='full'>
                             Cancel
                         </Button>
                     </nav>

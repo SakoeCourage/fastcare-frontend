@@ -21,6 +21,8 @@ export const initialFormStateProp: {
     open: false
 }
 
+
+
 function Individualandgroupsubtable() {
     const [showForm, setShowForm] = useState(initialFormStateProp)
     const [subscriberData, setSubscriberData] = useState<IndividualSubDTO | null>(null)

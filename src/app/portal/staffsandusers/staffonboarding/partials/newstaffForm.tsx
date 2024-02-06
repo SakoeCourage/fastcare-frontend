@@ -21,7 +21,8 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         idNumber: z.string().min(1, "This Field Is Required"),
         firstName: z.string().min(1, "This Field Is Required"),
         lastName: z.string().min(1, "This Field Is Required"),
-        otherNames: z.string().optional().nullable(),
+        // otherNames: z.string().optional().nullable(),
+        otherNames: z.string().min(1,"This Field Is Required"),
         gender: z.string().min(1, "This Field Is Required"),
         dateOfBirth: z.string().min(1, "This Field Is Required"),
         nationality: z.string().min(1, "This Field Is Required"),
@@ -29,7 +30,6 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         email: z.string().email("This Field Should Be A Valid Email").email(),
         phoneNumber: z.string().min(9, "This Field Is Required"),
         position: z.string().min(1, "This Field Is Required"),
-
     })
 
     useEffect(() => {
@@ -100,7 +100,7 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
                     error={errors?.otherNames}
                     value={data?.otherNames}
                     onChange={(e) => setData('otherNames', e.target.value)}
-                    required name='' label='Other Names Name' placeholder='Other Names Name' />
+                    name='' label='Other Names Name' placeholder='Other Names Name' />
                 <Selectoption
                     value={data.idType}
                     error={errors?.idType}
@@ -139,12 +139,14 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
                     error={errors?.email}
                     value={data?.email}
                     onChange={(e) => setData('email', e.target.value)}
+                    required
                     name=''
                     label='Email'
                     placeholder='example@email.com' />
                 <Input
                     error={errors?.phoneNumber}
                     value={data?.phoneNumber}
+                    required
                     onChange={(e) => setData('phoneNumber', e.target.value)}
                     name=''
                     label='Phone Number'

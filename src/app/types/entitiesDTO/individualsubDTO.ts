@@ -1,4 +1,4 @@
-import { groupDTO, facilityDTO, packageDTO } from ".";
+import { groupDTO, facilityDTO, packageDTO, bankDTO } from ".";
 import { PaymentMods } from ".";
 export interface IndividualSubDTO {
     id?: number;
@@ -31,7 +31,7 @@ export interface IndividualSubDTO {
     paymentMode: PaymentMods | string,
     amountToDebit: number,
     frequency: string,
-    bank: number,
+    bank: number | bankDTO,
     accountNumber?: string,
     chequeNumber?: string,
     CAGDStaffID?: string,

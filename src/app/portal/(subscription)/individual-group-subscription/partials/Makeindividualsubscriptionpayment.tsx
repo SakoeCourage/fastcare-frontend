@@ -126,36 +126,36 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
     const { formData, setData, errors, packages, banks, facilities, canDelete, onDelete, onSubmit, onCancel } = props
 
 
-
-    useEffect(() => {
-        if (formData.package || formData.discount == 0) setOriginalAmoutToDebit()
-        if (formData.discount > 0) {
-            const amount = formData.amountToDebit - (formData.amountToDebit * (formData.discount / 100))
-            setData("amountToDebit", amount)
-        }
-
-    }, [formData.discount, formData.package])
-
-    const setOriginalAmoutToDebit = () => {
+    const calculateAmountToDebit = () => {
         if (formData.package == null && packages == null) return
         const pkg = packages?.data?.find(p => p.id == formData.package);
         if (pkg) {
             const { amount } = pkg;
-            console.log(amount)
-            setData("amountToDebit", amount)
-            return amount
+            if (formData.discount == 0 || [undefined, null].includes(formData.discount)) {
+                return amount
+            }
+            if (formData.discount > 0) {
+                const _amount = amount - (amount * (formData.discount / 100))
+                return _amount
+            }
         }
     }
 
     const getAmountToDebit = useMemo(() => {
-        if (formData.package || formData.discount == 0) return setOriginalAmoutToDebit()
-        if (formData.discount > 0) {
-            const amount = formData.amountToDebit - (formData.amountToDebit * (formData.discount / 100))
-            return amount
+        let amount: any = 0;
+        if (formData.package && packages) {
+            amount = calculateAmountToDebit()
         }
-    }, [formData.discount, formData.package])
+        return amount
+    }, [formData.discount, formData.package, packages])
 
-    useEffect(() => { console.log(formData) }, [formData])
+    useEffect(() => {
+        if (formData?.bank) {
+            if (typeof formData?.bank == 'object') {
+                setData('bank', formData?.bank?.id)
+            }
+        }
+    }, [formData])
 
 
 
@@ -197,12 +197,12 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                 <div className='  pt-2 px-5  mx-auto max-w-md w-full'>
                     <nav className=' py-4 pb-4 flex flex-col gap-1 border-b border-gray-300 w-full'>
                         <nav className=' font-semibold text-gray-600 '>{formData?.firstName ?? "..."}</nav>
-                        <nav className=' text-xs'>You are about add a subscription to the above family</nav>
+                        <nav className=' text-xs'>You are about add a subscription to the above individual/group</nav>
                     </nav>
                     <nav className='my-2 grid grid-cols-1 gap-5 w-full pt-4'>
                         <nav className="flex items-center justify-between">
                             <nav className=' text-sm text-gray-600'>
-                                Beneficiaries :
+                                Beneficiary:
                             </nav>
                             <nav className='font-semibold text-gray-600'>
                                 {formData?.firstName ?? "..."}

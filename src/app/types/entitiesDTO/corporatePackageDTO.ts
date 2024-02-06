@@ -1,3 +1,5 @@
+import { bankDTO } from ".";
+
 export interface CorporatePackageDTO {
     id: number;
     corporateId: number;
@@ -7,7 +9,7 @@ export interface CorporatePackageDTO {
     chequeNumber: string;
     CAGDStaffID: string;
     amountToDebit: number;
-    bank: number,
+    bank: number | bankDTO,
     frequency: string;
     momoNetwork: string;
     momoNumber: string;
