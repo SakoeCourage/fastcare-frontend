@@ -22,7 +22,7 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         firstName: z.string().min(1, "This Field Is Required"),
         lastName: z.string().min(1, "This Field Is Required"),
         // otherNames: z.string().optional().nullable(),
-        otherNames: z.string().min(1,"This Field Is Required"),
+        otherNames: z.string().min(1, "This Field Is Required"),
         gender: z.string().min(1, "This Field Is Required"),
         dateOfBirth: z.string().min(1, "This Field Is Required"),
         nationality: z.string().min(1, "This Field Is Required"),
@@ -152,14 +152,16 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
                     label='Phone Number'
                     placeholder='(000) 0000 000' />
 
-                <Select2options
+                <Selectoption
                     required
+                    enableSearch
+                    searchPlacholder='Search Country'
                     label='Nationality'
                     placeholder='Select Nationality'
                     value={data?.nationality}
-                    onChange={(e) => setData("nationality", e)}
+                    onValueChange={(e) => setData("nationality", e)}
                     error={errors?.nationality}
-                    data={nationalities ? [...nationalities.map((n) => { return ({ label: n.nationality, value: n.nationality }) })] : []} />
+                    options={nationalities ? nationalities.map((n) => { return ({ key: n.nationality, value: n.nationality }) }) : []} />
 
                 <Input
                     error={errors?.position}

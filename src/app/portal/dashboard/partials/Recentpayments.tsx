@@ -23,7 +23,7 @@ const orders: Order[] = [
     {
         MID: "ABC123456789",
         Subscriber: "John Doe",
-        Mode: "Cache",
+        Mode: "Cash",
         status: "Pending",
         Amount: 750,
     },
@@ -106,7 +106,6 @@ export default function Recentpayments() {
                 enablePaginator={false}
                 heading='Recent Payments'
                 columns={columns} data={orders} />
-
         </div>
     )
 }

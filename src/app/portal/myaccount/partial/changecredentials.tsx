@@ -51,7 +51,7 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
             .onDialogConfirm(() => {
                 put('/users/change-password', {
                     onSuccess: () => {
-                        toastnotify("Password Has Been Changed");
+                        toastnotify("Password Has Been Changed","Success");
                         hanldeSignOut();
                     }
                 })

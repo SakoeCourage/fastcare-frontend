@@ -18,13 +18,19 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
     const [roles, setRoles] = useState<IPaginatedData<roleDTO> | null>(null)
     const [staffs, setStaffs] = useState<IPaginatedData<staffDTO> | null>(null)
     const { formData, onCancel, onNewDataSucess } = props
-    const { post, patch, data, errors, setData, setValidation } = useForm<Partial<userDTO>>(formData ? { ...formData } : {})
+    const { post, patch, data, errors, setData, setValidation } = useForm<Partial<userDTO>>(formData ?
+        {
+            ...formData,
+            roleId: formData.role && formData.role.id,
+            staffDbId: formData.staff && formData.staff.id,
+            facilityId: formData.facility && formData.facility.id
+        } : {})
 
     setValidation({
-        username: z.string().min(1, "This Field Is Required"),
+        username: z.string().min(1, "This Field Is Required").email(),
         roleId: z.number().min(1, "This Field Is Required"),
-        email: z.string().min(1, "This Field Is Required").email(),
         facilityId: z.number().min(1, "This Field Is Required"),
+        staffDbId: z.number().min(1, "This Field Is Required")
     })
 
     const getFacilitiesAsync: () => Promise<AxiosResponse<IPaginatedData<facilityDTO>>> = () => Api.get("/facilities");
@@ -53,6 +59,9 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
     useEffect(() => {
         fetchSelectFieldData();
     }, [])
+    useEffect(() => {
+        console.log(formData)
+    }, [formData])
 
 
 
@@ -64,28 +73,22 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                     value={data?.username}
                     onChange={(e) => setData("username", e.target.value)}
                     required name=''
-                    label='Username'
-                    placeholder='Enter Username'
-                />
-                <Input
-                    error={errors?.email}
-                    value={data?.email}
-                    onChange={(e) => setData("email", e.target.value)}
-                    required name=''
-                    label='Email'
+                    label='Username (Email)'
                     placeholder='example@email.com'
                 />
-                <Select2options
+
+                <Selectoption
                     required
                     label='Staff'
                     placeholder='Select Staff'
+                    enableSearch={true}
+                    searchPlacholder='Search Staff Name'
                     value={data?.staffDbId}
-                    onChange={(e) => setData("staffDbId", e)}
+                    onValueChange={(e) => setData("staffDbId", e)}
                     error={errors?.staffDbId}
-
-                    data={staffs
+                    options={staffs
                         ? staffs.data.map((n) => ({
-                            label: `${n.firstName} ${n.lastName}`,
+                            key: `${n.firstName} ${n.lastName}`,
                             value: n.id,
                         }))
                         : []}
