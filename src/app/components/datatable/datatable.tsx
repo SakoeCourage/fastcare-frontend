@@ -55,20 +55,26 @@ function DataTable<TData, TValue, K extends keyof TData>({
         onRowSelectionChange: setRowSelection,
     })
 
+    // Replacing base url up to the ...../v1/ with '/' to prevent CORS Error
+    function replaceUrlWithSlash(url: string): string {
+        const pattern = /(^https?:\/\/.*?\/api\/v1\/)/;
+        return url.replace(pattern, '/');
+    }
+
     const fetchSourceData = async (url: string | null) => {
         if (!url) return;
         setFetchingData(true)
         try {
-            const res = await Api.get<IPaginatedData<TData>>(url, {
+            const res = await Api.get<IPaginatedData<TData>>(replaceUrlWithSlash(url), {
                 headers: {
                     "Content-Type": "application/json",
-                    "Accept":"application/json"
+                    "Accept": "application/json"
                 }
             });
             if (res?.data) {
                 setTData(res.data)
                 console.log(res.data)
-                setPath(url)
+                setPath(res.data?.newPageInfo?.path)
             }
         } catch (error) {
             toastnotify("Failed to fetch table data", "Error");
@@ -79,6 +85,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
     }
 
     function getUrlParamValue(param: string) {
+        if (param == null) return
         if (path == null) return;
         return getQueryParamValue(path, param)
     }
@@ -115,6 +122,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
             </nav> : heading}
 
             {enableTableFilter && <TableFilterOptions hasAction={hasAction} filterablePlaceholder={filterablePlaceholder} handleUrlQuery={handleUrlQuery} actionOptions={actionOptions} filterable={filterable as string} actionName={actionName} table={table} onAction={onAction} />}
+
             {extendedFilter?.enable && <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={path} filters={extendedFilter.filters} />}
 
             <Table className=' h-max' >

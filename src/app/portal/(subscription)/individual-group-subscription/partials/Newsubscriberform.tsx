@@ -300,12 +300,13 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                     <Selectoption
                         error={errors?.group}
                         value={data.group}
+                        enableSearch={true}
+                        searchPlacholder='Search Group'
                         onValueChange={(v) => setData('group', v)}
                         label='Ass. / Group'
                         placeholder='Select Ass. / Group'
                         options={groups ? [...Object.entries(groups.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
                 </div>
-
             </div>
             <div>
                 <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>

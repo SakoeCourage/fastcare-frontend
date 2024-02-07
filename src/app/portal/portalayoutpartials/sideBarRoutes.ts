@@ -68,6 +68,10 @@ export let sidebarRoutes: routesListWitSections =
                             title: "Reset Password",
                             link: '/portal/myaccount'
                         },
+                        {
+                            title: "User Roles & Permissions",
+                            link: '/portal/staffsandusers/user-roles-and-permission'
+                        },
                     ],
                 }
 

@@ -5,6 +5,7 @@ type IPaginatedData<T> = {
         firstPageUrl: string | null
         lastPageUrl: string | null,
         nextPageUrl: string | null
+        path: string,
         prevPageUrl: string | null
         total: number
     },

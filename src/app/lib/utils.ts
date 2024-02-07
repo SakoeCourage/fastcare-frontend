@@ -68,6 +68,8 @@ export function updateUrlQueryParam(url: string, key: string, value: string | nu
 
 
 export function getQueryParamValue(url: string, key: string): string | null {
+  if (url == null || url == undefined || key == null || key == undefined) return;
+
   const urlObject = new URL(url);
   const queryParams = new URLSearchParams(urlObject.search);
 
