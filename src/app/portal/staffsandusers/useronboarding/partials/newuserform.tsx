@@ -27,7 +27,8 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
         } : {})
 
     setValidation({
-        username: z.string().min(1, "This Field Is Required").email(),
+        username: z.string().min(1, "This Field Is Required"),
+        email: z.string().min(1, "This Field Is Required").email(),
         roleId: z.number().min(1, "This Field Is Required"),
         facilityId: z.number().min(1, "This Field Is Required"),
         staffDbId: z.number().min(1, "This Field Is Required")
@@ -73,10 +74,17 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                     value={data?.username}
                     onChange={(e) => setData("username", e.target.value)}
                     required name=''
-                    label='Username (Email)'
+                    label='Username'
+                    placeholder='Enter username'
+                />
+                <Input
+                    error={errors?.email}
+                    value={data?.email}
+                    onChange={(e) => setData("email", e.target.value)}
+                    required name=''
+                    label='Email'
                     placeholder='example@email.com'
                 />
-
                 <Selectoption
                     required
                     label='Staff'
