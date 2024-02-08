@@ -51,7 +51,7 @@ function Rolesstable() {
     ]
     return (
         <div>
-            <Sidemodal size="md" open={showRolePermissions !== null} title={showRolePermissions ? `Edit Role Permission ${showRolePermissions.name}` : "User Role"} closeModal={() => setShowRolePermissions(null)}>
+            <Sidemodal size="md" open={showRolePermissions !== null} title={showRolePermissions != null ? `Edit Role Permission ${showRolePermissions.name}` : "User Role"} closeModal={() => setShowRolePermissions(null)}>
                 <EditPermissions
                     formData={showRolePermissions}
                     onCancel={() => setShowRolePermissions(null)}
@@ -59,7 +59,7 @@ function Rolesstable() {
                 />
             </Sidemodal>
 
-            <Modal size="md" open={showRoleForm !== null} title={showRoleForm ? `Edit Role ${showRoleForm.name}` : "User Role"} closeModal={() => setShowRoleForm(null)}>
+            <Modal size="md" open={showRoleForm !== null} title={showRoleForm != null ? `Edit Role ${showRoleForm.name}` : "User Role"} closeModal={() => setShowRoleForm(null)}>
                 <Newroleform
                     formData={showRoleForm}
                     onCancel={() => setShowRoleForm(null)}
