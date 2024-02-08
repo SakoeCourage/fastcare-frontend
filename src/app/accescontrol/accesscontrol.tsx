@@ -23,9 +23,7 @@ export const getPermissionPerRoute = (): routeHasPermision[] => {
                 }
             }
         }
-
     })
-    // console.log(currentAbilities)
     return currentAbilities;
 }
 
@@ -36,7 +34,6 @@ interface IAccessControlProps {
     abilities: Permission[] | [],
     children: React.ReactNode
 }
-
 
 export const getAllRequiredAbilitiesPerRoute = (route: routesTypesDef): Permission[] | [] => {
     let currentAbilities = [];

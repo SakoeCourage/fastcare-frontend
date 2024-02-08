@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const applyRoleProtectionMiddleWare = (request: NextRequest) => {
-
-}
 
 export const logRequest = (request: NextRequest) => {
     if (request.cookies.get('role')) {
