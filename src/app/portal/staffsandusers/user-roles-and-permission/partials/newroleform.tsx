@@ -7,7 +7,7 @@ import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { Button } from 'app/app/components/form-components/button'
 function Newroleform(props: IFormWithDataProps<roleDTO>) {
     const { formData, onNewDataSucess, onCancel } = props
-    const { errors, setData, data, post, patch, setValidation } = useForm<Partial<roleDTO>>(formData ? { ...formData } : { permissions: [] })
+    const { errors, setData, data, post, patch, setValidation } = useForm<Partial<roleDTO>>(formData ? { ...formData } : {})
 
     setValidation({
         name: z.string().min(1, "This Field Is Required")
@@ -18,13 +18,20 @@ function Newroleform(props: IFormWithDataProps<roleDTO>) {
         if (formData?.id) {
             patch("/roles/" + formData.id, { onSuccess: () => { onNewDataSucess(); toastnotify("Role Successfully", "Success") } })
         } else {
+            console.log(data)
             post("/roles", { onSuccess: () => { onNewDataSucess(); toastnotify("Role Created Successfully", "Success") } })
         }
     }
 
     useEffect(() => {
-        console.log(formData)
+        if (!formData?.id) {
+            setData('permissions', ['View_Dashboard'])
+        }
     }, [formData])
+
+    useEffect(() => {
+        console.log(data)
+    }, [data])
 
 
     return (

@@ -50,7 +50,7 @@ function Rolesstable() {
     ]
     return (
         <div>
-            <Sidemodal size="md" open={showRolePermissions !== null} title={showRolePermissions != null ? `Edit Role Permission ${showRolePermissions.name}` : "User Role"} closeModal={() => setShowRolePermissions(null)}>
+            <Sidemodal size="md" open={showRolePermissions !== null} title={showRolePermissions?.id ? `Edit Role Permission ${showRolePermissions.name}` : "User Role"} closeModal={() => setShowRolePermissions(null)}>
                 <EditPermissions
                     formData={showRolePermissions}
                     onCancel={() => setShowRolePermissions(null)}
@@ -58,15 +58,17 @@ function Rolesstable() {
                 />
             </Sidemodal>
 
-            <Modal size="md" open={showRoleForm !== null} title={showRoleForm != null ? `Edit Role ${showRoleForm.name}` : "User Role"} closeModal={() => setShowRoleForm(null)}>
+            <Modal size="md" open={showRoleForm !== null} title={showRoleForm?.id ? `Edit Role ${showRoleForm.name}` : "User Role"} closeModal={() => setShowRoleForm(null)}>
                 <Newroleform
                     formData={showRoleForm}
                     onCancel={() => setShowRoleForm(null)}
-                    onNewDataSucess={() => { resetTableData(); setShowRoleForm(null)}}
+                    onNewDataSucess={() => { resetTableData(); setShowRoleForm(null) }}
                 />
             </Modal>
             <DataTable
                 dataSourceUrl='/roles?pageSize=10&page=1&sort=createdAt_desc'
+                filterable="name"
+                filterablePlaceholder='Search Role Name'
                 onAction={() => setShowRoleForm({} as roleDTO)}
                 columns={columns}
                 sortableColumns={[
@@ -86,6 +88,7 @@ function Rolesstable() {
                     }
                 ]}
                 actionName='Create A Role'
+                
             />
         </div>
     )

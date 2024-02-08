@@ -22,7 +22,7 @@ function Userstable() {
     const handleOnUserAccountResetAction = (id: number) => {
         setDialogData({
             open: true,
-            title: "Reset User Password",
+            title: "Reset User Password?",
             promptText: "User password will be reset to default i.e users First Name",
             okText: "Continue",
             cancelText: "Cancel"
@@ -30,7 +30,7 @@ function Userstable() {
             .onDialogConfirm(() => {
                 Api.patch('/users/reset-password/' + id)
                     .then(res => {
-                        toastnotify("User Passwor Reset To Default","Success")
+                        toastnotify("User Passwor Reset To Default", "Success")
                         resetTableData();
                     }).catch(err => {
                         toastnotify("Failed To Reset Password")
@@ -43,8 +43,8 @@ function Userstable() {
     const handleOnUserDisableAction = (id: number) => {
         setDialogData({
             open: true,
-            title: "Disable User Account",
-            promptText: "User will be able to access system resources",
+            title: "Disable User Account?",
+            promptText: "User will not be able to access system resources",
             okText: "Continue",
             cancelText: "Cancel",
             variant: "Danger"
@@ -52,7 +52,7 @@ function Userstable() {
             .onDialogConfirm(() => {
                 Api.patch('/users/disable-user/' + id)
                     .then(res => {
-                        toastnotify("User Account Is Disabled","Success")
+                        toastnotify("User Account Is Disabled", "Success")
                         resetTableData();
                     }).catch(err => {
                         toastnotify("Failed Disable User Account")
@@ -65,7 +65,7 @@ function Userstable() {
     const handleOnUserEnableAction = (id: number) => {
         setDialogData({
             open: true,
-            title: "Enable User Account",
+            title: "Enable User Account?",
             promptText: "User will be able to access system resources",
             okText: "Continue",
             variant: "Danger",
@@ -75,7 +75,7 @@ function Userstable() {
                 Api.patch('/users/enable-user/' + id)
                     .then(res => {
                         resetTableData();
-                        toastnotify("User Account Enabled","Success")
+                        toastnotify("User Account Enabled", "Success")
                     }).catch(err => {
                         toastnotify("Failed To Enable User Account ")
                     })
@@ -130,10 +130,28 @@ function Userstable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/users?pageSize=10&page=1'
+                dataSourceUrl='/users?pageSize=10&page=1&sort=createAt_desc'
                 filterable="username"
                 filterablePlaceholder='Search username'
-                onAction={() => setShowNewUserForm({} as userDTO)} columns={columns} actionName='Onboard New User' />
+                onAction={() => setShowNewUserForm({} as userDTO)} columns={columns} actionName='Onboard New User'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
+            />
         </div>
     )
 }

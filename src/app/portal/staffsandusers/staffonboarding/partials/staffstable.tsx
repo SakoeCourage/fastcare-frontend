@@ -7,10 +7,16 @@ import Modal from 'app/app/components/ui/modal'
 import { staffDTO } from 'app/app/types/entitiesDTO'
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { resetTableData } from 'app/app/components/datatable/datatable'
+import { dateReformat } from 'app/app/lib/utils'
 
 function Staffstable() {
     const [showNewStaffForm, setShowNewStaffForm] = useState<staffDTO | null>(null)
     const columns: ColumnDef<staffDTO>[] = [
+        {
+            accessorKey: "createdAt",
+            header: "Created At",
+            cell: ({ row }) => dateReformat(row.original.createdAt)
+        },
         {
             accessorKey: "fullName",
             header: "Full Name",
@@ -53,10 +59,29 @@ function Staffstable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/staff?pageSize=10&page=1'
+                dataSourceUrl='/staff?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewStaffForm({} as staffDTO)}
                 columns={columns}
                 actionName='Onboard New Staff'
+                filterable='lastName'
+                filterablePlaceholder='Search Staff Name '
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
             />
         </div>
     )
