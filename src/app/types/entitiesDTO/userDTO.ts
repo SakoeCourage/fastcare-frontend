@@ -7,6 +7,7 @@ export interface userDTO {
     staffDbId: number,
     email: string,
     roleId: number,
+    active: boolean,
     role?: roleDTO,
     staff?: staffDTO,
     facilityId: number,

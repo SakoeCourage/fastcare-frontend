@@ -57,9 +57,17 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
     useEffect(() => {
         fetchSelectFieldData();
     }, [])
+
     useEffect(() => {
-        console.log(formData)
-    }, [formData])
+        if (data.staffDbId && staffs) {
+            var currentEmail = staffs.data.find(s => s.id == data.staffDbId)?.email
+            if (currentEmail) {
+                setData("email", currentEmail)
+            }
+        }
+    }, [data.staffDbId, staffs])
+
+
 
 
 
@@ -73,14 +81,6 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                     required name=''
                     label='Username'
                     placeholder='Enter username'
-                />
-                <Input
-                    error={errors?.email}
-                    value={data?.email}
-                    onChange={(e) => setData("email", e.target.value)}
-                    required name=''
-                    label='Email'
-                    placeholder='example@email.com'
                 />
                 <Selectoption
                     required
@@ -98,6 +98,16 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                         }))
                         : []}
                 />
+                <Input
+                    error={errors?.email}
+                    value={data?.email}
+                    disabled
+                    onChange={(e) => setData("email", e.target.value)}
+                    required name=''
+                    label='Email'
+                    placeholder='auto populated'
+                />
+
 
                 <Selectoption
                     error={errors?.roleId}
