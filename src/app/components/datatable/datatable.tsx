@@ -121,7 +121,15 @@ function DataTable<TData, TValue, K extends keyof TData>({
                 <nav className=''>{heading}</nav>
             </nav> : heading}
 
-            {enableTableFilter && <TableFilterOptions hasAction={hasAction} filterablePlaceholder={filterablePlaceholder} handleUrlQuery={handleUrlQuery} actionOptions={actionOptions} filterable={filterable as string} actionName={actionName} table={table} onAction={onAction} />}
+            {enableTableFilter && <TableFilterOptions
+                hasAction={hasAction}
+                filterablePlaceholder={filterablePlaceholder}
+                handleUrlQuery={handleUrlQuery} actionOptions={actionOptions}
+                filterable={filterable as string} actionName={actionName}
+                table={table}
+                onAction={onAction}
+                hasAnySearch={getUrlParamValue('search') ? true : false}
+            />}
 
             {extendedFilter?.enable && <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={path} filters={extendedFilter.filters} />}
 
@@ -186,7 +194,10 @@ function DataTable<TData, TValue, K extends keyof TData>({
             {tData &&
                 !!table.getRowModel().rows?.length &&
                 enablePaginator &&
-                <DataTablePagination table={table} getDataAsync={fetchSourceData} tableData={tData} />}
+                <DataTablePagination 
+                handleUrlQuery={handleUrlQuery}
+                getUrlParamValue={getUrlParamValue}
+                table={table} getDataAsync={fetchSourceData} tableData={tData} />}
         </div>
     )
 }

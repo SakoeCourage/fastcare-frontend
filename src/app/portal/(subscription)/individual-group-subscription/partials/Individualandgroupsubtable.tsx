@@ -11,7 +11,8 @@ import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
-
+import { dateReformat } from 'app/app/lib/utils'
+import axios from 'axios'
 export const initialFormStateProp: {
     title: string | null,
     open: boolean;
@@ -21,29 +22,20 @@ export const initialFormStateProp: {
     open: false
 }
 
-
-
 function Individualandgroupsubtable() {
-    const [showForm, setShowForm] = useState(initialFormStateProp)
     const [subscriberData, setSubscriberData] = useState<IndividualSubDTO | null>(null)
-
-    const handleFetchSubscriberData = (id: number | string | undefined) => {
-        if (id == null) return
-        Api.get('/individual-subscribers/' + id)
-            .then((res: AxiosResponse<IndividualSubDTO>) => {
-                setSubscriberData(res.data)
-                setShowForm({ title: "UPDATE SUBSCRIBER - " + res.data.membershipID + " " + res.data.firstName, open: true })
-            })
-            .catch(err => {
-                console.log(err)
-                toastnotify("An Error Occured Fetching Subscriber Data")
-            })
-    }
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
 
     const columns: ColumnDef<IndividualSubDTO>[] = [
         {
             accessorKey: "membershipID",
             header: "MID",
+        },
+        {
+            accessorKey: "createdAt",
+            header: "Created At",
+            cell: ({ row }) => dateReformat(row.original.createdAt)
         },
         {
             accessorKey: "firstName",
@@ -57,33 +49,86 @@ function Individualandgroupsubtable() {
         {
             accessorKey: "",
             header: "Action",
-            cell: ({ row }) => <IconifyIcon onClick={() => handleFetchSubscriberData(row.original.id)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+            cell: ({ row }) => <IconifyIcon onClick={() => setSubscriberData(row.original)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
         },
 
     ]
 
+
+    const handleFetchSubscriberData = (id: number | string | undefined) => {
+        if (id == null) return
+        Api.get('/individual-subscribers/' + id, {
+            cancelToken: source.token
+        })
+            .then((res: AxiosResponse<IndividualSubDTO>) => {
+                const { passportPicture } = res.data
+
+                let file: File | null = null;
+                if (typeof passportPicture === "string") {
+                    const inputString = passportPicture as string;
+                    const base64Data = inputString.split(",")[1];
+                    const fileType = inputString.split(",")[0].replace(/^data:([^:]+):base64$/, '$1');;
+
+                    const base64Buffer = Buffer.from(base64Data, 'base64');
+                    const blob = new Blob([base64Buffer]);
+                    const filename = "userprofile";
+                    file = new File([blob], filename, { type: fileType });
+                }
+                if (file) {
+                    setSubscriberData(cv => cv = { ...cv, passportPicture: file })
+                }
+            })
+            .catch(err => {
+                if (axios.isCancel(err)) {
+                    // toastnotify("Fetch Canc");
+                } else {
+                    toastnotify("An Error Occured Fetching Subscriber Data")
+                }
+
+            })
+    }
+
     const handleOnResetState = () => {
-        setShowForm(initialFormStateProp);
+        if (subscriberData.id) {
+            source.cancel('Request canceled by user');
+        }
         setSubscriberData(null)
     }
 
-   
-
     return (
         <div>
-            <Modal size='3xl' closeModal={() => { handleOnResetState() }} open={showForm.open} title={showForm.title ?? "Add New Subscriber"}>
+            <Modal size='3xl' closeModal={() => { handleOnResetState() }} open={subscriberData !== null} title={subscriberData ? `UPDATE SUBSCRIBER - ${subscriberData.membershipID}` : "Add New Subscriber"}>
                 <Newsubscriberform onCancel={() => { handleOnResetState() }}
                     onNewDataSucess={() => { handleOnResetState(); resetTableData() }}
-                    formData={subscriberData} />
+                    formData={subscriberData}
+                    handleFetchSubscriberData={handleFetchSubscriberData}
+                />
             </Modal>
 
             <DataTable
-                dataSourceUrl='/individual-subscribers?pageSize=10&page=1'
-                onAction={() => setShowForm({ title: "Add New Subscriber", open: true })}
+                dataSourceUrl='/individual-subscribers?pageSize=10&page=1&created_At=desc'
+                onAction={() => setSubscriberData({} as IndividualSubDTO)}
                 filterable='firstName'
                 actionName='Add Subscriber'
                 filterablePlaceholder='Name or MID'
                 columns={columns}
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
             />
         </div >
     )

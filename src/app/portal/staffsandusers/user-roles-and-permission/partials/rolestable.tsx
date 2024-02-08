@@ -46,7 +46,6 @@ function Rolesstable() {
             cell: ({ row }) => <Tooltip toolTipText='Edit Family'>
                 <IconifyIcon onClick={() => setShowRoleForm(row.original)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
             </Tooltip>
-
         },
     ]
     return (
@@ -63,7 +62,7 @@ function Rolesstable() {
                 <Newroleform
                     formData={showRoleForm}
                     onCancel={() => setShowRoleForm(null)}
-                    onNewDataSucess={() => { resetTableData(); setShowRoleForm(null) }}
+                    onNewDataSucess={() => { resetTableData(); setShowRoleForm(null)}}
                 />
             </Modal>
             <DataTable

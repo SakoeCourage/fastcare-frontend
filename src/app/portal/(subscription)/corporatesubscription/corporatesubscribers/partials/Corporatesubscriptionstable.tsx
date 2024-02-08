@@ -163,7 +163,7 @@ function Corporatesubscriptionstable() {
             </Modal>
 
             <DataTable
-                dataSourceUrl='/corporate-subscribers?pageSize=10&page=1'
+                dataSourceUrl='/corporate-subscribers?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewCorporateClientForm({ title: "Add Corporate Client", open: true })}
                 filterable="name"
                 columns={columns}

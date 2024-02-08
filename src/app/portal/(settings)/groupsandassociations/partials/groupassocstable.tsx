@@ -37,10 +37,29 @@ function Groupassocstable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/groups?pageSize=10&page=1'
+                filterable="name"
+                filterablePlaceholder='Search Group Name..'
+                dataSourceUrl='/groups?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewEntryForm({} as groupDTO)}
                 columns={columns}
                 actionName='Add New Group'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+                    
+                ]}
             />
         </div>
     )

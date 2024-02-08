@@ -30,7 +30,7 @@ function Facilitiestable() {
     const columns: ColumnDef<facilityDTO>[] = [
         {
             accessorKey: "createdAt",
-            header: "CreateAt",
+            header: "Created At",
             cell: ({ row }) => dateReformat(row.original.createdAt)
         },
         {
@@ -62,9 +62,29 @@ function Facilitiestable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/facilities?pageSize=10&page=1'
+                filterable='name'
+                filterablePlaceholder='Search Name..'
+                dataSourceUrl='/facilities?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewFacilityForm(true)}
-                columns={columns} actionName='Add Facility' />
+                columns={columns} actionName='Add Facility'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
+            />
         </div>
     )
 }

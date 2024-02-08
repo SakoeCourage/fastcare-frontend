@@ -163,7 +163,7 @@ function Familysubscriptionstable() {
             </Modal>
 
             <DataTable
-                dataSourceUrl='/family-subscribers?pageSize=10&page=1'
+                dataSourceUrl='/family-subscribers?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewFamilyClientForm({ title: "Add Family Client", open: true })}
                 filterable="name"
                 columns={columns}

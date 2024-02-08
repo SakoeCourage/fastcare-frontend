@@ -13,13 +13,16 @@ interface DataTablePaginationProps<TData> {
   tableData: IPaginatedData<TData>,
   getDataAsync: (url: string | null) => void,
   table: Table<TData>,
-
+  handleUrlQuery: (accessor: string, value: string) => void,
+  getUrlParamValue(param: string): string
 }
 
 export function DataTablePagination<TData>({
   tableData,
   table,
-  getDataAsync
+  getDataAsync,
+  handleUrlQuery,
+  getUrlParamValue
 }: DataTablePaginationProps<TData>) {
   return (
     <div className=" flex items-center justify-between px-2 py-2 !mt-auto">
@@ -31,9 +34,10 @@ export function DataTablePagination<TData>({
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Selectoption className="h-8 w-[70px]"
-            value={`${table.getState().pagination.pageSize}`}
+            value={getUrlParamValue("pageSize") ?? `${table.getState().pagination.pageSize}`}
             onValueChange={(value) => {
               table.setPageSize(Number(value))
+              handleUrlQuery('pageSize', value)
             }}
             placeholder="Select of rows"
             options={[

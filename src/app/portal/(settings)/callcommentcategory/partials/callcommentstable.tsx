@@ -45,9 +45,30 @@ function Callcommentstable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/call-comment-categories?pageSize=10&page=1'
+                filterable="name"
+                filterablePlaceholder='Search Name..'
+                dataSourceUrl='/call-comment-categories?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setCurentCallComment({} as callCommentDTO)}
-                columns={columns} actionName='Add Call Comment Category' />
+                columns={columns} actionName='Add Call Comment Category' 
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+                    
+                ]}
+                />
+                
         </div>
     )
 }

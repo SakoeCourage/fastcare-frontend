@@ -14,14 +14,17 @@ import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
 
 import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
 
-function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: IFormWithDataProps<IndividualSubDTO>) {
+interface IFectchSubscribers {
+    handleFetchSubscriberData: (id: number | string | undefined) => void
+}
+
+function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel,handleFetchSubscriberData }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers ) {
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
     const [banks, setBanks] = useState<IPaginatedData<bankDTO> | null>(null)
     const { setDialogData } = DialogService()
-    const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>({
-    })
+    const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {})
 
     const isFile = (value: unknown): value is File => {
         return value instanceof File;
@@ -77,6 +80,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
             setBanks(_banks.data)
         } catch (error) {
             console.error('Error fetching data:', error);
+        } finally{
+            if (subscriber.id) handleFetchSubscriberData(subscriber.id);
         }
     }
 
@@ -93,24 +98,13 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
 
     useEffect(() => {
         if (subscriber == null) return
-        const { facility: fc, package: pckg, group: gr, passportPicture, ...rest } = subscriber;
-        let file: File | null = null;
-        if (typeof passportPicture === "string") {
-            const inputString = passportPicture as string;
-            const base64Data = inputString.split(",")[1];
-            const fileType = inputString.split(",")[0].replace(/^data:([^:]+):base64$/, '$1');;
-
-            const base64Buffer = Buffer.from(base64Data, 'base64');
-            const blob = new Blob([base64Buffer]);
-            const filename = "userprofile";
-            file = new File([blob], filename, { type: fileType });
-        }
+        const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
         try {
             setData({
-                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id, passportPicture: file && file as File
+                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id
             })
         } catch (error) {
-            console.warn(error)
+            console.log(error)
         }
 
     }, [subscriber])
@@ -119,7 +113,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
         if (subscriber?.id) {
             patch("/individual-subscribers/" + subscriber.id, { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
-        if (!subscriber) {
+        if (!subscriber?.id) {
             post("/individual-subscribers", { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
     }
@@ -189,6 +183,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         <Fileupload placeholder="Click To Add Image" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
                             acceptType={['image/jpeg', 'image/jpg', 'image/png']}
                             maxNumber={1}
+                            maxFileSize={1500000}
                         />
                     </nav>
                 </div>
@@ -337,7 +332,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel }: 
                         error={errors?.phoneOne}
                         value={data.phoneOne}
                         onChange={(e) => setData("phoneOne", e.target.value)}
-                        label="phone one"
+                        label="Phone one"
                         name=""
                         required
                         placeholder="Enter Phone One"

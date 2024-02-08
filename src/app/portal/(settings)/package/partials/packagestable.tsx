@@ -9,6 +9,7 @@ import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import Api from 'app/app/fetch/axiosInstance'
 import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
+import { dateReformat } from 'app/app/lib/utils'
 
 function Packagestable() {
     const [showNewPackageForm, setShowNewPackageForm] = useState<boolean>(false)
@@ -27,6 +28,11 @@ function Packagestable() {
             })
     }
     const columns: ColumnDef<packageDTO>[] = [
+        {
+            accessorKey: "createdAt",
+            header: "Created At",
+            cell: ({ row }) => dateReformat(row.original.createdAt)
+        },
         {
             accessorKey: "name",
             header: "Name"
@@ -56,10 +62,30 @@ function Packagestable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/packages?pageSize=10&page=1'
+                dataSourceUrl='/packages?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewPackageForm(true)}
+                filterable='name'
+                filterablePlaceholder='Search Name..'
                 columns={columns}
-                actionName='Add Package' />
+                actionName='Add Package'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
+                 />
         </div>
     )
 }

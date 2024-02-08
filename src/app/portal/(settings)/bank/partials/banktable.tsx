@@ -42,9 +42,29 @@ function Banktable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/banks?pageSize=10&page=1'
+                dataSourceUrl='/banks?pageSize=10&page=1&sort=createdAt_desc'
+                filterable="name"
+                filterablePlaceholder='Search Name..'
                 onAction={() => setCurentCallComment({} as bankDTO)}
-                columns={columns} actionName='Add Bank' />
+                columns={columns} actionName='Add Bank' 
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+                    
+                ]}
+                />
         </div>
     )
 }

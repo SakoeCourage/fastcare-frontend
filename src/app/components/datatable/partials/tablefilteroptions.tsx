@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown"
 import { IActionOptions } from './tabletypedefs'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ interface IOptionsProps<TData extends import("@tanstack/table-core").Table<TData
     filterable?: string
     table: TData,
     hasAction?: boolean,
+    hasAnySearch: boolean,
     actionName?: string,
     actionOptions: IActionOptions,
     filterablePlaceholder?: string,
@@ -18,19 +19,27 @@ interface IOptionsProps<TData extends import("@tanstack/table-core").Table<TData
 }
 
 function TableFilterOptions<TData extends import("@tanstack/table-core").Table<TData>>(props: IOptionsProps<TData>): React.JSX.Element {
-    const { filterable, table, hasAction, actionName, actionOptions, onAction, filterablePlaceholder, handleUrlQuery } = props
+    const { filterable, table, hasAction, actionName, hasAnySearch, actionOptions, onAction, filterablePlaceholder, handleUrlQuery } = props
     const searchInput = useRef<HTMLInputElement | null>(null)
-
+    const [showResetButton, setShowResetButton] = useState(false)
 
     const handleSearch = () => {
         if (searchInput.current == null) return
         let value = searchInput.current.value
-        handleUrlQuery("search", value)
+        if (value) {
+            handleUrlQuery("search", value)
+        }
     }
 
     function handleOnReset() {
         if (searchInput.current == null) return
         searchInput.current.value = ""
+    }
+
+    function handleOnSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.value == "" && hasAnySearch) {
+            handleUrlQuery("search", "")
+        }
     }
 
     useEffect(() => {
@@ -42,15 +51,20 @@ function TableFilterOptions<TData extends import("@tanstack/table-core").Table<T
 
     return (
         <div className="flex items-center p-4">
-            {filterable && <div className='border border-gray-300  pl-3 gap-3 flex items-center justify-center rounded-md'>
-                <input ref={searchInput} type='text'
-                    placeholder={`Search ${filterablePlaceholder ?? filterable.toString().toLocaleLowerCase()}...`}
-                    value={table.getColumn(filterable as string)?.getFilterValue() as string}
-                    onKeyUp={(e) => e.key == "Enter" && handleSearch()}
-                    className="max-w-sm  text-sm text-gray-700   outline-none focus:outline-none"
-                />
-                <button onClick={handleSearch} className=' bg-blue-400/80 rounded-r-md py-1 px-2'><IconifyIcon className=' text-white bg-transparent' icon='ep:search' /></button>
-            </div>}
+            {filterable && <div className='flex items-center gap-1'>
+                <div className='border border-gray-300  pl-3 gap-3 flex items-center justify-center rounded-md'>
+                    <input ref={searchInput}
+                        type='search'
+                        onChange={(e) => handleOnSearchChange(e)}
+                        placeholder={` ${filterablePlaceholder ? filterablePlaceholder : "Search" + filterable.toString().toLocaleLowerCase()}...`}
+                        value={table.getColumn(filterable as string)?.getFilterValue() as string}
+                        onKeyUp={(e) => e.key == "Enter" && handleSearch()}
+                        className="max-w-sm  text-sm text-gray-700   outline-none focus:outline-none"
+                    />
+                    <button onClick={handleSearch} className=' bg-blue-400/80 rounded-r-md py-1 px-2'><IconifyIcon className=' text-white bg-transparent' icon='ep:search' /></button>
+                </div>
+            </div>
+            }
             <div className=' flex items-center gap-2 ml-auto'>
                 <DropdownMenu >
                     <DropdownMenuTrigger asChild>
