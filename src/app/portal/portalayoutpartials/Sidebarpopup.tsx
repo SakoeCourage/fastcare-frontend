@@ -2,12 +2,18 @@ import React from 'react'
 import classNames from 'classnames'
 import Link from "next/link"
 import { useSidebar } from 'app/app/providers/Sidebarserviceprovider'
-const Sidebarpopup = ({ links, pathname }: { links: { title: string, link: string }[], pathname: string }) => {
+import { sbitemWithLinks, singleSbItem } from 'app/app/types/portal/sidebar-typedef'
+import { AccessByPermission } from 'app/app/accescontrol'
+
+interface ISidebarPopUp extends sbitemWithLinks{
+
+}
+const Sidebarpopup = ({ links, title:pathname }:ISidebarPopUp) => {
     const { setPopupVisible} = useSidebar()
 
     return <ul className={`z-50 rounded-md overflow-hidden h-max bg-gray-100/95   add-customer-bezier duration-300 w-[var(--sidebar-width)]  list-none pl-2 pr-3 py-[0.03rem]  `}>
-        {links.map((link, i) =>
-            <li key={i} className=" list-none ">
+        {links.map((link, i) =><AccessByPermission key={i} abilities={link.permissions}>
+             <li key={i} className=" list-none ">
                 <Link
                     onClick={()=>setPopupVisible(false)}
                     href={link.link}
@@ -21,6 +27,7 @@ const Sidebarpopup = ({ links, pathname }: { links: { title: string, link: strin
                     <nav className="route-title my-auto pl-1 "> {link.title}</nav>
                 </Link>
             </li>
+            </AccessByPermission>
         )}
     </ul>
 }

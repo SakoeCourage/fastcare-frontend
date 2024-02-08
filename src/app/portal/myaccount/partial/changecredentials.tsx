@@ -12,6 +12,7 @@ import { z } from 'zod'
 interface passwordChangeDto {
     oldPassword: string
     newPassword: string,
+    passwordConfirmation: string,
 }
 
 
@@ -20,11 +21,18 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
     const { data, setData, put, errors, setValidation } = useForm<passwordChangeDto>({
         oldPassword: "",
         newPassword: "",
+        passwordConfirmation: ""
     })
 
     setValidation({
         oldPassword: z.string().min(5, "Password too short"),
         newPassword: z.string().min(5, "Password too short")
+            .refine((value) => value === data.passwordConfirmation, {
+                message: "Passwords do not match",
+                path: ["newPassword"]
+            }),
+        passwordConfirmation: z.string().min(5, "Password too short"),
+
     })
 
     const hanldeSignOut = async () => {
@@ -51,7 +59,7 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
             .onDialogConfirm(() => {
                 put('/users/change-password', {
                     onSuccess: () => {
-                        toastnotify("Password Has Been Changed","Success");
+                        toastnotify("Password Has Been Changed", "Success");
                         hanldeSignOut();
                     }
                 })
@@ -86,12 +94,20 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
                 label="New Password"
                 placeholder="Enter New Password" />
 
+            <Input
+                onChange={(e) => setData('passwordConfirmation', e.target.value)}
+                value={data?.passwordConfirmation}
+                error={errors?.passwordConfirmation}
+                type="password"
+                label="Confirm Password"
+                placeholder="Confirm New Password" />
+
             <div className='grid grid-cols-2 gap-2'>
                 <Button onClick={() => changeView("profile")} size='full' variant="outline">
                     Cancel
                 </Button>
                 <Button size='full' variant='primary'>
-                    Rest Password
+                    Reset Password
                 </Button>
             </div>
         </form>

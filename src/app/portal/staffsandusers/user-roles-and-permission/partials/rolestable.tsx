@@ -30,7 +30,7 @@ function Rolesstable() {
         {
             accessorKey: "",
             header: "Permissions",
-            cell: ({ row }) => <button disabled={Boolean(row.original?.name?.toLocaleLowerCase() == "Super Admin".toLocaleLowerCase())} onClick={() => setShowRolePermissions(row.original as roleDTO)} role="navigation" className=' whitespace-nowrap  flex items-center gap-1 cursor-pointer'>
+            cell: ({ row }) => <button disabled={Boolean(row.original?.name?.trim().toLocaleLowerCase() == "Super Admin".toLocaleLowerCase())} onClick={() => setShowRolePermissions(row.original as roleDTO)} role="navigation" className=' whitespace-nowrap  flex items-center gap-1 cursor-pointer'>
                 <nav className=' whitespace-nowrap flex rounded-full p-1 px-2 bg-white border text-blue-600 border-blue-400 items-center text-xs'>
                     <nav className="text-xs text-center mr-1">
                         {row.original?.permissions?.length}

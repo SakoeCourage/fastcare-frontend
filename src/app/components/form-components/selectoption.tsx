@@ -17,7 +17,7 @@ export interface ISelectparams extends SelectProps {
     enableSearch?: boolean,
     searchPlacholder?: string,
     required?: boolean,
-    options: { key: string, value: any }[],
+    options: { key: string, value: any, disabled?: boolean }[],
     placeholder?: string,
     className?: string
     error?: string
@@ -28,7 +28,7 @@ function Selectoption(props: ISelectparams) {
     const [searchKey, setSearchKey] = useState<string>("")
     const searchInput = useRef<HTMLInputElement | null>(null)
 
-    const focusSearchIput = () => {
+    const focusSearchInput = () => {
         try {
             if (searchInput.current) {
                 searchInput.current.focus();
@@ -43,8 +43,6 @@ function Selectoption(props: ISelectparams) {
     }
 
 
-
-
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             {label && <Label className="flex items-center gap-1">{label}
@@ -57,7 +55,7 @@ function Selectoption(props: ISelectparams) {
                     </nav>
                     <svg className="cursor-pointer ml-auto v-error-svg text-red-400 hover:text-red-500" xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m1 15h-2v-2h2zm0-4h-2V7h2z" /></svg>
                 </nav>}
-                <Select  onValueChange={(v) => { onValueChange(v); setSearchKey(null) }} {...rest} >
+                <Select onValueChange={(v) => { onValueChange(v); enableSearch && setSearchKey(null) }} {...rest} >
                     <SelectTrigger className={`w-full text-gray-600 bg-white ${error && 'border-red-400'}`}>
                         <SelectValue className="bg-white " placeholder={placeholder} />
                     </SelectTrigger>
@@ -66,7 +64,7 @@ function Selectoption(props: ISelectparams) {
                             <Input ref={searchInput} value={searchKey} onChange={(e) => handleOnSearchValueChange(e.target.value)} placeholder={searchPlacholder} className="w-full mb-1 focus:!ring-0" />
                         }
                         {options.map((option, i) => (
-                            <SelectItem onFocus={enableSearch && focusSearchIput}
+                            <SelectItem disabled={option.disabled ?? false} onFocus={() => enableSearch && focusSearchInput()}
                                 className={
                                     classNames({
                                         "cursor-pointer hover:!bg-gray-100 ": true,

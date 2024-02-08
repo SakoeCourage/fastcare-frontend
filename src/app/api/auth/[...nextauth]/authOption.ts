@@ -52,6 +52,7 @@ export const authOptions: NextAuthOptions = {
             session.expires = token.expires
             cookies().set("passwordResetRequired", String(token.user.passwordResetRequired))
             cookies().set("apiToken", String(token.accessToken))
+            cookies().set("role", String(JSON.stringify(token.user.role)))
             return session;
         },
 

@@ -28,9 +28,6 @@ const Fileupload = ({ getFiles,
     const inputRef = useRef<HTMLInputElement | null>(null);
     const [files, setFiles] = useState<File[] | Blob[]>([])
 
-
-
-
     function insertUnique<T>(arr: T[], values: T[]): T[] {
         const uniqueValues = values.filter((value) => !arr.includes(value));
         return [...arr, ...uniqueValues];

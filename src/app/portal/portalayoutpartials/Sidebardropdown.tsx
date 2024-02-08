@@ -7,15 +7,12 @@ import { Icon } from '@iconify/react'
 import classNames from "classnames";
 import Sidebarpopup from "./Sidebarpopup";
 import { useSidebar } from "app/app/providers/Sidebarserviceprovider";
+import { AccessByPermission } from "app/app/accescontrol";
+import { sbitemWithLinks } from "app/app/types/portal/sidebar-typedef";
 
-interface params {
-  links: { title: string, link: string }[],
-  toggleSidebar: () => void,
-  title: string,
-  icon: string
+interface params extends sbitemWithLinks {
+  toggleSidebar: () => void
 }
-
-
 
 export default function Sidebardropdown(props: params) {
   const { sidebarStateOpen, setSidebarItemLocation, setCurrentPopupElement, setPopupVisible, handleLeave, visibilityTimeout } = useSidebar()
@@ -34,7 +31,7 @@ export default function Sidebardropdown(props: params) {
       const documentTop = window.scrollY || document.documentElement.scrollTop;
       const root = document.documentElement;
       const sbWidth = getComputedStyle(root).getPropertyValue('--sidebar-mini-width');
-      const cuurentCp = <Sidebarpopup links={props.links} pathname={pathname} />
+      const cuurentCp = <Sidebarpopup {...props} />
       if ((documentTop + top + listitems.current!.scrollHeight! ?? 0) >= window.innerHeight) {
         setSidebarItemLocation({
           top: window.innerHeight - 2 - listitems.current!.scrollHeight! ?? 0,
@@ -111,9 +108,8 @@ export default function Sidebardropdown(props: params) {
         <svg className={` transfrom text-[#c7d2fe] transition-transform  !justify-self-end ml-auto ${mini ? 'hidden' : "transition-fadeIn"}  ${!isColapsed && ' rotate-180'}`} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6l-6-6l1.41-1.42Z" /></svg>
       </nav>
       <ul ref={listitems} className={`${isIncurrentpathname && "rounded-b-md"} overflow-hidden h-0  transition-all add-customer-bezier duration-300 bg-gray-500/30  list-none px-1 py-[0.03rem]  `}>
-        {props.links.map((link, i) =>
+        {props.links.map((link, i) => <AccessByPermission key={i} abilities={link.permissions}>
           <li
-            key={i}
             className=" list-none">
             <Link
               onClick={props.toggleSidebar}
@@ -129,6 +125,7 @@ export default function Sidebardropdown(props: params) {
               <nav className={`route-title my-auto pl-1  ${mini ? 'hidden' : "transition-fadeIn"}`}> {link.title}</nav>
             </Link>
           </li>
+        </AccessByPermission>
         )}
       </ul>
 

@@ -9,14 +9,14 @@ import { Icon } from '@iconify/react'
 import SimpleBar from "simplebar-react";
 import { useSidebar } from "../providers/Sidebarserviceprovider";
 import { motion, AnimatePresence } from "framer-motion"
+import { routesTypesDef, isSingleSbItemGuard, isSbWithLinksGuard, singleSbItem } from "../types/portal/sidebar-typedef";
+import { AccessByPermission, getAllRequiredAbilitiesPerRoute, getAllSidebarSectionAbilities } from "../accescontrol";
 
-
-interface params { link: string, toggleSidebar: () => void, title: string, icon: string }
+interface params extends singleSbItem { toggleSidebar: () => void }
 function Sidebarlink(props: params) {
     const { sidebarStateOpen } = useSidebar()
     const { mini, full } = sidebarStateOpen
     const pathname = usePathname()
-
 
     return <Link
         onClick={props.toggleSidebar}
@@ -67,25 +67,30 @@ export default function Sidebar() {
                     </nav>
                 </nav>
                 <SimpleBar forceVisible="y" autoHide={true} className="w-full overflow-x-hidden z-50 basis-auto flex flex-col gap-5  list-none py-1 h-[calc(100vh-var(--header-height))]">
-                    {sideBarSections.map((section, i) => <nav key={i} className="w-full flex flex-col gap-3 text-sm tracking-tight capitalize whitespace-nowrap"  >
+                    {sideBarSections.map((section, i) => <AccessByPermission key={i} abilities={getAllSidebarSectionAbilities(section.routes)}>
+                        <nav key={i} className="w-full flex flex-col gap-3 text-sm tracking-tight capitalize whitespace-nowrap"  >
+                            <nav className={` flex items-center transition-all  px-4 pt-6 py-2 truncate w-full uppercase tracking-wide text-gray-300/60 text-xs font-medium ${sidebarStateOpen.mini && ' justify-center w-full !text-[0.6rem]'}`}>{section.sectionName}</nav>
+                            <ul className=" w-full basis-auto px-3  flex flex-col gap-1 h-full min-h-max list-none">
+                                {section.routes.map((route, i) => <AccessByPermission key={i} abilities={getAllRequiredAbilitiesPerRoute(route)}>
+                                    <li className="w-full text-sm tracking-tight capitalize whitespace-nowrap"  >
+                                        {isSingleSbItemGuard(route) ?
+                                            <Sidebarlink
+                                                toggleSidebar={toggleSideBar}
+                                                {...route}
+                                            /> :
+                                            <Sidebardropdown
+                                                toggleSidebar={toggleSideBar}
+                                                {...route}
+                                            />
+                                        }
+                                    </li>
+                                </AccessByPermission>
+                                )
 
-                        <nav className={` flex items-center transition-all  px-4 pt-6 py-2 truncate w-full uppercase tracking-wide text-gray-300/60 text-xs font-medium ${sidebarStateOpen.mini && ' justify-center w-full !text-[0.6rem]'}`}>{section.sectionName}</nav>
-
-                        <ul className=" w-full basis-auto px-3  flex flex-col gap-1 h-full min-h-max list-none">
-                            {section.routes.map((route, i) => <li key={i} className="w-full text-sm tracking-tight capitalize whitespace-nowrap"  >
-                                {!route.links ?
-                                    <Sidebarlink toggleSidebar={toggleSideBar} title={route.title} link={route.link} icon={route.icon} /> :
-                                    <Sidebardropdown
-                                        toggleSidebar={toggleSideBar}
-                                        title={route.title}
-                                        icon={route.icon}
-                                        links={route.links}
-                                    />
                                 }
-                            </li>
-                            )}
-                        </ul>
-                    </nav>
+                            </ul>
+                        </nav>
+                    </AccessByPermission >
                     )}
                 </SimpleBar>
             </div>

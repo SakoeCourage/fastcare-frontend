@@ -73,6 +73,7 @@ export default function EditPermissions(props: IFormWithDataProps<roleDTO>) {
             ;
         setData('permissions', _permission)
         setRolePermissions(_permission)
+        setIsAltered(true)
     }
 
     const checkStatus = (r_permission) => {
@@ -90,9 +91,6 @@ export default function EditPermissions(props: IFormWithDataProps<roleDTO>) {
         }
     }
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
 
 
 
@@ -117,16 +115,13 @@ export default function EditPermissions(props: IFormWithDataProps<roleDTO>) {
                     );
                 })}
 
-            <nav className='flex items-center mt-auto px-4 bg-transparent'>
+            {isAltered && <nav className='flex items-center mt-auto px-4 bg-transparent'>
                 <Button className='flex items-center justify-center gap-3' type='submit' size='full' processing={processing} onClick={ApplyNewPermissions} >
                     Sync New Permissions
                     <IconifyIcon className='bg-transparent' icon='ic:round-sync' />
                 </Button >
-            </nav>
-            {isLoading && <div>
-
-            </div>}
-
+            </nav>}
+         
         </form>
 
     )

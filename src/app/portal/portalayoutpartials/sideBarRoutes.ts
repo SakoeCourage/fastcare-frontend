@@ -9,6 +9,7 @@ export let sidebarRoutes: routesListWitSections =
                     title: 'Dashboard',
                     icon: "mingcute:grid-fill",
                     link: '/portal/dashboard',
+                    permissions: ['View_Dashboard']
                 },
                 {
                     title: "Payments",
@@ -16,15 +17,18 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "View Payments",
-                            link: '/portal/payments/viewpayments'
+                            link: '/portal/payments/viewpayments',
+                            permissions: ["View_Payment"]
                         },
                         {
                             title: "Make Payment",
-                            link: '/portal/payments/makepayment'
+                            link: '/portal/payments/makepayment',
+                            permissions: ["Manage_Payment"]
                         },
                         {
                             title: "Payment Confirmation",
-                            link: '/portal/payments/paymentconfirmation'
+                            link: '/portal/payments/paymentconfirmation',
+                            permissions: ["Manage_Payment", "View_Payment"]
                         },
                     ],
                 },
@@ -34,7 +38,8 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Call Subscibers",
-                            link: '/portal/customercare/callsubscribers'
+                            link: '/portal/customercare/callsubscribers',
+                            permissions: ["View_Subscriptions"]
                         }
                     ]
                 },
@@ -44,11 +49,14 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Check Mandate Details",
-                            link: '/portal/autodebitoperation/checkmandate'
+                            link: '/portal/autodebitoperation/checkmandate',
+                            permissions: ["View_Debit_OPS", "Manage_Debit_OPS"]
                         },
                         {
                             title: "Unmandated Subscribers",
-                            link: '/portal/autodebitoperation/unmandatedsubscribers'
+                            link: '/portal/autodebitoperation/unmandatedsubscribers',
+                            permissions: ["View_Debit_OPS", "Manage_Debit_OPS"]
+
                         }
                     ]
                 },
@@ -58,19 +66,23 @@ export let sidebarRoutes: routesListWitSections =
                     links: [
                         {
                             title: "Staff Onboarding",
-                            link: '/portal/staffsandusers/staffonboarding'
+                            link: '/portal/staffsandusers/staffonboarding',
+                            permissions: ["View_Users","Manage_Users"]
                         },
                         {
                             title: "User Onboarding",
-                            link: '/portal/staffsandusers/useronboarding'
+                            link: '/portal/staffsandusers/useronboarding',
+                            permissions: ["View_Users","Manage_Users"]
                         },
                         {
                             title: "Reset Password",
-                            link: '/portal/myaccount'
+                            link: '/portal/myaccount',
+                            permissions: ["View_Dashboard"]
                         },
                         {
                             title: "User Roles & Permissions",
-                            link: '/portal/staffsandusers/user-roles-and-permission'
+                            link: '/portal/staffsandusers/user-roles-and-permission',
+                            permissions: ["View_Users","Manage_Users"]
                         },
                     ],
                 }
@@ -88,7 +100,8 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: "Individual And Group",
                     icon: "fa:users",
-                    link: "/portal/individual-group-subscription"
+                    link: "/portal/individual-group-subscription",
+                    permissions: ["View_Subscriptions","Manage_Subscriptions"]
                 },
                 {
                     title: "Family Subscription",
@@ -97,14 +110,18 @@ export let sidebarRoutes: routesListWitSections =
                         {
                             title: 'Family Subscibers',
                             link: '/portal/familysubscription/familysubscribers',
+                            permissions: ["View_Subscriptions","Manage_Subscriptions"]
+
                         },
                         {
                             title: 'Family Plan Members',
                             link: '/portal/familysubscription/familyplanmembers',
+                            permissions: ["View_Subscriptions","Manage_Subscriptions"]
                         },
                         {
                             title: 'View Family Subs',
                             link: '/portal/familysubscription/viewfamilysubscription',
+                            permissions: ["View_Subscriptions","Manage_Subscriptions"]
                         },
                     ]
                 },
@@ -115,10 +132,12 @@ export let sidebarRoutes: routesListWitSections =
                         {
                             title: 'Corporate Subscribers',
                             link: '/portal/corporatesubscription/corporatesubscribers',
+                            permissions: ["View_Subscriptions","Manage_Subscriptions"]
                         },
                         {
                             title: 'View Corporate Subs',
                             link: '/portal/corporatesubscription/viewcorporatesubscription',
+                            permissions: ["View_Subscriptions","Manage_Subscriptions"]
                         },
                     ]
                 },
@@ -129,10 +148,12 @@ export let sidebarRoutes: routesListWitSections =
                         {
                             title: 'Import Data',
                             link: '/portal/datamigration/importdata',
+                            permissions: ["View_Settings"]
                         },
                         {
                             title: 'Complete Migrate Subs',
                             link: '/portal/datamigration/completemigratedsubs',
+                            permissions: ["View_Settings"]
                         }
                     ]
                 },
@@ -146,22 +167,26 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: "Subscribers View",
                     icon: "icon-park-solid:book",
-                    link: "/portal/subscribers"
+                    link: "/portal/subscribers",
+                    permissions: ["View_Subscriptions","Manage_Subscriptions"]
                 },
                 {
                     title: "Facility Performance",
                     icon: "icon-park-solid:book",
-                    link: "/portal/facilitiesperformance"
+                    link: "/portal/facilitiesperformance",
+                    permissions: ["View_Subscriptions","Manage_Subscriptions"]
                 },
                 {
                     title: "Staff Collection Perf.",
                     icon: "icon-park-solid:book",
-                    link: "/portal/staffperformance"
+                    link: "/portal/staffperformance",
+                    permissions: ["View_Subscriptions","Manage_Subscriptions"]
                 },
                 {
                     title: "Agents Commision List",
                     icon: "icon-park-solid:book",
-                    link: "/portal/agentscommission"
+                    link: "/portal/agentscommission",
+                    permissions: ["View_Subscriptions","Manage_Subscriptions"]
                 },
             ]
         },
@@ -171,27 +196,32 @@ export let sidebarRoutes: routesListWitSections =
                 {
                     title: 'Facility Setup',
                     icon: "mdi:gear",
-                    link: "/portal/facility"
+                    link: "/portal/facility",
+                    permissions: ["View_Settings"]
                 },
                 {
                     title: 'Package Setup',
                     icon: "mdi:gear",
-                    link: "/portal/package"
+                    link: "/portal/package",
+                    permissions: ["View_Settings"]
                 },
                 {
                     title: 'Bank Setup',
                     icon: "mdi:gear",
-                    link: "/portal/bank"
+                    link: "/portal/bank",
+                    permissions: ["View_Settings"]
                 },
                 {
                     title: 'Call Comment Category',
                     icon: "mdi:gear",
-                    link: "/portal/callcommentcategory"
+                    link: "/portal/callcommentcategory",
+                    permissions: ["View_Settings"]
                 },
                 {
                     title: 'Groups and Associations',
                     icon: "mdi:gear",
-                    link: "/portal/groupsandassociations"
+                    link: "/portal/groupsandassociations",
+                    permissions: ["View_Settings"]
                 },
             ]
         }

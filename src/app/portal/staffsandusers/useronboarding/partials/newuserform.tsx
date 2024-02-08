@@ -1,17 +1,14 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { Input } from 'app/app/components/form-components/input'
-import { Textarea } from 'app/app/components/form-components/textarea'
 import Selectoption from 'app/app/components/form-components/selectoption'
 import { Button } from 'app/app/components/form-components/button';
-import Datepicker from 'app/app/components/form-components/datepicker';
 import { userDTO, roleDTO, facilityDTO, staffDTO } from 'app/app/types/entitiesDTO'
 import useForm from 'app/app/hooks/formHook/useForm'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { z } from 'zod'
 import Api from 'app/app/fetch/axiosInstance'
 import { AxiosResponse } from 'axios'
-import Select2options from 'app/app/components/form-components/select2options'
 
 function Newuserform(props: IFormWithDataProps<userDTO>) {
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
@@ -92,7 +89,7 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                     enableSearch={true}
                     searchPlacholder='Search Staff Name'
                     value={data?.staffDbId}
-                    onValueChange={(e) => setData("staffDbId", e)}
+                    onValueChange={(v) => setData("staffDbId", v)}
                     error={errors?.staffDbId}
                     options={staffs
                         ? staffs.data.map((n) => ({
@@ -105,16 +102,16 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                 <Selectoption
                     error={errors?.roleId}
                     value={data?.roleId}
-                    onValueChange={(e) => setData("roleId", e)}
+                    onValueChange={(v) => setData("roleId", v)}
                     label='Role'
                     placeholder='Select Role'
-                    options={roles ? [...Object.entries(roles.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []}
+                    options={roles ? roles.data.map(entry => { return { key: entry.name, value: entry.id, disabled: entry.permissions.length === 0 } }) : []}
                     required
                 />
                 <Selectoption
                     error={errors?.facilityId}
                     value={data?.facilityId}
-                    onValueChange={(e) => setData("facilityId", e)}
+                    onValueChange={(v) => setData("facilityId", v)}
                     label='Facility'
                     placeholder='Select Facility'
                     options={facilities ? [...Object.entries(facilities.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []}
