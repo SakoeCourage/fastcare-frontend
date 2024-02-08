@@ -1,45 +1,26 @@
-import { NextResponse } from 'next/server'
-import type { NextRequest } from 'next/server'
+import { Permission } from "../types/entitiesDTO"
+import { isSingleSbItemGuard, isSbWithLinksGuard } from "../types/portal/sidebar-typedef"
+import { sidebarRoutes } from "../portal/portalayoutpartials/sideBarRoutes"
 
-
-export const logRequest = (request: NextRequest) => {
-    if (request.cookies.get('role')) {
-        console.log(JSON.parse(request.cookies.get('role').value))
-    }
+interface routeHasPermision {
+    route: string,
+    permisssions: Permission[]
 }
 
-export const authOnly = (request: NextRequest) => {
-    const currentAuthToken = request.cookies.get("next-auth.session-token")?.value || request.cookies.get("__Secure-next-auth.session-token")?.value;
-    if (currentAuthToken === undefined) {
-        if (!request.url.endsWith("/login")) {
-            return NextResponse.redirect(new URL('/login', request.url));
+export const getPermissionPerRoute = (): routeHasPermision[] => {
+    let currentAbilities: routeHasPermision[] = [];
+    sidebarRoutes.forEach(sbroute => {
+        for (const route of sbroute.routes) {
+            if (isSingleSbItemGuard(route)) {
+                currentAbilities = [...currentAbilities, { route: route.link, permisssions: route.permissions }]
+            }
+
+            if (isSbWithLinksGuard(route)) {
+                for (const r of route.links) {
+                    currentAbilities = [...currentAbilities, { route: r.link, permisssions: r.permissions }]
+                }
+            }
         }
-    } else {
-        return NextResponse.next()
-    }
+    })
+    return currentAbilities;
 }
-
-export const guestOnly = (request: NextRequest) => {
-    const currentAuthToken = request.cookies.get("next-auth.session-token")?.value || request.cookies.get("__Secure-next-auth.session-token")?.value;
-
-    if (currentAuthToken === undefined) {
-        if (!request.url.endsWith("/login")) {
-            return NextResponse.redirect(new URL('/login', request.url));
-        }
-    } else {
-        return NextResponse.next()
-    }
-}
-
-export const hasResetPassword = (request: NextRequest) => {
-    const passwordResetRequired = request.cookies.get("passwordResetRequired");
-    if (passwordResetRequired != null && passwordResetRequired.value === "true") {
-        if (!request.url.endsWith("/myaccount?view=pass_reset")) {
-            return NextResponse.redirect(new URL('/portal/myaccount?view=pass_reset', request.url));
-        }
-    } else {
-        return NextResponse.next()
-    }
-}
-
-

@@ -1,8 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getPermissionPerRoute } from './app/accescontrol/accesscontrol';
+import { getPermissionPerRoute } from './app/accescontrol/routemiddleware';
 import { roleDTO } from './app/types/entitiesDTO';
-
 
 function removeAnyQueryParam(url: string): string {
     if (url.includes('?')) {
