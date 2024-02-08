@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Link from "next/link"
 import { useSidebar } from 'app/app/providers/Sidebarserviceprovider'
 import { sbitemWithLinks, singleSbItem } from 'app/app/types/portal/sidebar-typedef'
-import { AccessByPermission } from 'app/app/accescontrol'
+import { AccessByPermission } from 'app/app/accescontrol/accesscontrol'
 
 interface ISidebarPopUp extends sbitemWithLinks{
 

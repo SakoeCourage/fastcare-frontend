@@ -7,7 +7,7 @@ import { Icon } from '@iconify/react'
 import classNames from "classnames";
 import Sidebarpopup from "./Sidebarpopup";
 import { useSidebar } from "app/app/providers/Sidebarserviceprovider";
-import { AccessByPermission } from "app/app/accescontrol";
+import { AccessByPermission } from "app/app/accescontrol/accesscontrol";
 import { sbitemWithLinks } from "app/app/types/portal/sidebar-typedef";
 
 interface params extends sbitemWithLinks {

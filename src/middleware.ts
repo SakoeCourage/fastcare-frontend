@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getPermissionPerRoute } from './app/accescontrol';
+import { getPermissionPerRoute } from './app/accescontrol/accesscontrol';
 import { roleDTO } from './app/types/entitiesDTO';
 
 

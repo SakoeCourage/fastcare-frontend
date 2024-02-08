@@ -10,7 +10,7 @@ import SimpleBar from "simplebar-react";
 import { useSidebar } from "../providers/Sidebarserviceprovider";
 import { motion, AnimatePresence } from "framer-motion"
 import { routesTypesDef, isSingleSbItemGuard, isSbWithLinksGuard, singleSbItem } from "../types/portal/sidebar-typedef";
-import { AccessByPermission, getAllRequiredAbilitiesPerRoute, getAllSidebarSectionAbilities } from "../accescontrol";
+import { AccessByPermission, getAllRequiredAbilitiesPerRoute, getAllSidebarSectionAbilities } from "../accescontrol/accesscontrol";
 
 interface params extends singleSbItem { toggleSidebar: () => void }
 function Sidebarlink(props: params) {
