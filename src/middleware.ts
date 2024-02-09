@@ -34,8 +34,8 @@ export function middleware(request: NextRequest) {
         }
         else if (request.url.endsWith("/login")) {
             return NextResponse.redirect(new URL('/portal/dashboard', request.url));
-        } else if (request.url.search('/portal') && !request.url.endsWith('/portal/dashboard')) {
-            if (!!role?.permissions?.length) {
+        } else if (request.url.includes('/portal') && !request.url.endsWith('/portal/dashboard')) {
+            if (role?.permissions && (Boolean(role?.permissions.length) == true)) {
                 try {
                     var currentRouteTo = routePermissions.find((r) => removeAnyQueryParam(request.url).trim().endsWith(r.route.trim()))
                     var canAccessRoute = currentRouteTo?.permisssions.some(permission => role.permissions.includes(permission));

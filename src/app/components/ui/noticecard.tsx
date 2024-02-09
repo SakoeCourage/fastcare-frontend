@@ -39,7 +39,7 @@ const Noticecard: React.FC<NoticeCardProps> = ({ variant = "info", children }) =
             </div>
             <div
                 style={{ backgroundColor: options[variant].textBgColor, color: options[variant].textColor }}
-                className=" flex-grow p-2 text-sm ">
+                className=" flex-grow flex items-center p-2 text-sm ">
                 {children}
             </div>
         </div>

@@ -8,7 +8,8 @@ import { useSession, signOut } from 'next-auth/react'
 import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { z } from 'zod'
-
+import Noticecard from 'app/app/components/ui/noticecard'
+import { RequestEvents } from 'app/app/fetch/apiEvent'
 interface passwordChangeDto {
     oldPassword: string
     newPassword: string,
@@ -17,6 +18,7 @@ interface passwordChangeDto {
 
 
 function Changecredentials({ changeView }: { changeView: (comp: componentsType) => void }) {
+    const { data: sessionData } = useSession()
     const { setDialogData } = DialogService()
     const { data, setData, put, errors, setValidation } = useForm<passwordChangeDto>({
         oldPassword: "",
@@ -41,6 +43,7 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
                 redirect: false
             })
             window.location.href = "/login"
+            window.localStorage.removeItem(RequestEvents.REQUEST_CALLBACK_URL_CONSTACT)
         } catch (error) {
             toastnotify("Failed to sign out")
         }
@@ -48,7 +51,6 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
 
     const handleFormSubmission = (e: FormEvent) => {
         e.preventDefault()
-
         setDialogData({
             open: true,
             title: "Reset Password",
@@ -69,16 +71,14 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
 
 
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
-
     return (
         <form onSubmit={handleFormSubmission} className='flex flex-col gap-5'>
             <nav className=' py-2 flex items-center  gap-1 text-gray-500'>
                 <nav className=' text-2xl'>Password Reset</nav>
             </nav>
+            {sessionData?.user?.passwordResetRequired && <Noticecard>
+                Reset Password to Continue
+            </Noticecard>}
             <Input
                 onChange={(e) => setData('oldPassword', e.target.value)}
                 value={data?.oldPassword}

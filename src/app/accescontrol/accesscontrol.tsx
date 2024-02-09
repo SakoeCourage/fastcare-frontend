@@ -23,29 +23,31 @@ export const getAllRequiredAbilitiesPerRoute = (route: routesTypesDef): Permissi
 }
 
 export const getAllSidebarSectionAbilities = (routes: routesTypesDef[]): Permission[] | [] => {
-    let currentAbilities = [];
+    let currentAbilities: Permission[] = [];
     routes.forEach(route => {
-        currentAbilities = getAllRequiredAbilitiesPerRoute(route)
+        console.log(route)
+        const routeAbilities = getAllRequiredAbilitiesPerRoute(route);
+        currentAbilities = [...currentAbilities, ...routeAbilities];
     })
     return currentAbilities;
 }
+
 
 
 export function AccessByPermission({ abilities, children }: IAccessControlProps) {
     const { data, status } = useSession();
     if (status !== "loading" && status == "authenticated") {
         const { name, permissions } = data?.user?.role;
+    
         if (name.trim() === 'Super Admin') {
             return <> {children}</>;
         }
 
         if (name.trim() !== 'Super Admin') {
-            for (const ability of abilities) {
-                if (permissions.some((c_permission, i) => c_permission === ability)) {
-                    return <> {children}</>;
-                }
+            var canAccess = abilities.some(permission => permissions.includes(permission))
+            if (canAccess === true) {
+                return <>{children}</>
             }
-
         }
     }
 

@@ -30,7 +30,7 @@ function Userstable() {
             .onDialogConfirm(() => {
                 Api.patch('/users/reset-password/' + id)
                     .then(res => {
-                        toastnotify("User Passwor Reset To Default", "Success")
+                        toastnotify("User Password Reset To Default", "Success")
                         resetTableData();
                     }).catch(err => {
                         toastnotify("Failed To Reset Password")
