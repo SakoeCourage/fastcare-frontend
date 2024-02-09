@@ -64,6 +64,9 @@ export function updateUrlQueryParam(url: string, key: string, value: string | nu
   return urlObject.toString();
 }
 
+export function isNullOrWhitespace(input: string | null | undefined): boolean {
+  return input === null || input === undefined || /^\s*$/.test(input);
+}
 
 
 

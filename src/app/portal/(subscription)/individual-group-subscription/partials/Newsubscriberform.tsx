@@ -11,14 +11,16 @@ import { IndividualSubDTO, facilityDTO, groupDTO, packageDTO, bankDTO } from 'ap
 import { AxiosResponse } from 'axios'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
-
+import Noticecard from 'app/app/components/ui/noticecard'
 import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
+import { isNullOrWhitespace } from 'app/app/lib/utils'
 
 interface IFectchSubscribers {
     handleFetchSubscriberData: (id: number | string | undefined) => void
 }
 
-function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel,handleFetchSubscriberData }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers ) {
+function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, handleFetchSubscriberData }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers) {
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
@@ -80,7 +82,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel,han
             setBanks(_banks.data)
         } catch (error) {
             console.error('Error fetching data:', error);
-        } finally{
+        } finally {
             if (subscriber.id) handleFetchSubscriberData(subscriber.id);
         }
     }
@@ -146,6 +148,26 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel,han
     }, [])
 
 
+    const checkFileValidationRule = (rule: "Size" | "AcceptType") => {
+        if (isNullOrWhitespace(data.passportPicture)) return false
+        if (!rule && !isFile(data.passportPicture)) return false
+
+        if (rule == "Size") {
+            if (data.passportPicture.size < 1080033) {
+                return true
+            }
+            return false
+        }
+
+        if (rule == "AcceptType") {
+
+            if (['image/jpeg', 'image/jpg', 'image/png'].includes(data.passportPicture.type)) {
+                return true
+            }
+            return false
+        }
+    }
+
     return (
         <div className=' '>
             {/* First Section Begins here */}
@@ -178,14 +200,22 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel,han
                         />
                     </nav>
                 </div>
-                <div className=' grid grid-cols-1 gap-5 !bg-white  h-full pt-2 pb-2 px-5 lg:py-5  border'>
-                    <nav className=' grid-cols-1 grid h-full'>
-                        <Fileupload placeholder="Click To Add Image" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
-                            acceptType={['image/jpeg', 'image/jpg', 'image/png']}
-                            maxNumber={1}
-                            maxFileSize={1500000}
-                        />
-                    </nav>
+                <div className=' grid grid-cols-2 gap-2 !bg-white  pt-2 pb-2 px-5 lg:py-5  border'>
+                    <Fileupload placeholder="Click To Add Image" files={typeof data?.passportPicture != 'undefined' && [data.passportPicture]} getFiles={(files) => setData('passportPicture', files[0])}
+                        acceptType={['image/jpeg', 'image/jpg', 'image/png']}
+                        maxNumber={1}
+                        maxFileSize={1080000}
+                    />
+                    <ul className='my-auto flex flex-col justify-center gap-3'>
+                        <li className={`text-xs flex items-center gap-2 ${checkFileValidationRule("Size") ? 'text-green-500' : 'text-red-500'}`}>
+                            <IconifyIcon icon={checkFileValidationRule("Size") ? 'charm:circle-tick' : 'pepicons-print:line-x-circle'} fontSize="1rem" className='bg-transparent' />
+                            <span>  Recommended Image Size - 600px by 600px i.e less than 1.03mb</span>
+                        </li>
+                        <li className={`text-xs flex items-center gap-2 ${checkFileValidationRule("AcceptType") ? 'text-green-500' : 'text-red-500'}`}>
+                            <IconifyIcon icon={checkFileValidationRule("AcceptType") ? 'charm:circle-tick' : 'pepicons-print:line-x-circle'} fontSize="1rem" className='bg-transparent' />
+                            <span>   AcceptType - jpg/jpeg/png </span>
+                        </li>
+                    </ul>
                 </div>
 
             </div>

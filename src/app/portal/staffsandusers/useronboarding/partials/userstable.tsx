@@ -13,11 +13,20 @@ import Moretableoptions from 'app/app/components/datatable/moretableoptions'
 import Api from 'app/app/fetch/axiosInstance'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { DialogService } from 'app/app/providers/Dailogueserviceprovider'
+import { useSession } from 'next-auth/react'
+
 
 function Userstable() {
     const { setDialogData } = DialogService()
+    const { data: sessionData } = useSession();
     const [showNewUserForm, setShowNewUserForm] = useState<userDTO | null>(null)
-
+  
+    const canEdit = (id: string | number): boolean => {
+        if (sessionData?.user) {
+            return Number(sessionData.user.id) === Number(id)
+        }
+        return false
+    }
 
     const handleOnUserAccountResetAction = (id: number) => {
         setDialogData({
@@ -102,17 +111,17 @@ function Userstable() {
                 options={[
                     {
                         optionName: "Edit User",
-                        onOptionSelected: () => setShowNewUserForm(row.original),
+                        onOptionSelected: () => { !canEdit(row.original.id) && setShowNewUserForm(row.original) },
                         icon: "basil:edit-alt-solid"
                     },
                     {
                         optionName: "Reset User Password",
-                        onOptionSelected: () => handleOnUserAccountResetAction(row.original.id),
+                        onOptionSelected: () => { !canEdit(row.original.id) && handleOnUserAccountResetAction(row.original.id) },
                         icon: "material-symbols:device-reset-rounded"
                     },
                     {
                         optionName: row.original.active ? "Disable Account" : "Enable Account",
-                        onOptionSelected: () => row.original.active ? handleOnUserDisableAction(row.original.id) : handleOnUserEnableAction(row.original.id),
+                        onOptionSelected: () => { !canEdit(row.original.id) && (row.original.active ? handleOnUserDisableAction(row.original.id) : handleOnUserEnableAction(row.original.id)) },
                         icon: "tabler:lock-x",
                         theme: row.original.active ? "danger" : "neutral"
                     },
