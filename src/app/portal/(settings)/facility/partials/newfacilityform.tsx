@@ -22,7 +22,7 @@ function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
 
     const handleFormSubmission = (e: FormEvent) => {
         e.preventDefault();
-        if (formData.id) {
+        if (formData?.id) {
             patch('/facilities/' + formData.id, { onSuccess: () => { toastnotify("Facility Has Been Updated", "Success"); onNewDataSucess() } })
         } else {
             post('/facilities/', { onSuccess: () => { toastnotify("Facility Has Been Created", "Success"); onNewDataSucess() } })
