@@ -97,7 +97,7 @@ function Individualandgroupsubtable() {
 
     return (
         <div>
-            <Modal size='3xl' closeModal={() => { handleOnResetState() }} open={subscriberData !== null} title={subscriberData ? `UPDATE SUBSCRIBER - ${subscriberData.membershipID}` : "Add New Subscriber"}>
+            <Modal size='3xl' closeModal={() => { handleOnResetState() }} open={subscriberData !== null} title={subscriberData?.membershipID ? `UPDATE SUBSCRIBER - ${subscriberData.membershipID}` : "Add New Subscriber"}>
                 <Newsubscriberform onCancel={() => { handleOnResetState() }}
                     onNewDataSucess={() => { handleOnResetState(); resetTableData() }}
                     formData={subscriberData}
