@@ -130,7 +130,7 @@ function Userstable() {
                 />
             </Modal>
             <DataTable
-                dataSourceUrl='/users?pageSize=10&page=1&sort=createAt_desc'
+                dataSourceUrl='/users?pageSize=10&page=1&sort=createdAt_desc'
                 filterable="username"
                 filterablePlaceholder='Search username'
                 onAction={() => setShowNewUserForm({} as userDTO)} columns={columns} actionName='Onboard New User'
