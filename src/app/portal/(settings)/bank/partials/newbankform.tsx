@@ -37,7 +37,7 @@ function Newbankform(props: IFormWithDataProps<bankDTO>) {
                 placeholder='Enter Name'
             />
             <nav className='flex items-center justify-end gap-3'>
-                <Button type='button' onClick={onCancel} variant='outline' size='sm'>
+                <Button processing={processing} type='button' onClick={onCancel} variant='outline' size='sm'>
                     Cancel
                 </Button>
                 <Button type='submit' variant='primary' size='sm'>

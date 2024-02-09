@@ -19,7 +19,7 @@ function Groupassocstable() {
         },
         {
             accessorKey: "name",
-            header: "Groups"
+            header: "Name"
         },
         {
             accessorKey: "",

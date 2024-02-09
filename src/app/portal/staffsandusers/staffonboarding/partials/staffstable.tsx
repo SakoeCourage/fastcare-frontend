@@ -39,10 +39,6 @@ function Staffstable() {
             header: "Date Of Birth"
         },
         {
-            accessorKey: "phoneNumber",
-            header: "Phone Number"
-        },
-        {
             accessorKey: "",
             header: "Action",
             cell: ({ row }) => <IconifyIcon onClick={() => setShowNewStaffForm(row.original)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />

@@ -12,6 +12,7 @@ import { formatcurrency } from 'app/app/lib/utils';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { AxiosResponse } from 'axios';
 import Api from 'app/app/fetch/axiosInstance';
+import ContactInput from 'app/app/components/form-components/contactinput';
 
 export const SlideUpAndDownAnimation = {
     initial: { opacity: 0, translateY: "10px" },
@@ -112,15 +113,15 @@ function PaymentmethodCard(param: IAvailablePaymentMethod & {
 function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
     const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
 
-    const { formData, onCancel, onNewDataSucess } = props
-    const { data, setData, processing, errors, setValidation, post, patch } = useForm<Partial<familyPackageDTO>>({
+    const { formData, onCancel, onNewDataSucess, processing } = props
+    const { data, setData, errors, setValidation, post, patch } = useForm<Partial<familyPackageDTO>>({
         familyId: formData?.id,
     })
 
     setValidation({
         paymentMode: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(12, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
@@ -256,6 +257,7 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
 
 
                     <nav className='flex flex-col gap-3'>
+
                         {
                             data.paymentMode == "MOMO" &&
                             <motion.nav
@@ -263,12 +265,14 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit' className=' flex flex-col gap-3'>
-                                <Input required
+                                <ContactInput
+                                    required
                                     value={data.momoNumber}
-                                    onChange={(e) => setData('momoNumber', e.target.value)}
+                                    onChange={(v) => setData('momoNumber', v)}
                                     error={errors?.momoNumber}
                                     label='MoMo Number'
-                                    placeholder='(00) (0000) (0000)' />
+                                    placeholder='(00) (0000) (0000)'
+                                />
                             </motion.nav>
                         }
 
@@ -357,7 +361,7 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
                             label='Frequency' placeholder='Select Frequency' />
                     </nav>
                     <nav className='flex items-center justify-end flex-col gap-1 w-full mt-4 pb-2'>
-                        <Button onClick={() => handleFormSubmission()} variant='primary' size='full'>
+                        <Button processing={processing} onClick={() => handleFormSubmission()} variant='primary' size='full'>
                             Save & Make Payment
                         </Button>
                         <Button onClick={() => onCancel()} className=' !bg-white' variant='outline' size='full'>

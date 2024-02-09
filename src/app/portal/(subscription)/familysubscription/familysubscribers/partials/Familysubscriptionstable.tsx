@@ -70,27 +70,20 @@ function Familysubscriptionstable() {
             accessorKey: "",
             header: "Actions",
             cell: ({ row }) => <Tooltip toolTipText='Edit Family'>
-                <IconifyIcon onClick={() => handleFetchFamiliySubscriber(row.original.id)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+                <IconifyIcon onClick={() => {
+                    setFamilySubscriberData(row.original)
+                    setShowNewFamilyClientForm({
+                        title: `UPDATE - ${row.original.familyMembershipID} ${row.original.name}`.toUpperCase(),
+                        open: true
+                    })
+                }} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
             </Tooltip>
 
         },
 
     ]
 
-    const handleFetchFamiliySubscriber = (id: string | number | undefined) => {
-        if (!id) return
-        Api.get('/family-subscribers/' + id, { signal })
-            .then((res: AxiosResponse<familySubsciberDTO>) => {
-                setFamilySubscriberData(res.data)
-                setShowNewFamilyClientForm({
-                    title: `UPDATE - ${res.data.familyMembershipID} ${res.data.name}`.toUpperCase(),
-                    open: true
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
+
 
     const fetchFamilyData = () => {
         if (showFamilyBeneficiaryList?.id == null) return
@@ -127,7 +120,7 @@ function Familysubscriptionstable() {
                 <Makefamilysubpayment
                     formData={showPaymentForm}
                     onCancel={() => setShowPaymentForm(null)}
-                    onNewDataSucess={() => { resetTableData();setShowPaymentForm(null) }} />
+                    onNewDataSucess={() => { resetTableData(); setShowPaymentForm(null) }} />
             </Sidemodal>
 
             <Sidemodal className={`${showBeneficiaryForm && '!opacity-50'}`}

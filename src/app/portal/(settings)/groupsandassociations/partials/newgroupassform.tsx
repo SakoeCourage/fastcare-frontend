@@ -39,7 +39,7 @@ function Newgroupassocform(props: IFormWithDataProps<groupDTO>) {
                     <Button onClick={onCancel} type='button' variant='outline' size='sm'>
                         Cancel
                     </Button>
-                    <Button type='submit' variant='primary' size='sm'>
+                    <Button processing={processing} type='submit' variant='primary' size='sm'>
                         Save
                     </Button>
                 </nav>

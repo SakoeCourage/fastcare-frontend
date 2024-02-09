@@ -70,27 +70,19 @@ function Corporatesubscriptionstable() {
             accessorKey: "",
             header: "Actions",
             cell: ({ row }) => <Tooltip toolTipText='Edit'>
-                <IconifyIcon onClick={() => handleFetchCorporateSubscriber(row.original.id)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+                <IconifyIcon onClick={() => {
+                    setCoporateSubscriberData(row.original)
+                    setShowNewCorporateClientForm({
+                        title: `UPDATE - ${row.original.corporateMembershipID} ${row.original.name}`.toUpperCase(),
+                        open: true
+                    })
+                }} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
             </Tooltip>
 
         },
 
     ]
 
-    const handleFetchCorporateSubscriber = (id: string | number | undefined) => {
-        if (!id) return
-        Api.get('/corporate-subscribers/' + id, { signal })
-            .then((res: AxiosResponse<corporateSubscriberDTO>) => {
-                setCoporateSubscriberData(res.data)
-                setShowNewCorporateClientForm({
-                    title: `UPDATE - ${res.data.corporateMembershipID} ${res.data.name}`.toUpperCase(),
-                    open: true
-                })
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
 
     const fetchCoporateData = () => {
         if (showCorporateBeneficiaryList?.id == null) return

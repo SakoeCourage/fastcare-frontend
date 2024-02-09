@@ -13,21 +13,22 @@ import Api from 'app/app/fetch/axiosInstance'
 import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { formatcurrency } from 'app/app/lib/utils'
+import ContactInput from 'app/app/components/form-components/contactinput'
 
 function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiaryDTO> & { corporateID: number | undefined }) {
     const { onCancel, onNewDataSucess, formData, corporateID: prfId } = props
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
 
-    const { data, setData, setValidation, errors, post, patch, processing } = useForm<Partial<corporateBeneficiaryDTO>>({
-
-    })
+    const { data, setData, setValidation, errors, post, patch, processing } = useForm<Partial<corporateBeneficiaryDTO>>(
+        formData ? { ...formData } : {}
+    )
 
     setValidation({
         corporateId: z.number().min(1, "This Field Is Required"),
         name: z.string().min(1),
         dateOfBirth: z.string().min(1, "This Field Is Required"),
-        contact: z.string().min(9, "This Field Is Required"),
+        contact: z.string().min(12, "This Field Is Required"),
         facility: z.number().min(1, "This Field Is Required"),
         package: z.number().min(1, "This Field Is Required"),
     })
@@ -109,11 +110,10 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
                         error={errors?.dateOfBirth}
                         onChange={(e) => setData("dateOfBirth", e)}
                         name='' label='Date Of Birth' />
-                    <Input
+                    <ContactInput
                         value={data.contact}
                         error={errors?.contact}
-                        onChange={(e) => setData('contact', e.target.value)}
-                        name=''
+                        onChange={(v) => setData('contact', v)}
                         label='Contact Number'
                         placeholder='(000) 000 0000'
                         disabled={!!(formData && facilities?.data == null)}
@@ -144,7 +144,7 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
                     <Button type="button" onClick={() => onCancel()} variant='outline' size='sm'>
                         Cancel
                     </Button>
-                    <Button disabled={processing} type='submit' variant='primary' size='sm'>
+                    <Button processing={processing} type='submit' variant='primary' size='sm'>
                         Save
                     </Button>
                 </nav>

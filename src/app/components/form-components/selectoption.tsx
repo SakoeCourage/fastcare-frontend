@@ -59,7 +59,17 @@ function Selectoption(props: ISelectparams) {
                     <SelectTrigger className={`w-full text-gray-600 bg-white ${error && 'border-red-400'}`}>
                         <SelectValue className="bg-white " placeholder={placeholder} />
                     </SelectTrigger>
-                    <SelectContent className="bg-white z-[70]">
+                    <SelectContent
+                        style={{
+                            minHeight: (enableSearch && !!options?.length ) && "15rem"
+                        }}
+                        className={
+                            classNames(
+                                {
+                                    "bg-white z-[60]": true
+                                }
+                            )
+                        }>
                         {enableSearch &&
                             <Input ref={searchInput} value={searchKey} onChange={(e) => handleOnSearchValueChange(e.target.value)} placeholder={searchPlacholder} className="w-full mb-1 focus:!ring-0" />
                         }

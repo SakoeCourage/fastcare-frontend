@@ -10,10 +10,11 @@ import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { z } from "zod"
 import { nationalities } from 'app/app/lib/nationalities';
 import Select2options from 'app/app/components/form-components/select2options';
+import ContactInput from 'app/app/components/form-components/contactinput';
 
 function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
     const { formData, onCancel, onNewDataSucess } = props
-    const { post, patch, data, errors, setData, setValidation } = useForm<Partial<staffDTO>>(formData ? { ...formData } : {})
+    const { post, patch, data,processing, errors, setData, setValidation } = useForm<Partial<staffDTO>>(formData ? { ...formData } : {})
 
     setValidation({
         title: z.string().min(1, "This Field Is Required"),
@@ -28,14 +29,9 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         nationality: z.string().min(1, "This Field Is Required"),
         marritalStatus: z.string().min(1, "This Field Is Required"),
         email: z.string().email("This Field Should Be A Valid Email").email(),
-        phoneNumber: z.string().min(9, "This Field Is Required"),
+        phoneNumber: z.string().min(15, "This Field Is Required"),
         position: z.string().min(1, "This Field Is Required"),
     })
-
-    useEffect(() => {
-        console.log(data)
-    }, [data])
-
 
     const handleSubmit = () => {
         if (formData?.id) {
@@ -143,12 +139,11 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
                     name=''
                     label='Email'
                     placeholder='example@email.com' />
-                <Input
+                <ContactInput
                     error={errors?.phoneNumber}
                     value={data?.phoneNumber}
                     required
-                    onChange={(e) => setData('phoneNumber', e.target.value)}
-                    name=''
+                    onChange={(value) => setData('phoneNumber', value)}
                     label='Phone Number'
                     placeholder='(000) 0000 000' />
 
@@ -192,7 +187,7 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
                 <Button type='button' onClick={onCancel} variant='outline' size='sm'>
                     Cancel
                 </Button>
-                <Button onClick={() => handleSubmit()} type='submit' variant='primary' size='sm'>
+                <Button processing={processing} onClick={() => handleSubmit()} type='submit' variant='primary' size='sm'>
                     Save
                 </Button>
             </nav>

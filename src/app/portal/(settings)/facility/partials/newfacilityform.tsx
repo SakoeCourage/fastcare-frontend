@@ -8,13 +8,14 @@ import { facilityDTO } from 'app/app/types/entitiesDTO'
 import useForm from 'app/app/hooks/formHook/useForm'
 import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
+import ContactInput from 'app/app/components/form-components/contactinput'
 function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
     const { formData, onCancel, onNewDataSucess } = props
     const { data, setData, post, patch, errors, processing, setValidation } = useForm<Partial<facilityDTO>>(formData ? { ...formData } : {})
 
     setValidation({
         name: z.string().min(1, "This Field Is Required"),
-        phoneNumber: z.string().min(1, "This Field Is Required"),
+        phoneNumber: z.string().min(15, "This Field Is Required"),
         address: z.string().min(1, "This Field Is Required"),
         gpsAdress: z.string().optional().nullable()
     })
@@ -27,9 +28,7 @@ function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
             post('/facilities/', { onSuccess: () => { toastnotify("Facility Has Been Created", "Success"); onNewDataSucess() } })
         }
     }
-    useEffect(() => {
-      console.log(formData)
-    }, [formData])
+   
     
     return (
         <form onSubmit={handleFormSubmission} className=' max-w-xl w-full p-5 mx-auto'>
@@ -42,13 +41,12 @@ function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
                     value={data?.name}
                     onChange={(e) => setData('name', e.target.value)}
                 />
-                <Input
-                    name=''
+                <ContactInput
                     label='Phone Number'
                     placeholder='(000) 0000 000'
                     error={errors?.phoneNumber}
                     value={data?.phoneNumber}
-                    onChange={(e) => setData('phoneNumber', e.target.value)}
+                    onChange={(v) => setData('phoneNumber',v)}
                 />
                 <Input
                     name=''
@@ -68,10 +66,10 @@ function Newfacilityform(props: IFormWithDataProps<facilityDTO>) {
                 />
 
                 <nav className='flex items-center justify-end gap-3'>
-                    <Button type="button" onClick={() => onCancel()} variant='outline' size='sm'>
+                    <Button  type="button" onClick={() => onCancel()} variant='outline' size='sm'>
                         Cancel
                     </Button>
-                    <Button type="submit" variant='primary' size='sm'>
+                    <Button processing={processing} type="submit" variant='primary' size='sm'>
                         Save
                     </Button>
                 </nav>

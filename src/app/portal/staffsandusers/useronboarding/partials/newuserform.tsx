@@ -15,7 +15,7 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
     const [roles, setRoles] = useState<IPaginatedData<roleDTO> | null>(null)
     const [staffs, setStaffs] = useState<IPaginatedData<staffDTO> | null>(null)
     const { formData, onCancel, onNewDataSucess } = props
-    const { post, patch, data, errors, setData, setValidation } = useForm<Partial<userDTO>>(formData ?
+    const { post, patch, data, errors, processing,setData, setValidation } = useForm<Partial<userDTO>>(formData ?
         {
             ...formData,
             roleId: formData.role && formData.role.id,
@@ -133,7 +133,7 @@ function Newuserform(props: IFormWithDataProps<userDTO>) {
                 <Button onClick={onCancel} variant='outline' size='sm'>
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} variant='primary' size='sm'>
+                <Button processing={processing} onClick={handleSubmit} variant='primary' size='sm'>
                     Save
                 </Button>
             </nav>

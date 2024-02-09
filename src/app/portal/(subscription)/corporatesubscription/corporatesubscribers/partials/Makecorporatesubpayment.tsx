@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { formatcurrency } from 'app/app/lib/utils';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { SlideUpAndDownAnimation, PaymentmethodCard, AvailablePaymentMethods } from '../../../individual-group-subscription/partials/Makeindividualsubscriptionpayment';
+import ContactInput from 'app/app/components/form-components/contactinput';
 
 
 function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDTO>) {
@@ -23,7 +24,7 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
     setValidation({
         paymentMode: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(15, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
@@ -168,12 +169,14 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
                                     initial='initial'
                                     animate='animate'
                                     exit='exit' className=' flex flex-col gap-3'>
-                                    <Input required
+                                    <ContactInput
+                                        required
                                         value={data.momoNumber}
-                                        onChange={(e) => setData('momoNumber', e.target.value)}
+                                        onChange={(v) => setData('momoNumber', v)}
                                         error={errors?.momoNumber}
                                         label='MoMo Number'
-                                        placeholder='(00) (0000) (0000)' />
+                                        placeholder='(00) (0000) (0000)'
+                                    />
                                 </motion.nav>
                             }
 
@@ -262,7 +265,7 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
                                 label='Frequency' placeholder='Select Frequency' />
                         </nav>
                         <nav className='flex items-center justify-end flex-col gap-1 w-full mt-4 pb-2'>
-                            <Button onClick={() => handleFormSubmission()} variant='primary' size='full'>
+                            <Button processing={processing} onClick={() => handleFormSubmission()} variant='primary' size='full'>
                                 Save & Make Payment
                             </Button>
                             <Button onClick={() => onCancel()} className=' !bg-white' variant='outline' size='full'>

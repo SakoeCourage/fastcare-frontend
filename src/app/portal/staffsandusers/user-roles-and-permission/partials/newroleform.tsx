@@ -7,7 +7,7 @@ import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { Button } from 'app/app/components/form-components/button'
 function Newroleform(props: IFormWithDataProps<roleDTO>) {
     const { formData, onNewDataSucess, onCancel } = props
-    const { errors, setData, data, post, patch, setValidation } = useForm<Partial<roleDTO>>(formData ? { ...formData } : {})
+    const { errors, setData, data, post, patch, setValidation,processing } = useForm<Partial<roleDTO>>(formData ? { ...formData } : {})
 
     setValidation({
         name: z.string().min(1, "This Field Is Required")
@@ -43,7 +43,7 @@ function Newroleform(props: IFormWithDataProps<roleDTO>) {
                 required name='' label='Role Name' placeholder='Enter Role Name' />
 
             <nav className='flex items-center justify-end gap-3'>
-                <Button type='button' onClick={onCancel} variant='outline' size='sm'>
+                <Button processing={processing} type='button' onClick={onCancel} variant='outline' size='sm'>
                     Cancel
                 </Button>
                 <Button type='submit' variant='primary' size='sm'>

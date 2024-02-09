@@ -58,7 +58,7 @@ function Newpackageform(props: IFormWithDataProps<packageDTO>) {
                 />
 
                 <nav className='flex items-center justify-end gap-3'>
-                    <Button onClick={()=>onCancel()} type='button' variant='outline' size='sm'>
+                    <Button processing={processing} onClick={()=>onCancel()} type='button' variant='outline' size='sm'>
                         Cancel
                     </Button>
                     <Button type='submit' variant='primary' size='sm'>

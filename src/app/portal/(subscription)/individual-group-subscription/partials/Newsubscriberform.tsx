@@ -15,6 +15,7 @@ import Noticecard from 'app/app/components/ui/noticecard'
 import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayment'
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { isNullOrWhitespace } from 'app/app/lib/utils'
+import ContactInput from 'app/app/components/form-components/contactinput'
 
 interface IFectchSubscribers {
     handleFetchSubscriberData: (id: number | string | undefined) => void
@@ -47,10 +48,10 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         maritalStatus: z.string().min(1, "This Field is required"),
         address: z.string().min(1, "This Field is required"),
         gpsAddress: z.string().min(5, "This Field is required"),
-        phoneOne: z.string().min(9, "This Field is required"),
-        phoneTwo: z.string().nullable(),
+        phoneOne: z.string().min(15, "This Field is required"),
+        phoneTwo: z.string().min(15,"This Field is required").nullable().optional(),
         emergencyPerson: z.string().min(5, "This Field is required"),
-        emergencyPersonPhone: z.string().min(5, "This Field is required"),
+        emergencyPersonPhone: z.string().min(15, "This Field is required"),
         hasNHIS: z.boolean(),
         NHISNumber: (data.hasNHIS == true) ? z.string().min(5, "This Field is required") : z.string().optional(),
         facility: z.number().min(1, "This Field is required"),
@@ -58,7 +59,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         group: z.number().min(1, "This Field is required").optional().nullable(),
         paymentMode: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z.string().min(15, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
@@ -249,7 +250,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         onChange={(e) => setData('otherNames', e.target.value)}
                         label="Other Names"
                         name=""
-
                         placeholder="Enter Other Names"
                     />
                     <Input
@@ -358,21 +358,19 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         placeholder="Enter GPS Address"
                     />
 
-                    <Input
+                    <ContactInput
                         error={errors?.phoneOne}
                         value={data.phoneOne}
-                        onChange={(e) => setData("phoneOne", e.target.value)}
+                        onChange={(v) => setData("phoneOne", v)}
                         label="Phone one"
-                        name=""
                         required
                         placeholder="Enter Phone One"
                     />
-                    <Input
+                    <ContactInput
                         error={errors?.phoneTwo}
                         value={data.phoneTwo}
-                        onChange={(e) => setData('phoneTwo', e.target.value)}
+                        onChange={(value) => setData('phoneTwo',value)}
                         label="Phone two"
-                        name=""
                         required
                         placeholder="Enter Phone two"
                     />
@@ -385,16 +383,14 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         required
                         placeholder="Enter EMG. Person"
                     />
-                    <Input
+                    <ContactInput
                         error={errors?.emergencyPersonPhone}
                         value={data.emergencyPersonPhone}
-                        onChange={(e) => setData('emergencyPersonPhone', e.target.value)}
+                        onChange={(v) => setData('emergencyPersonPhone', v)}
                         label="EMG Phone"
-                        name=""
                         required
                         placeholder="Enter EMG Phone"
                     />
-
                 </div>
             </div>
             <div>
@@ -403,6 +399,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                     <nav className='font-semibold text-base text-gray-500'> Payment Information</nav>
                 </nav>
                 <Makeindividualsubscriptionpayment
+                    processing={processing}
                     canDelete={!!subscriber?.id}
                     onSubmit={handleFormSubmission}
                     onDelete={handleOnEntityDelete}

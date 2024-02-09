@@ -6,36 +6,24 @@ import { Button } from 'app/app/components/form-components/button';
 import useForm from 'app/app/hooks/formHook/useForm';
 import { z } from 'zod'
 import { corporateSubscriberDTO } from 'app/app/types/entitiesDTO';
-
+import ContactInput from 'app/app/components/form-components/contactinput';
 
 
 function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO>) {
 
     const { formData, onNewDataSucess, onCancel } = props
 
-    const { setData, data, errors, processing, post, patch, setValidation } = useForm({
-        idNumber: "",
-        name: "",
-        address: "",
-        contact: "",
-        principalPerson: "",
-        principalPersonPhone: "",
-        email: ""
-    })
+    const { setData, data, errors, processing, post, patch, setValidation } = useForm<Partial<corporateSubscriberDTO>>(formData ? { ...formData } : {})
     setValidation({
         name: z.string().min(1),
         idNumber: z.string().min(1),
         address: z.string().min(1),
-        contact: z.string().min(9),
+        contact: z.string().min(15),
         principalPerson: z.string().min(1),
-        principalPersonPhone: z.string().min(1),
+        principalPersonPhone: z.string().min(15),
         email: z.string().email().min(1),
     })
 
-    useEffect(() => {
-        if (formData == null) return
-        setData(formData)
-    }, [formData])
 
     const handleFormDataSubmission = () => {
         if (formData) {
@@ -55,12 +43,21 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
                 <Input
                     onChange={e => { setData('principalPerson', e.target.value) }} error={errors?.principalPerson} value={data.principalPerson}
                     required name='' label='Principal Person' placeholder='Enter Principal Person' />
-                <Input
-                    onChange={e => { setData('principalPersonPhone', e.target.value) }} error={errors?.principalPersonPhone} value={data.principalPersonPhone}
-                    required name='' label='Principal Phone' placeholder='Enter Principal Phone' />
-                <Input
-                    onChange={e => { setData('contact', e.target.value) }} error={errors?.contact} value={data.contact}
-                    required name='' label='Contact' placeholder='Contact'
+                <ContactInput
+                    onChange={v => { setData('principalPersonPhone', v) }}
+                    error={errors?.principalPersonPhone}
+                    value={data.principalPersonPhone}
+                    required
+                    label='Principal Phone'
+                    placeholder='Enter Principal Phone' />
+
+                <ContactInput
+                    onChange={v => { setData('contact', v) }}
+                    error={errors?.contact}
+                    value={data.contact}
+                    required
+                    label='Contact'
+                    placeholder='Contact'
                 />
                 <Input
                     onChange={e => { setData('address', e.target.value) }} error={errors?.address} value={data.address}
@@ -73,7 +70,7 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
                 <Button onClick={() => onCancel()} variant='outline' size='sm'>
                     Cancel
                 </Button>
-                <Button onClick={() => handleFormDataSubmission()} variant='primary' size='sm'>
+                <Button processing={processing} onClick={() => handleFormDataSubmission()} variant='primary' size='sm'>
                     Save
                 </Button>
             </nav>

@@ -39,39 +39,7 @@ export default function Datepicker({ label, value, name, required, placeholder, 
     onChange && onChange(dateReformat(v as Date));
     setDate(v)
   }
-  const handleOnMonthChange = (m: number) => {
-    let newDate = date ? date.setMonth(m) : new Date().setMonth(m);
-    handleOnDateChage(new Date(newDate))
-
-  }
-  const handleOnYearChange = (y: number) => {
-    let newDate = date ? date.setFullYear(y) : new Date().setFullYear(y)
-    handleOnDateChage(new Date(newDate))
-  }
-
-  function getYearsArray(endYear: string = "1900"): number[] {
-    const currentYear = new Date().getFullYear();
-    const years: number[] = [];
-
-    for (let year = currentYear; year >= parseInt(endYear, 10); year--) {
-      years.push(year);
-    }
-
-    return years;
-  }
-
-
-  function getMonthsArray(): { index: number; name: string }[] {
-    const months: { index: number; name: string }[] = [];
-
-    for (let monthIndex = 0; monthIndex < 12; monthIndex++) {
-      const monthName = new Date(2000, monthIndex, 1).toLocaleString('en-US', { month: 'short' });
-      months.push({ index: monthIndex, name: monthName });
-    }
-
-    return months;
-  }
-
+  
   React.useEffect(() => {
     if (value == "" || value == null) {
       setDate(undefined)

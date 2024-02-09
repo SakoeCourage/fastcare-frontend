@@ -15,17 +15,6 @@ function Facilitiestable() {
     const [showNewFacilityForm, setShowNewFacilityForm] = useState<boolean>(false)
     const [facilityData, setFacilityData] = useState<facilityDTO | null>(null)
 
-    const handleFetchFacilityData = (id: number | undefined | null) => {
-        if (!id) return
-        Api.get('/facilities/' + id)
-            .then((res: AxiosResponse<facilityDTO>) => {
-                setFacilityData(res.data)
-                setShowNewFacilityForm(true)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
 
     const columns: ColumnDef<facilityDTO>[] = [
         {
@@ -48,7 +37,10 @@ function Facilitiestable() {
         {
             accessorKey: "",
             header: "Action",
-            cell: ({ row }) => <IconifyIcon onClick={() => handleFetchFacilityData(row.original.id)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+            cell: ({ row }) => <IconifyIcon onClick={() => {
+                setFacilityData(row.original)
+                setShowNewFacilityForm(true)
+            }} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
 
         }
     ]

@@ -15,18 +15,6 @@ function Packagestable() {
     const [showNewPackageForm, setShowNewPackageForm] = useState<boolean>(false)
     const [selectedPackage, setSelectedPackage] = useState<packageDTO | null>(null)
 
-    const handleFetchPackageData = (id: number | undefined | null) => {
-        if (!id) return
-        Api.get('/packages/' + id)
-            .then((res: AxiosResponse<packageDTO>) => {
-                setSelectedPackage(res.data)
-                console.log(res.data)
-                setShowNewPackageForm(true)
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    }
     const columns: ColumnDef<packageDTO>[] = [
         {
             accessorKey: "createdAt",
@@ -48,7 +36,10 @@ function Packagestable() {
         {
             accessorKey: "",
             header: "Action",
-            cell: ({ row }) => <IconifyIcon onClick={() => handleFetchPackageData(row.original.id)} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
+            cell: ({ row }) => <IconifyIcon onClick={() => {
+                setSelectedPackage(row.original)
+                setShowNewPackageForm(true)
+            }} className='bg-transparent cursor-pointer' icon='basil:edit-alt-solid' />
 
         }
     ]

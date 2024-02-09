@@ -648,55 +648,81 @@ input.select2-search__field {
 .checkbox-wrapper-56 *,
 .checkbox-wrapper-56 ::after,
 .checkbox-wrapper-56 ::before {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 .checkbox-wrapper-56 .container input {
-    opacity: 1;
-    -webkit-appearance: none;
-    cursor: pointer;
-    height: 30px;
-    width: 30px;
-    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.5), 10px 10px 15px rgba(0, 0, 70, 0.12);
-    border-radius: 50%;
-    border: 4px solid #ececec;
-    outline: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: .5s;
+  opacity: 1;
+  -webkit-appearance: none;
+  cursor: pointer;
+  height: 30px;
+  width: 30px;
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.5), 10px 10px 15px rgba(0, 0, 70, 0.12);
+  border-radius: 50%;
+  border: 4px solid #ececec;
+  outline: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: .5s;
 }
 
 .checkbox-wrapper-56 .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .checkbox-wrapper-56 .container input::after {
-    transition: .5s;
-    font-family: monospace;
-    content: '';
-    color: #7a7a7a;
-    font-size: 25px;
-    left: 0.45em;
-    top: 0.25em;
-    width: 0.25em;
-    height: 0.5em;
-    border: solid #7a7a7a;
-    border-width: 0 0.15em 0.15em 0;
-    transform: rotate(45deg);
+  transition: .5s;
+  font-family: monospace;
+  content: '';
+  color: #7a7a7a;
+  font-size: 25px;
+  left: 0.45em;
+  top: 0.25em;
+  width: 0.25em;
+  height: 0.5em;
+  border: solid #7a7a7a;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
 }
 
 .checkbox-wrapper-56 .container input:checked {
-    box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.5), 10px 10px 15px rgba(70, 70, 70, 0.12), inset -10px -10px 15px rgba(255, 255, 255, 0.5), inset 10px 10px 15px rgba(70, 70, 70, 0.12);
-    transition: .5s;
-    @apply bg-[#4880FF]
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.5), 10px 10px 15px rgba(70, 70, 70, 0.12), inset -10px -10px 15px rgba(255, 255, 255, 0.5), inset 10px 10px 15px rgba(70, 70, 70, 0.12);
+  transition: .5s;
+  @apply bg-[#4880FF]
 }
 
 .checkbox-wrapper-56 .container input:checked::after {
-    transition: .5s;
-    border: solid white;
-    border-width: 0 0.15em 0.15em 0;
-    transform: rotate(45deg);
+  transition: .5s;
+  border: solid white;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
+}
+
+
+
+.react-tel-input .form-control {
+  @apply text-gray-600 placeholder:!text-gray-400 flex !h-10 !w-full !rounded-md !border !border-gray-400 px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed
+}
+
+
+.react-tel-input .flag-dropdown {
+  @apply !border-gray-400 !bg-white !rounded-l-md
+}
+
+
+
+.phone-input-error .react-tel-input .flag-dropdown {
+  @apply !border-red-400
+}
+
+
+.phone-input-error .react-tel-input .form-control {
+  @apply !border-red-400
+}
+
+.react-tel-input .country-list {
+  z-index: 70 !important;
 }

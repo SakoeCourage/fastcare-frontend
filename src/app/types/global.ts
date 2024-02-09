@@ -21,7 +21,8 @@ type IPaginatedData<T> = {
 interface IFormWithDataProps<T> {
     formData?: T | null,
     onNewDataSucess: () => void,
-    onCancel: () => void
+    onCancel: () => void,
+    processing?: boolean
 }
 
 type dbTimeStamp = {

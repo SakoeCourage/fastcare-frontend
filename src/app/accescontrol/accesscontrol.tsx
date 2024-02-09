@@ -25,7 +25,6 @@ export const getAllRequiredAbilitiesPerRoute = (route: routesTypesDef): Permissi
 export const getAllSidebarSectionAbilities = (routes: routesTypesDef[]): Permission[] | [] => {
     let currentAbilities: Permission[] = [];
     routes.forEach(route => {
-        console.log(route)
         const routeAbilities = getAllRequiredAbilitiesPerRoute(route);
         currentAbilities = [...currentAbilities, ...routeAbilities];
     })

@@ -11,6 +11,7 @@ import { z } from 'zod'
 import { formatcurrency } from 'app/app/lib/utils';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import type { data, errors, setData } from 'app/app/hooks/formHook/useFormtypes';
+import ContactInput from 'app/app/components/form-components/contactinput';
 
 export const SlideUpAndDownAnimation = {
     initial: { opacity: 0, translateY: "10px" },
@@ -109,7 +110,7 @@ export function PaymentmethodCard(param: IAvailablePaymentMethod & {
 
 
 
-interface IFamilypaymentprops {
+interface IIndvidualpaymentprops {
     setData: setData<IndividualSubDTO>,
     formData: data<IndividualSubDTO>,
     errors: errors<IndividualSubDTO>,
@@ -117,13 +118,14 @@ interface IFamilypaymentprops {
     banks: IPaginatedData<bankDTO> | null,
     facilities: IPaginatedData<facilityDTO> | null,
     canDelete: boolean,
+    processing?: boolean,
     onSubmit: () => void,
     onCancel: () => void
     onDelete: () => void
 }
 
-function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
-    const { formData, setData, errors, packages, banks, facilities, canDelete, onDelete, onSubmit, onCancel } = props
+function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
+    const { formData, setData, errors, processing, packages, banks, facilities, canDelete, onDelete, onSubmit, onCancel } = props
 
 
     const calculateAmountToDebit = () => {
@@ -245,12 +247,14 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                                 initial='initial'
                                 animate='animate'
                                 exit='exit' className=' flex flex-col gap-3'>
-                                <Input required
+                                <ContactInput
+                                    required
                                     value={formData.momoNumber}
-                                    onChange={(e) => setData('momoNumber', e.target.value)}
+                                    onChange={(v) => setData('momoNumber', v)}
                                     error={errors?.momoNumber}
                                     label='MoMo Number'
-                                    placeholder='(00) (0000) (0000)' />
+                                    placeholder='(00) (0000) (0000)'
+                                />
                             </motion.nav>
                         }
                         {(["Cheque", "Standing Order"].includes(formData.paymentMode)) &&
@@ -348,7 +352,7 @@ function Makeindividualsubscriptionpayment(props: IFamilypaymentprops) {
                             options={facilities ? [...Object.entries(facilities.data).map(entry => { return { key: entry[1].name, value: entry[1].id } })] : []} />
                     </nav>
                     <nav className='flex items-center justify-end flex-col gap-1 w-full mt-4 pb-2'>
-                        <Button onClick={() => onSubmit()} variant='primary' size='full'>
+                        <Button processing={processing} onClick={() => onSubmit()} variant='primary' size='full'>
                             Save & Make Payment
                         </Button>
                         <Button onClick={() => onCancel()} variant='outline' size='full'>

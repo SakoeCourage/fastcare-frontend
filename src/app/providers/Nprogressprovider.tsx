@@ -35,7 +35,7 @@ const Nprogressprovider = ({ children }: { children: React.ReactNode }) => {
             <ProgressBar
                 height="5px"
                 color="#4880FF"
-                options={{ showSpinner: true }}
+                options={{ showSpinner: false }}
                 shallowRouting
             />
             {children}
