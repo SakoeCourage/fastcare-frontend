@@ -42,7 +42,7 @@ const Sidemodal: React.FC<Imodal> = ({ className, open = false, size = "md", tit
                     </nav>
                     <IconifyIcon onClick={() => closeModal()} className='text-gray-700 mr-3 my-auto cursor-pointer' icon='iconamoon:close-light' />
                 </nav>
-                <SimpleBar id="side-modal-scroller" className=' h-[calc(100vh-3.5rem)] border-none focus:border-none outline-none focus:outline-none'>
+                <SimpleBar id="side-modal-scroller" className=' h-[calc(100dvh-3.5rem)] border-none focus:border-none outline-none focus:outline-none'>
                     {children}
                 </SimpleBar>
             </SheetContent>
