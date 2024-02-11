@@ -1,3 +1,4 @@
+"use server"
 import { cookies } from 'next/headers'
 import axios from 'axios';
 import { AxiosError } from 'axios';
@@ -27,7 +28,7 @@ serverReq.interceptors.response.use(async (response) => {
 }, async (error: AxiosError) => {
     if (error.response?.status == 401) {
         await signOut({
-            redirect: false
+            redirect: true
         })
     }
     return Promise.reject(error);

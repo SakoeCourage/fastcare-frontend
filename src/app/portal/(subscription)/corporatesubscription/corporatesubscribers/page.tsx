@@ -1,7 +1,21 @@
 import React from 'react'
 import Coporatesubscriptiontable from './partials/Corporatesubscriptionstable'
-import { GetFormSelectFieldData } from '../../familysubscription/familysubscribers/page'
-import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
+import { ISelectData, getBanksAsync, getFacilitiesAsync, getPackagesAsync } from 'app/app/fetch/getselectfieldsdata';
+
+
+export async function GetFormSelectFieldData() {
+  const fetchSelectFieldData = async () => {
+      try {
+          const [_facilities, _packages, _bank] = await Promise.all([getFacilitiesAsync(), getPackagesAsync(), getBanksAsync()]);
+          return { facilities: _facilities.data, packages: _packages.data, banks: _bank.data };
+      } catch (error) {
+          console.error('Error fetching data:', error);
+      }
+  }
+  const data = await fetchSelectFieldData();
+
+  return data
+}
 
 async function page() {
   const selectData: Partial<ISelectData> = await GetFormSelectFieldData()
