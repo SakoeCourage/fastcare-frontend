@@ -44,7 +44,7 @@ function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[],
 
   return (
     <div className=' min-w-full px-4'>
-      <div className=' rounded-md border h-max border-gray-300 w-full flex items-center'>
+      <div className=' rounded-md border overflow-x-scroll hiddenscroll h-max border-gray-300 w-full flex items-center'>
         <nav className=' min-h-full px-3 flex items-center justify-center'>
           <IconifyIcon className={`text-gray-500 ${!!getActiveFilters().length && 'bg-green-100 text-green-500'}`} icon='mi:filter' />
         </nav>

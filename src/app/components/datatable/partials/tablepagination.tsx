@@ -32,7 +32,7 @@ export function DataTablePagination<TData>({
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
       <div className=" ml-auto flex items-center space-x-6 lg:space-x-8">
-        <div className="flex items-center space-x-2">
+        <div className="hidden lg:flex items-center space-x-2">
           <p className="text-sm font-medium">Rows per page</p>
           <Selectoption className="h-8 w-[70px]"
             value={getUrlParamValue("pageSize") ?? `${table.getState().pagination.pageSize}`}
@@ -58,7 +58,7 @@ export function DataTablePagination<TData>({
         <div className="flex items-center space-x-2">
           <Button
             variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+            className="!hidden h-8 w-8 p-0 lg:!flex"
             onClick={() => {getDataAsync(tableData.newPageInfo.firstPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.firstPageUrl}
           >
@@ -85,7 +85,7 @@ export function DataTablePagination<TData>({
           </Button>
           <Button
             variant="outline"
-            className="hidden h-8 w-8 p-0 lg:flex"
+            className="!hidden h-8 w-8 p-0 lg:!flex"
             onClick={() => {getDataAsync(tableData.newPageInfo.lastPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.lastPageUrl}
           >
