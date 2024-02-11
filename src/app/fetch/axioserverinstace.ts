@@ -5,8 +5,6 @@ import { AxiosError } from 'axios';
 import { signOut } from 'next-auth/react';
 
 const apiToken = cookies().get("apiToken")?.value
-axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
-
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const serverReq = axios.create({
