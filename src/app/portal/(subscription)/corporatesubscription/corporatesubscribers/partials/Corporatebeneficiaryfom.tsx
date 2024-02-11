@@ -14,8 +14,9 @@ import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { formatcurrency } from 'app/app/lib/utils'
 import ContactInput from 'app/app/components/form-components/contactinput'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
 
-function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiaryDTO> & { corporateID: number | undefined }) {
+function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiaryDTO> & { corporateID: number | undefined } & Partial<ISelectData>) {
     const { onCancel, onNewDataSucess, formData, corporateID: prfId } = props
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
@@ -32,19 +33,6 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
         facility: z.number().min(1, "This Field Is Required"),
         package: z.number().min(1, "This Field Is Required"),
     })
-
-    const getFacilitiesAsync: () => Promise<AxiosResponse<IPaginatedData<facilityDTO>>> = () => Api.get("/facilities");
-    const getPackagesAsync: () => Promise<AxiosResponse<IPaginatedData<packageDTO>>> = () => Api.get("/packages");
-
-    const fetchSelectFieldData = async () => {
-        try {
-            const [_facilities, _packages] = await Promise.all([getFacilitiesAsync(), getPackagesAsync()]);
-            setFacilities(_facilities.data)
-            setPackages(_packages.data)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
 
     const handeOnSaveorUpdateSucess = () => {
         onNewDataSucess()
@@ -64,7 +52,6 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
             })
         }
     }
-    useEffect(() => { fetchSelectFieldData() }, [])
 
     useEffect(() => {
         if (formData && packages?.data?.length) {
@@ -81,6 +68,11 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
         const _amount = packages.data.find(p => p.id == data.package)?.amount
         return _amount
     }, [packages, data.package])
+
+    useEffect(() => {
+        setFacilities(props?.facilities)
+        setPackages(props?.packages)
+    }, [props.packages, props.facilities])
 
 
 

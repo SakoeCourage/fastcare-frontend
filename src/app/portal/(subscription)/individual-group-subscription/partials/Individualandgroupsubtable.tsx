@@ -1,7 +1,6 @@
 "use client"
 import React, { useEffect, useState } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
-import { IndividualAndGroupType } from '../individualandgrouptypedef'
 import DataTable from 'app/app/components/datatable/datatable'
 import Newsubscriberform from './Newsubscriberform'
 import Modal from 'app/app/components/ui/modal';
@@ -13,6 +12,9 @@ import { AxiosResponse } from 'axios'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 import { dateReformat } from 'app/app/lib/utils'
 import axios from 'axios'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
+import Tableinitials from 'app/app/components/datatable/partials/tableinitials'
+
 export const initialFormStateProp: {
     title: string | null,
     open: boolean;
@@ -22,30 +24,29 @@ export const initialFormStateProp: {
     open: false
 }
 
-function Individualandgroupsubtable() {
+function Individualandgroupsubtable(props: Partial<ISelectData>) {
+
     const [subscriberData, setSubscriberData] = useState<IndividualSubDTO | null>(null)
     const { CancelToken } = axios;
     const source = CancelToken.source();
 
     const columns: ColumnDef<IndividualSubDTO>[] = [
         {
-            accessorKey: "membershipID",
-            header: "MID",
-        },
-        {
             accessorKey: "createdAt",
             header: "Created At",
             cell: ({ row }) => dateReformat(row.original.createdAt)
         },
         {
-            accessorKey: "firstName",
-            header: "Full Name",
-            cell: ({ row }) => `${row.original.firstName} ${row.original.lastName}`
+            accessorKey: "membershipID",
+            header: "MID",
         },
         {
-            accessorKey: 'phoneOne',
-            header: "Contact Number"
+            accessorKey: "firstName",
+            header: "Full Name",
+            cell: ({ row }) => <Tableinitials address={row.original.phoneOne} name={`${row.original.firstName} ${row.original.lastName}`} />
+
         },
+
         {
             accessorKey: "",
             header: "Action",
@@ -102,6 +103,7 @@ function Individualandgroupsubtable() {
                     onNewDataSucess={() => { handleOnResetState(); resetTableData() }}
                     formData={subscriberData}
                     handleFetchSubscriberData={handleFetchSubscriberData}
+                    {...props}
                 />
             </Modal>
 

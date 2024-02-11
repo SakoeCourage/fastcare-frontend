@@ -7,7 +7,7 @@ import Vr from 'app/app/components/ui/vr'
 import { ExtendedFilterTypes, filterParamTypes } from '../tabletypedefs'
 import { FilterCompsPropsTuple } from '../tabletypedefs'
 import { getQueryParamValue, extractQueryParams } from 'app/app/lib/utils'
-import { resetTableData } from '../../datatable'
+import { resetDefaultData } from '../../datatable'
 const OptionsHasComponent: Record<ExtendedFilterTypes, React.JSX.Element | React.FC<any>> = {
   "DateFilter": Datepicker,
   "SelectFilter": Selectoption
@@ -69,7 +69,7 @@ function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[],
             </div>
           })
         }
-        <button onClick={() => resetTableData()} className=' text-sm flex min-h-full items-center gap-2 py-1 px-3 text-red-500 border border-gray-300 bg-red-100/35 rounded-md'>
+        <button onClick={() => resetDefaultData()} className=' text-sm flex min-h-full items-center gap-2 py-1 px-3 text-red-500 border border-gray-300 bg-red-100/35 rounded-md'>
           <IconifyIcon className=' bg-transparent' icon='system-uicons:reset-forward' />
           <span className=' hidden md:block whitespace-nowrap'>
             Reset Table

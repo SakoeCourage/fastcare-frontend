@@ -8,6 +8,7 @@ import { Table } from "@tanstack/react-table"
 
 import { Button } from "../../form-components/button"
 import Selectoption from "../../form-components/selectoption"
+import { scrollDataTableToTop } from "../datatable"
 
 interface DataTablePaginationProps<TData> {
   tableData: IPaginatedData<TData>,
@@ -58,7 +59,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => getDataAsync(tableData.newPageInfo.firstPageUrl)}
+            onClick={() => {getDataAsync(tableData.newPageInfo.firstPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.firstPageUrl}
           >
             <span className="sr-only">Go to first page</span>
@@ -67,7 +68,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => getDataAsync(tableData.newPageInfo.prevPageUrl)}
+            onClick={() => {getDataAsync(tableData.newPageInfo.prevPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.prevPageUrl}
           >
             <span className="sr-only">Go to previous page</span>
@@ -76,7 +77,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="h-8 w-8 p-0"
-            onClick={() => getDataAsync(tableData.newPageInfo.nextPageUrl)}
+            onClick={() => {getDataAsync(tableData.newPageInfo.nextPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.nextPageUrl}
           >
             <span className="sr-only">Go to next page</span>
@@ -85,7 +86,7 @@ export function DataTablePagination<TData>({
           <Button
             variant="outline"
             className="hidden h-8 w-8 p-0 lg:flex"
-            onClick={() => getDataAsync(tableData.newPageInfo.lastPageUrl)}
+            onClick={() => {getDataAsync(tableData.newPageInfo.lastPageUrl);scrollDataTableToTop()}}
             disabled={!tableData.newPageInfo.lastPageUrl}
           >
             <span className="sr-only">Go to last page</span>

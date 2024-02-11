@@ -14,10 +14,32 @@ import Api from 'app/app/fetch/axiosInstance'
 import { updateUrlQueryParam, extractQueryParams, getQueryParamValue } from 'app/app/lib/utils'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 
+
+export function scrollDataTableToTop(): void {
+    const outletElement = document.getElementById('outlet');
+    const dataTableElement = document.getElementById('dataTable');
+    
+    if (outletElement && dataTableElement) {
+      const dataTableOffsetTop = dataTableElement.offsetTop - outletElement.offsetTop;
+      outletElement.scrollTo({ top: dataTableOffsetTop-5, behavior:'smooth' });
+    }
+  }
+  
+
+// Refetch the current Path
 export function resetTableData() {
+    const customEvent = new Event('tableRefreshEvent');
+    document.dispatchEvent(customEvent);
+}
+
+
+//Reset to default data i.e on mount
+export function resetDefaultData() {
     const customEvent = new Event('tableResetEvent');
     document.dispatchEvent(customEvent);
 }
+
+
 
 
 function DataTable<TData, TValue, K extends keyof TData>({
@@ -97,19 +119,36 @@ function DataTable<TData, TValue, K extends keyof TData>({
     }
 
 
-    function handleOnReset() {
+    
+    function handleOnResetToDefault() {
         fetchSourceData(dataSourceUrl ?? null)
     }
+    
+    function handleOnRefresh() {
+        fetchSourceData(path ?? null)
+    }
+
     useEffect(() => {
-        fetchSourceData(dataSourceUrl ?? null)
-        document.addEventListener('tableResetEvent', handleOnReset);
-        return () => {
-            document.removeEventListener('tableResetEvent', handleOnReset);
-        };
+        console.log(path)
+        document.addEventListener('tableRefreshEvent' as any, handleOnRefresh);
+        return () => document.removeEventListener('tableRefreshEvent' as any, handleOnRefresh);
+    }, [path]);
+
+    useEffect(() => {
+
     }, []);
 
+    useEffect(() => {
+        fetchSourceData(dataSourceUrl ?? null)
+        document.addEventListener('tableResetEvent', handleOnResetToDefault);
+        return () => {
+            document.removeEventListener('tableResetEvent', handleOnResetToDefault);
+        };
+    }, [])
+
+
     return (
-        <div className="rounded-md border h-max min-h-[32rem] bg-white  relative overflow-hidden ">
+        <div id='dataTable' className="rounded-md border h-max min-h-[32rem] bg-white  relative overflow-hidden ">
 
             {/* {fetchingData && <nav className="absolute top-[40%] z-20  rounded-md flex flex-col items-center gap-1 text-gray-600 justify-center bg-gray-400  bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100 inset-x-[40%] w-max p-3  text-xs  pointer-events-none ">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity=".5" /><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" /></path></svg>
@@ -194,10 +233,10 @@ function DataTable<TData, TValue, K extends keyof TData>({
             {tData &&
                 !!table.getRowModel().rows?.length &&
                 enablePaginator &&
-                <DataTablePagination 
-                handleUrlQuery={handleUrlQuery}
-                getUrlParamValue={getUrlParamValue}
-                table={table} getDataAsync={fetchSourceData} tableData={tData} />}
+                <DataTablePagination
+                    handleUrlQuery={handleUrlQuery}
+                    getUrlParamValue={getUrlParamValue}
+                    table={table} getDataAsync={fetchSourceData} tableData={tData} />}
         </div>
     )
 }

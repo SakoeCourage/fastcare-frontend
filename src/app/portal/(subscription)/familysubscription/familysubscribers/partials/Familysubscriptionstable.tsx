@@ -16,9 +16,11 @@ import Sidemodal from 'app/app/components/ui/sidemodal'
 import Familybeneficiarieslist from './Familybeneficiarieslist'
 import Familybeneficiaryform from './Familybeneficiaryfom'
 import Makefamilysubpayment from './Makefamilysubpayment'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
+import { getInitials } from 'app/app/lib/utils'
+import Tableinitials from 'app/app/components/datatable/partials/tableinitials'
 
-
-function Familysubscriptionstable() {
+function Familysubscriptionstable(props: Partial<ISelectData>) {
     const abortController = new AbortController();
     const { signal } = abortController;
     const [showNewFamilyClientForm, setShowNewFamilyClientForm] = useState(initialFormStateProp)
@@ -41,10 +43,7 @@ function Familysubscriptionstable() {
         {
             accessorKey: "name",
             header: "Name",
-        },
-        {
-            accessorKey: "contact",
-            header: "Contact"
+            cell: ({ row }) => <Tableinitials address={row.original.contact} name={row.original.name}/>
         },
         {
             accessorKey: "",
@@ -102,6 +101,9 @@ function Familysubscriptionstable() {
     }
 
 
+
+
+
     return (
         <div>
 
@@ -118,6 +120,7 @@ function Familysubscriptionstable() {
                 title="Make Payment"
                 closeModal={() => setShowPaymentForm(null)}>
                 <Makefamilysubpayment
+                    {...props}
                     formData={showPaymentForm}
                     onCancel={() => setShowPaymentForm(null)}
                     onNewDataSucess={() => { resetTableData(); setShowPaymentForm(null) }} />
@@ -144,6 +147,7 @@ function Familysubscriptionstable() {
                 size='lg' open={showBeneficiaryForm}
                 closeModal={() => { setShowBeneficiaryForm(false); setcurrentBeneficiary(null); }}>
                 <Familybeneficiaryform
+                    {...props}
                     familyId={showFamilyBeneficiaryList?.id}
                     onNewDataSucess={() => {
                         setShowBeneficiaryForm(false);
@@ -159,8 +163,26 @@ function Familysubscriptionstable() {
                 dataSourceUrl='/family-subscribers?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewFamilyClientForm({ title: "Add Family Client", open: true })}
                 filterable="name"
+                filterablePlaceholder='Search Name or FID'
                 columns={columns}
                 actionName='Add Family Client'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
             />
         </div>
     )

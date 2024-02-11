@@ -12,9 +12,9 @@ import { formatcurrency } from 'app/app/lib/utils';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { SlideUpAndDownAnimation, PaymentmethodCard, AvailablePaymentMethods } from '../../../individual-group-subscription/partials/Makeindividualsubscriptionpayment';
 import ContactInput from 'app/app/components/form-components/contactinput';
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata';
 
-
-function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDTO>) {
+function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDTO> & Partial<ISelectData>) {
     const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
     const { formData, onCancel, onNewDataSucess } = props
     const { data, setData, processing, errors, setValidation, post, patch } = useForm<Partial<CorporatePackageDTO>>({
@@ -34,9 +34,7 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
     })
 
-    useEffect(() => {
-        console.log(data)
-    }, [data])
+ 
 
     useEffect(() => {
         if (data.discount == 0) setOriginalAmoutToDebit()
@@ -69,20 +67,11 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
         setOriginalAmoutToDebit()
     }, [formData])
 
-    const getBanksAsync: () => Promise<AxiosResponse<IPaginatedData<bankDTO>>> = () => Api.get("/banks");
-
-    const fetchSelectFieldData = async () => {
-        try {
-            const [_banks] = await Promise.all([getBanksAsync()]);
-            setBanks(_banks.data)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
 
     useEffect(() => {
-        fetchSelectFieldData();
-    }, [])
+        setBanks(props.banks)
+    }, [props.banks])
+
 
     const handleFormSubmission = () => {
         if (formData?.corporatePackage) {

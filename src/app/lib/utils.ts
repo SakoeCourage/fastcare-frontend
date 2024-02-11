@@ -94,3 +94,14 @@ export function extractQueryParams(url: string): Record<string, string> | undefi
 
   return result;
 }
+
+
+export function getInitials(name:string) {
+  const parts = name.split(' ');
+  
+  if (parts.length === 1) {
+      return parts[0][0];
+  }
+  
+  return parts[0][0] + parts[1][0];
+}

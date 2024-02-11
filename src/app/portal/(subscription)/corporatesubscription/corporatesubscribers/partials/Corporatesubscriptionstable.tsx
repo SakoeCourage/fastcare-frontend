@@ -5,7 +5,7 @@ import DataTable from 'app/app/components/datatable/datatable'
 import Modal from 'app/app/components/ui/modal'
 import NewCorpoarateclientform from './Newcorporateclientform'
 import { corporateBeneficiaryDTO, corporateSubscriberDTO } from 'app/app/types/entitiesDTO'
-import { dateReformat } from 'app/app/lib/utils'
+import { dateReformat, getInitials } from 'app/app/lib/utils'
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import Api from 'app/app/fetch/axiosInstance'
 import { initialFormStateProp } from '../../../individual-group-subscription/partials/Individualandgroupsubtable'
@@ -16,9 +16,11 @@ import Sidemodal from 'app/app/components/ui/sidemodal'
 import Corporatebeneficiarieslist from './Corporatebeneficiarieslist'
 import Corporatebeneficiaryform from './Corporatebeneficiaryfom'
 import MakeCorporatesubpayment from './Makecorporatesubpayment'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
+import Tableinitials from 'app/app/components/datatable/partials/tableinitials'
 
 
-function Corporatesubscriptionstable() {
+function Corporatesubscriptionstable(props: Partial<ISelectData>) {
     const abortController = new AbortController();
     const { signal } = abortController;
     const [showNewCorporateClientForm, setShowNewCorporateClientForm] = useState(initialFormStateProp)
@@ -41,10 +43,7 @@ function Corporatesubscriptionstable() {
         {
             accessorKey: "name",
             header: "Name",
-        },
-        {
-            accessorKey: "contact",
-            header: "Contact"
+            cell: ({ row }) => <Tableinitials address={row.original.contact} name={row.original.name}/>
         },
         {
             accessorKey: "",
@@ -117,6 +116,7 @@ function Corporatesubscriptionstable() {
                 title="Make Payment"
                 closeModal={() => setShowPaymentForm(null)}>
                 <MakeCorporatesubpayment
+                    {...props}
                     formData={showPaymentForm}
                     onCancel={() => setShowPaymentForm(null)}
                     onNewDataSucess={() => { resetTableData(); setShowPaymentForm(null) }} />
@@ -143,6 +143,7 @@ function Corporatesubscriptionstable() {
                 size='lg' open={showBeneficiaryForm}
                 closeModal={() => { setShowBeneficiaryForm(false); setcurrentBeneficiary(null); }}>
                 <Corporatebeneficiaryform
+                    {...props}
                     corporateID={showCorporateBeneficiaryList?.id}
                     onNewDataSucess={() => {
                         setShowBeneficiaryForm(false);
@@ -158,8 +159,26 @@ function Corporatesubscriptionstable() {
                 dataSourceUrl='/corporate-subscribers?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setShowNewCorporateClientForm({ title: "Add Corporate Client", open: true })}
                 filterable="name"
+                filterablePlaceholder='Search Name or MID'
                 columns={columns}
                 actionName='Add Corporate Client'
+                sortableColumns={[
+                    {
+                        column: "createdAt",
+                        accessor: "sort",
+                        options: [
+                            {
+                                key: "Ascending",
+                                value: "createdAt_asc"
+                            },
+                            {
+                                key: "Descending",
+                                value: "createdAt_desc"
+                            }
+                        ]
+                    },
+
+                ]}
             />
         </div>
     )

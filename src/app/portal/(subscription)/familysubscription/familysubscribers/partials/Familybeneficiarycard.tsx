@@ -4,6 +4,7 @@ import { IBeneficiariesProps } from './Familybeneficiarieslist'
 import Moretableoptions from 'app/app/components/datatable/moretableoptions'
 import { familyBeneficiaryDTO } from 'app/app/types/entitiesDTO'
 import Modal from 'app/app/components/ui/modal'
+import Tableinitials from 'app/app/components/datatable/partials/tableinitials'
 
 interface IFamilyBenProp {
     beneficiaryData: familyBeneficiaryDTO,
@@ -17,17 +18,7 @@ function Familybeneficiarycard(props: IFamilyBenProp) {
 
     return <>
         <div className='flex bg-gray-50/60 p-2 rounded-md border items-center gap-2 w-full relative'>
-            <nav className=' h-12 w-12 shadow text-blue-500 font-medium rounded-full bg-blue-100 uppercase p-1 aspect-square flex items-center justify-center gap-1'>
-                {beneficiaryData?.name
-                    .split(" ")
-                    .map(name => name.charAt(0))
-                    .join("")
-                }
-            </nav>
-            <nav className='flex grow flex-col text-sm'>
-                <h1 className=' font-medium text-gray-500'>{beneficiaryData?.name}</h1>
-                <h1 className=' font-thin'>{beneficiaryData?.contact}</h1>
-            </nav>
+            <Tableinitials name={beneficiaryData.name} address={beneficiaryData.contact} />
             <nav className=' text-xs absolute right-0 p-2 bg-gray-100 inset-y-0 flex  items-center justify-center'>
                 <Moretableoptions options={[{
                     optionName: "Edit",

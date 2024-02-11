@@ -18,6 +18,7 @@ export function middleware(request: NextRequest) {
     const routePermissions = getPermissionPerRoute()
     let role: roleDTO = {} as roleDTO;
 
+   
     if (request.cookies.get('role')) {
         role = JSON.parse(request.cookies.get('role')?.value)
     }

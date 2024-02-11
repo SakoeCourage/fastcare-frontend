@@ -26,8 +26,6 @@ Api.interceptors.request.use(async (config) => {
   return Promise.reject(error);
 });
 
-
-
 Api.interceptors.response.use(async (response) => {
   RequestEvents.onRequestCompleteEvent();
   return response;

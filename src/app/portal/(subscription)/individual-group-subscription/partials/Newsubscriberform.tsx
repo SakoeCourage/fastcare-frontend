@@ -16,16 +16,14 @@ import Makeindividualsubscriptionpayment from './Makeindividualsubscriptionpayme
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { isNullOrWhitespace } from 'app/app/lib/utils'
 import ContactInput from 'app/app/components/form-components/contactinput'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
 
-interface IFectchSubscribers {
+interface IFectchSubscribers extends Partial<ISelectData> {
     handleFetchSubscriberData: (id: number | string | undefined) => void
 }
 
-function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, handleFetchSubscriberData }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers) {
-    const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
-    const [groups, setGroups] = useState<IPaginatedData<groupDTO> | null>(null)
-    const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
-    const [banks, setBanks] = useState<IPaginatedData<bankDTO> | null>(null)
+function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, handleFetchSubscriberData, ...rest }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers) {
+    const { groups, facilities, banks, packages } = { ...rest }
     const { setDialogData } = DialogService()
     const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {})
 
@@ -49,7 +47,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         address: z.string().min(1, "This Field is required"),
         gpsAddress: z.string().min(5, "This Field is required"),
         phoneOne: z.string().min(15, "This Field is required"),
-        phoneTwo: z.string().min(15,"This Field is required").nullable().optional(),
+        phoneTwo: z.string().min(15, "This Field is required").nullable().optional(),
         emergencyPerson: z.string().min(5, "This Field is required"),
         emergencyPersonPhone: z.string().min(15, "This Field is required"),
         hasNHIS: z.boolean(),
@@ -69,24 +67,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
 
     })
 
-    const getGroupAsync: () => Promise<AxiosResponse<IPaginatedData<groupDTO>>> = () => Api.get("/groups");
-    const getFacilitiesAsync: () => Promise<AxiosResponse<IPaginatedData<facilityDTO>>> = () => Api.get("/facilities");
-    const getPackagesAsync: () => Promise<AxiosResponse<IPaginatedData<packageDTO>>> = () => Api.get("/packages");
-    const getBanksAsync: () => Promise<AxiosResponse<IPaginatedData<bankDTO>>> = () => Api.get("/banks");
-
-    const fetchSelectFieldData = async () => {
-        try {
-            const [_groups, _facilities, _packages, _banks] = await Promise.all([getGroupAsync(), getFacilitiesAsync(), getPackagesAsync(), getBanksAsync()]);
-            setGroups(_groups.data)
-            setFacilities(_facilities.data)
-            setPackages(_packages.data)
-            setBanks(_banks.data)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        } finally {
-            if (subscriber.id) handleFetchSubscriberData(subscriber.id);
-        }
-    }
 
     const handleOnsucess = () => {
         if (subscriber.id) {
@@ -99,18 +79,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         onNewDataSucess();
     }
 
-    useEffect(() => {
-        if (subscriber == null) return
-        const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
-        try {
-            setData({
-                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id
-            })
-        } catch (error) {
-            console.log(error)
-        }
-
-    }, [subscriber])
 
     const handleFormSubmission = () => {
         if (subscriber?.id) {
@@ -144,11 +112,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         }).onDialogDecline(() => { })
     }
 
-    useEffect(() => {
-        fetchSelectFieldData();
-    }, [])
-
-
     const checkFileValidationRule = (rule: "Size" | "AcceptType") => {
         if (isNullOrWhitespace(data.passportPicture)) return false
         if (!rule && !isFile(data.passportPicture)) return false
@@ -168,6 +131,27 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
             return false
         }
     }
+
+    useEffect(() => {
+        if (subscriber?.id) {
+            handleFetchSubscriberData(subscriber.id)
+        }
+    }, [])
+
+
+    useEffect(() => {
+        if (subscriber == null) return
+        const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
+        try {
+            setData({
+                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+    }, [subscriber])
+
 
     return (
         <div className=' '>
@@ -369,7 +353,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                     <ContactInput
                         error={errors?.phoneTwo}
                         value={data.phoneTwo}
-                        onChange={(value) => setData('phoneTwo',value)}
+                        onChange={(value) => setData('phoneTwo', value)}
                         label="Phone two"
                         required
                         placeholder="Enter Phone two"

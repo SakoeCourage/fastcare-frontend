@@ -14,15 +14,16 @@ import { z } from 'zod'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 import { formatcurrency } from 'app/app/lib/utils'
 import ContactInput from 'app/app/components/form-components/contactinput'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
 
-function Familybeneficiaryform(props: IFormWithDataProps<familyBeneficiaryDTO> & { familyId: number | undefined }) {
+function Familybeneficiaryform(props: IFormWithDataProps<familyBeneficiaryDTO> & { familyId: number | undefined } & Partial<ISelectData>) {
     const { onCancel, onNewDataSucess, formData, familyId: prfId } = props
     const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
     const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
 
     const { data, setData, setValidation, errors, post, patch, processing } = useForm<Partial<familyBeneficiaryDTO>>(
         formData ? { ...formData } : {}
-        )
+    )
 
     setValidation({
         familyId: z.number().min(1, "This Field Is Required"),
@@ -33,18 +34,6 @@ function Familybeneficiaryform(props: IFormWithDataProps<familyBeneficiaryDTO> &
         package: z.number().min(1, "This Field Is Required"),
     })
 
-    const getFacilitiesAsync: () => Promise<AxiosResponse<IPaginatedData<facilityDTO>>> = () => Api.get("/facilities");
-    const getPackagesAsync: () => Promise<AxiosResponse<IPaginatedData<packageDTO>>> = () => Api.get("/packages");
-
-    const fetchSelectFieldData = async () => {
-        try {
-            const [_facilities, _packages] = await Promise.all([getFacilitiesAsync(), getPackagesAsync()]);
-            setFacilities(_facilities.data)
-            setPackages(_packages.data)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
 
     const handeOnSaveorUpdateSucess = () => {
         onNewDataSucess()
@@ -82,7 +71,10 @@ function Familybeneficiaryform(props: IFormWithDataProps<familyBeneficiaryDTO> &
         }
     }, [formData, packages])
 
-    useEffect(() => { fetchSelectFieldData() }, [])
+    useEffect(() => {
+        setFacilities(props?.facilities)
+        setPackages(props?.packages)
+    }, [props.packages, props.facilities])
 
 
 

@@ -13,6 +13,7 @@ import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 import { AxiosResponse } from 'axios';
 import Api from 'app/app/fetch/axiosInstance';
 import ContactInput from 'app/app/components/form-components/contactinput';
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata';
 
 export const SlideUpAndDownAnimation = {
     initial: { opacity: 0, translateY: "10px" },
@@ -110,7 +111,7 @@ function PaymentmethodCard(param: IAvailablePaymentMethod & {
 
 
 
-function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
+function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO> & Partial<ISelectData>) {
     const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
 
     const { formData, onCancel, onNewDataSucess, processing } = props
@@ -131,16 +132,6 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
     })
 
-    const getBanksAsync: () => Promise<AxiosResponse<IPaginatedData<bankDTO>>> = () => Api.get("/banks");
-
-    const fetchSelectFieldData = async () => {
-        try {
-            const [_banks] = await Promise.all([getBanksAsync()]);
-            setBanks(_banks.data)
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
-    }
 
     useEffect(() => {
         if (data.discount == 0) setOriginalAmoutToDebit()
@@ -183,9 +174,10 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO>) {
         console.log(formData)
     }, [formData])
 
+    
     useEffect(() => {
-        fetchSelectFieldData();
-    }, [])
+        setBanks(props.banks)
+    }, [props.banks])
 
 
 

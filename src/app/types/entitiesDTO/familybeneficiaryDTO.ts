@@ -4,9 +4,9 @@ export interface familyBeneficiaryDTO {
     name: string,
     dateOfBirth: string,
     contact: string,
-    familyId: string,
+    familyId: number,
     createdBy: string,
     updatedBy: string | null,
-    package: packageDTO,
-    facility: facilityDTO
+    package: packageDTO | number,
+    facility: facilityDTO | number
 }

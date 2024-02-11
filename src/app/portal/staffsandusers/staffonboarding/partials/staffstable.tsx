@@ -8,6 +8,7 @@ import { staffDTO } from 'app/app/types/entitiesDTO'
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { resetTableData } from 'app/app/components/datatable/datatable'
 import { dateReformat } from 'app/app/lib/utils'
+import Tableinitials from 'app/app/components/datatable/partials/tableinitials'
 
 function Staffstable() {
     const [showNewStaffForm, setShowNewStaffForm] = useState<staffDTO | null>(null)
@@ -20,15 +21,7 @@ function Staffstable() {
         {
             accessorKey: "fullName",
             header: "Full Name",
-            cell: ({ row }) => <div className='flex rounded-md items-center gap-2 w-full '>
-                <nav className=' h-12 w-12 shadow text-blue-500 font-medium rounded-full bg-blue-100 p-1 aspect-square uppercase flex items-center justify-center gap-1'>
-                    {`${row.original.firstName[0]}${row.original.lastName[0]}`}
-                </nav>
-                <nav className='flex grow flex-col text-sm'>
-                    <h1 className=' font-medium text-gray-500'>{row.original.firstName} {row.original.lastName}</h1>
-                    <h1 className=' font-thin'>{row.original.phoneNumber}</h1>
-                </nav>
-            </div>
+            cell: ({ row }) => <Tableinitials address={row.original.phoneNumber} name={`${row.original.firstName} ${row.original.lastName}`}/>
         },
         {
             accessorKey: "gender",

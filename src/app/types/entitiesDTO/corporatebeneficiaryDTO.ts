@@ -7,6 +7,6 @@ export interface corporateBeneficiaryDTO {
     contact: string,
     createdBy: string,
     updatedBy: string | null,
-    package?: packageDTO,
-    facility?: facilityDTO
+    package?: packageDTO | number,
+    facility?: facilityDTO | number
 }
