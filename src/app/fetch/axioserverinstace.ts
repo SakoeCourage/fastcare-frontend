@@ -4,7 +4,6 @@ import axios from 'axios';
 import { AxiosError } from 'axios';
 import { signOut } from 'next-auth/react';
 
-const apiToken = cookies().get("apiToken")?.value
 const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const serverReq = axios.create({
@@ -12,6 +11,7 @@ const serverReq = axios.create({
 });
 
 serverReq.interceptors.request.use(async (config) => {
+    const apiToken =  cookies().get("apiToken")?.value
     if (apiToken) {
         config.headers["Authorization"] = `Bearer ${apiToken}`;
     }
