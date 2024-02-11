@@ -90,6 +90,7 @@ const Fileupload = ({ getFiles,
     };
 
     const handleOnFileChange = (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>) => {
+        console.log(event.type)
         setlvErrors([])
         onError && onError([])
 
@@ -109,6 +110,7 @@ const Fileupload = ({ getFiles,
 
         if ('files' in event.target) {
             const Ifiles: FileList | null = inputRef.current?.files as FileList;
+
             if (Ifiles) {
                 try {
                     handleMaxNumberValidation(Ifiles);
@@ -117,7 +119,7 @@ const Fileupload = ({ getFiles,
                     validationErrors.push(errorMessages.maxNumber);
                 }
             }
-        } else if (event.type === 'drop') {
+        } else if (event.type === "drop") {
             event.preventDefault()
             const dragEvent = event as React.DragEvent;
             const Ifiles = dragEvent.dataTransfer.files;
@@ -178,8 +180,8 @@ const Fileupload = ({ getFiles,
                 setIsDragOver(true)
             }}
             onDrop={(e) => {
-                setIsDragOver(false)
                 handleOnFileChange(e)
+                setIsDragOver(false)
             }}
         >
             <input
@@ -194,6 +196,7 @@ const Fileupload = ({ getFiles,
             />
             {!files.length && (
                 <BlankImagePlaceholder
+                    handleOnFileChange={handleOnFileChange}
                     placeholder={placeholder}
                     isDragging={dragOver}
                     onImageUpload={() => inputRef.current!.click()}
@@ -206,6 +209,7 @@ const Fileupload = ({ getFiles,
                 {Boolean(files.length) &&
                     !(Number(files.length) === maxNumber) && (
                         <BlankImagePlaceholder
+                            handleOnFileChange={handleOnFileChange}
                             placeholder={placeholder}
                             isDragging={dragOver}
                             onImageUpload={() => inputRef.current!.click()}

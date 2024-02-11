@@ -98,17 +98,17 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
             okText: "Yes",
             cancelText: "No"
         }).onDialogConfirm(() => {
-            // if (subscriber?.id == null) return
-            // del('/individual-subscribers/' + subscriber.id,
-            //     {
-            //         onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
-            //         onError: () => toastnotify("Failed To Remove Subscription", "Error"),
-            //         config: {
-            //             validation: {
-            //                 enable: false
-            //             }
-            //         }
-            //     })
+            if (subscriber?.id == null) return
+            del('/individual-subscribers/' + subscriber.id,
+                {
+                    onSuccess: () => { toastnotify("Subsription Payment Has Been Removed", "Success"), onNewDataSucess() },
+                    onError: () => toastnotify("Failed To Remove Subscription", "Error"),
+                    config: {
+                        validation: {
+                            enable: false
+                        }
+                    }
+                })
         }).onDialogDecline(() => { })
     }
 

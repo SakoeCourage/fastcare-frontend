@@ -6,19 +6,22 @@ interface BlankImagePlaceholderProps {
   isDragging: boolean;
   dragProps?: Record<string, any>;
   placeholder?: string;
+  handleOnFileChange: (event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>)=> void
 }
 
 export function BlankImagePlaceholder({
   onImageUpload,
   isDragging,
   dragProps,
-  placeholder
+  placeholder,
+  handleOnFileChange
 }: BlankImagePlaceholderProps) {
   return (<div className=" grid place-items-center  w-full">
     {/* <div className="md:">
 
     </div> */}
     <div
+      onDrop={handleOnFileChange}
       onClick={onImageUpload}
       {...dragProps}
       className={` active:bg-gray-50 aspect-square mx-auto  min-h-44 min-w-44  w-1/2 lg:w-1/3  h-full  cursor-pointer ${isDragging && "opacity-50"
