@@ -20,7 +20,7 @@ interface passwordChangeDto {
 function Changecredentials({ changeView }: { changeView: (comp: componentsType) => void }) {
     const { data: sessionData } = useSession()
     const { setDialogData } = DialogService()
-    const { data, setData, put, errors, setValidation } = useForm<passwordChangeDto>({
+    const { data, setData, put, errors, setValidation,processing } = useForm<passwordChangeDto>({
         oldPassword: "",
         newPassword: "",
         passwordConfirmation: ""
@@ -106,7 +106,7 @@ function Changecredentials({ changeView }: { changeView: (comp: componentsType) 
                 <Button onClick={() => changeView("profile")} size='full' variant="outline">
                     Cancel
                 </Button>
-                <Button size='full' variant='primary'>
+                <Button processing={processing} size='full' variant='primary'>
                     Reset Password
                 </Button>
             </div>

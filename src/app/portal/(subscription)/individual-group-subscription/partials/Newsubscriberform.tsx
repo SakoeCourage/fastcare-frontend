@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { experimental_useEffectEvent, useEffect, useState } from 'react'
 import { Input } from 'app/app/components/form-components/input'
 import Datepicker from 'app/app/components/form-components/datepicker'
 import Selectoption from 'app/app/components/form-components/selectoption'
@@ -25,7 +25,9 @@ interface IFectchSubscribers extends Partial<ISelectData> {
 function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, handleFetchSubscriberData, ...rest }: IFormWithDataProps<IndividualSubDTO> & IFectchSubscribers) {
     const { groups, facilities, banks, packages } = { ...rest }
     const { setDialogData } = DialogService()
-    const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {})
+    const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {
+            discount: 0
+    })
 
     const isFile = (value: unknown): value is File => {
         return value instanceof File;
@@ -142,6 +144,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
     useEffect(() => {
         if (subscriber == null) return
         const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
+        console.log(subscriber)
         try {
             setData({
                 ...rest, facility: fc?.id, package: pckg?.id, group: gr.id
@@ -150,7 +153,10 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
             console.log(error)
         }
 
-    }, [subscriber])
+    }, [subscriber,packages,banks,facilities])
+
+ 
+    
 
 
     return (

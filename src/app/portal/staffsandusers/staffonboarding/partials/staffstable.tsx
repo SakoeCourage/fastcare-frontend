@@ -21,7 +21,7 @@ function Staffstable() {
         {
             accessorKey: "fullName",
             header: "Full Name",
-            cell: ({ row }) => <Tableinitials address={row.original.phoneNumber} name={`${row.original.firstName} ${row.original.lastName}`}/>
+            cell: ({ row }) => <Tableinitials address={row.original.phoneNumber} name={`${row.original.firstName}${row.original.lastName}`}/>
         },
         {
             accessorKey: "gender",

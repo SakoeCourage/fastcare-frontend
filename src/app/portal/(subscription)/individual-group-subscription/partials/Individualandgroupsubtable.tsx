@@ -43,7 +43,7 @@ function Individualandgroupsubtable(props: Partial<ISelectData>) {
         {
             accessorKey: "firstName",
             header: "Full Name",
-            cell: ({ row }) => <Tableinitials address={row.original.phoneOne} name={`${row.original.firstName} ${row.original.lastName}`} />
+            cell: ({ row }) => <Tableinitials address={row.original.phoneOne} name={`${row.original.firstName}${row.original.lastName}`} />
 
         },
 

@@ -10,11 +10,16 @@ interface FileRendererProps {
 
 const Filetyperenderer: React.FC<FileRendererProps> = ({ file, removeFile, index }) => {
   useEffect(() => {
-    if(isBlob(file)){      
-      console.log("From Renderer",file)
+    if (isBlob(file)) {
+      console.log("From Renderer", file)
     }
   }, [file])
-  
+
+  const viewFile = (file: File) => {
+    const _file = URL.createObjectURL(file);
+    window.open(_file, '_blank')
+  }
+
   return (
     <div
       className=" aspect-square w-full h-full min-h-44 min-w-44  border rounded-md object-cover relative"
@@ -24,15 +29,16 @@ const Filetyperenderer: React.FC<FileRendererProps> = ({ file, removeFile, index
       {["image/jpeg", "image/jpg", "image/png"].includes(file.type) || isBlob(file) ?
         (
           <img
+            onClick={()=>viewFile(file)}
             src={URL.createObjectURL(file)}
             alt=""
-            className="min-h-40 min-w-40 h-full w-full object-contain aspect-square"
+            className="min-h-40 min-w-40 cursor-pointer h-full w-full object-contain aspect-square"
           />
         ) :
         (
           isFile(file) && ["application/pdf"].includes(file.type) ?
             (
-              <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
+              <div onClick={()=>viewFile(file)} className='truncate flex flex-col cursor-pointer gap-2 items-center justify-center h-full w-full p-3'>
                 <IconifyIcon className='!h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-pdf2' />
                 <abbr title={file.name} className='text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
               </div>
@@ -40,13 +46,13 @@ const Filetyperenderer: React.FC<FileRendererProps> = ({ file, removeFile, index
             (
               ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "text/csv"].includes(file.type) ?
                 (
-                  <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
+                  <div onClick={()=>viewFile(file)} className='truncate flex flex-col cursor-pointer gap-2 items-center justify-center h-full w-full p-3'>
                     <IconifyIcon className='!h-16 !w-16' fontSize="3.5rem" icon='vscode-icons:file-type-excel' />
                     <abbr title={file.name} className='text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
                   </div>
                 ) :
                 (
-                  <div className='truncate flex flex-col gap-2 items-center justify-center h-full w-full p-3'>
+                  <div onClick={()=>viewFile(file)} className='truncate flex flex-col cursor-pointer gap-2 items-center justify-center h-full w-full p-3'>
                     <IconifyIcon className='!h-16 !w-16 text-gray-500' fontSize="3.5rem" icon='basil:file-outline' />
                     <abbr title={file.name} className='text-center text-decoration-none truncate text-gray-600 w-full'>{file.name}</abbr>
                   </div>

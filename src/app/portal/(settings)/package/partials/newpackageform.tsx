@@ -17,7 +17,7 @@ function Newpackageform(props: IFormWithDataProps<packageDTO>) {
     setValidation({
         name: z.string().min(1, "This Field Is Required"),
         description: z.string().optional(),
-        amount: z.number().min(1, "This Field Is Required")
+        amount: z.number().min(0, "This Field Is Required")
     })
 
     const handleFormSubmission = (e: React.FormEvent) => {
@@ -58,10 +58,10 @@ function Newpackageform(props: IFormWithDataProps<packageDTO>) {
                 />
 
                 <nav className='flex items-center justify-end gap-3'>
-                    <Button processing={processing} onClick={()=>onCancel()} type='button' variant='outline' size='sm'>
+                    <Button  onClick={()=>onCancel()} type='button' variant='outline' size='sm'>
                         Cancel
                     </Button>
-                    <Button type='submit' variant='primary' size='sm'>
+                    <Button processing={processing} type='submit' variant='primary' size='sm'>
                         Save
                     </Button>
                 </nav>

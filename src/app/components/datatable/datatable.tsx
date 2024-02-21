@@ -18,13 +18,13 @@ import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 export function scrollDataTableToTop(): void {
     const outletElement = document.getElementById('outlet');
     const dataTableElement = document.getElementById('dataTable');
-    
+
     if (outletElement && dataTableElement) {
-      const dataTableOffsetTop = dataTableElement.offsetTop - outletElement.offsetTop;
-      outletElement.scrollTo({ top: dataTableOffsetTop-5, behavior:'smooth' });
+        const dataTableOffsetTop = dataTableElement.offsetTop - outletElement.offsetTop;
+        outletElement.scrollTo({ top: dataTableOffsetTop - 5, behavior: 'smooth' });
     }
-  }
-  
+}
+
 
 // Refetch the current Path
 export function resetTableData() {
@@ -77,6 +77,10 @@ function DataTable<TData, TValue, K extends keyof TData>({
         onRowSelectionChange: setRowSelection,
     })
 
+    const isPaginatedData = (dt: IPaginatedData<TData>): dt is IPaginatedData<TData> => {
+        return 'newPageInfo' in dt
+    }
+
     // Replacing base url up to the ...../v1/ with '/' to prevent CORS Error
     function replaceUrlWithSlash(url: string): string {
         const pattern = /(^https?:\/\/.*?\/api\/v1\/)/;
@@ -94,9 +98,11 @@ function DataTable<TData, TValue, K extends keyof TData>({
                 }
             });
             if (res?.data) {
-                setTData(res.data)
                 console.log(res.data)
-                setPath(res.data?.newPageInfo?.path)
+                if (isPaginatedData(res.data)) {
+                    setTData(res.data)
+                    setPath(res.data?.newPageInfo?.path)
+                }
             }
         } catch (error) {
             toastnotify("Failed to fetch table data", "Error");
@@ -119,11 +125,11 @@ function DataTable<TData, TValue, K extends keyof TData>({
     }
 
 
-    
+
     function handleOnResetToDefault() {
         fetchSourceData(dataSourceUrl ?? null)
     }
-    
+
     function handleOnRefresh() {
         fetchSourceData(path ?? null)
     }

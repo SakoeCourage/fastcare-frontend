@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import Api from '../../fetch/axiosInstance';
 import { AxiosError, AxiosResponse } from 'axios';
-import { RequestOptions, useForm, validationType } from './useFormtypes';
+import { RequestOptions, type useForm, validationType } from './useFormtypes';
 import { z, ZodError } from 'zod';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
 

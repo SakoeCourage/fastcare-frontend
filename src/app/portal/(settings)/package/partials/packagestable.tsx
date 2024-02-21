@@ -45,7 +45,10 @@ function Packagestable() {
     ]
     return (
         <div>
-            <Modal open={showNewPackageForm} title={selectedPackage ? `UPDATE -  ${selectedPackage?.name}` : "New Package Setup"} closeModal={() => setShowNewPackageForm(false)}>
+            <Modal open={showNewPackageForm} title={selectedPackage ? `UPDATE -  ${selectedPackage?.name}` : "New Package Setup"} closeModal={() => {
+                setShowNewPackageForm(false);
+                setSelectedPackage(null)
+            }}>
                 <NewPackage
                     formData={selectedPackage}
                     onNewDataSucess={() => { setShowNewPackageForm(false); resetTableData(); setSelectedPackage(null) }}
@@ -76,7 +79,7 @@ function Packagestable() {
                     },
 
                 ]}
-                 />
+            />
         </div>
     )
 }
