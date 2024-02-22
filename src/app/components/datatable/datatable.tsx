@@ -98,7 +98,7 @@ function DataTable<TData, TValue, K extends keyof TData>({
                 }
             });
             if (res?.data) {
-                console.log(res.data)
+                console.log(res?.data)
                 if (isPaginatedData(res.data)) {
                     setTData(res.data)
                     setPath(res.data?.newPageInfo?.path)

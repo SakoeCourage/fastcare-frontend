@@ -1,10 +1,10 @@
 "use client"
 import React from 'react'
 import { ColumnDef } from '@tanstack/react-table'
-import { PaymentsListType, PaymentRes, PaymentList } from '../paymentstypedef'
+import { paymentDataDTO } from 'app/app/types/entitiesDTO'
 
 import DataTable from 'app/app/components/datatable/datatable'
-import { dateReformat } from 'app/app/lib/utils'
+import { dateReformat, formatcurrency } from 'app/app/lib/utils'
 
 export function Statusindicator({ status }: { status: "paid" | "pending" }): React.JSX.Element {
     return <nav>
@@ -13,33 +13,34 @@ export function Statusindicator({ status }: { status: "paid" | "pending" }): Rea
         }
     </nav>
 }
-export const columns: ColumnDef<PaymentRes>[] = [
+export const columns: ColumnDef<paymentDataDTO>[] = [
     {
-        accessorKey: "created_at",
-        header: "Created At",
-        cell: ({ row }) => dateReformat(row.original.created_at)
+        accessorKey: "dateOfPayment",
+        header: "Date of Payment",
+        cell: ({ row }) => dateReformat(row.original.dateOfPayment)
     },
     {
-        accessorKey: "mid",
-        header: "MID"
+        accessorKey: "mandateId",
+        header: "Mandate ID"
     },
     {
-        accessorKey: "subscriber",
-        header: "Subscriber"
+        accessorKey: "subscriberName",
+        header: "Subscriber Name"
     },
     {
-        accessorKey: "mode",
+        accessorKey: 'paymentMode',
         header: "Mode",
-        cell: ({ row }) => row.original?.mode?.mode
+        cell: ({ row }) => row.original?.paymentMode
     },
     {
         accessorKey: "amount",
-        header: "amount"
+        header: "amount",
+        cell: ({ row }) => formatcurrency(Number(row.original.amount))
     },
     {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => <Statusindicator status={row.original.status} />
+        cell: ({ row }) => <Statusindicator status={row.original.confirmed ? "paid" : "pending"} />
     },
 
 ]
@@ -48,17 +49,17 @@ function Paymentstable() {
     return (
         <div>
             <DataTable
-                dataSourceUrl='/paymentlist'
+                dataSourceUrl='/payments?sort=createdAt_desc'
                 sortableColumns={[{
-                    column: 'created_at',
+                    column: "dateOfPayment",
                     accessor: "sort",
                     options: [
-                        { key: "Ascending", value: "created_asc" },
-                        { key: "Descending", value: "created_desc" }
+                        { key: "Ascending", value: "createdAt_asc" },
+                        { key: "Descending", value: "createdAt_desc" }
                     ]
                 }]}
                 columns={columns}
-                filterable="subscriber"
+                filterable="mandateId"
                 actionName='New Payment'
                 extendedFilter={{
                     enable: true,

@@ -86,8 +86,6 @@ export function PaymentmethodCard(param: IAvailablePaymentMethod & {
     isActive: boolean
 }): React.ReactNode {
     const { name, accessor, value, hints, icon, onChange, isActive } = param
-
-
     return <nav onClick={() => onChange(param)} className={classNames({
         "flex items-start  cursor-pointer p-2 gap-1 border transition-all duration-500 rounded-md": true,
         "border-gray-400/60 hover:bg-blue-50  text-gray-700": isActive == false,
@@ -152,7 +150,7 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
             amount = calculateAmountToDebit()
         }
         return amount
-    }, [formData.discount, formData.package, props.packages])
+    }, [formData.discount, formData.package, props?.packages])
 
     useEffect(() => {
         if (formData?.bank) {
@@ -166,7 +164,6 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
         setPackages(props.packages)
         setBanks(props.banks)
         setFacilities(props.facilities)
-        console.log(props)
     }, [props?.banks, props?.facilities, props?.packages])
 
 
@@ -369,9 +366,9 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
                         <Button onClick={() => onCancel()} variant='outline' size='full'>
                             Cancel
                         </Button>
-                        {canDelete && <Button onClick={() => onDelete()} variant="danger" size='full'>
+                        {/* {canDelete && <Button onClick={() => onDelete()} variant="danger" size='full'>
                             Pause Subscription
-                        </Button>}
+                        </Button>} */}
                     </nav>
                 </div>
             </div>

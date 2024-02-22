@@ -1,11 +1,16 @@
 "use client"
 import toast, { Toaster, ToastOptions } from 'react-hot-toast';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { errorOptions, successOptions, warningOption, infoOptions } from './partials/toastoptions';
 interface Itoastparams {
     children: React.ReactNode
 }
 function Toastserviceprovider({ children }: Itoastparams) {
+    const [isToastVisible, setIsToastVisible] = useState(false);
+
+    const toggleToastVisibility = () => {
+        setIsToastVisible(!isToastVisible);
+    };
     return (
         <>
             <Toaster
@@ -33,6 +38,7 @@ const statusOptions: Record<status, ToastOptions> = {
 }
 
 export const toastnotify = (message: string, status: status = "Error") => {
+    toast.dismiss();
     return toast(message, statusOptions[status])
 }
 

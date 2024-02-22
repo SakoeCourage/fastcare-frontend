@@ -88,6 +88,7 @@ function Familysubscriptionstable(props: Partial<ISelectData>) {
         if (showFamilyBeneficiaryList?.id == null) return
         Api.get("/family-subscribers/" + showFamilyBeneficiaryList.id, { signal })
             .then((res: AxiosResponse<familySubsciberDTO>) => {
+                console.log(res.data)
                 setShowFamilyBeneficiaryList(res.data)
                 resetTableData()
             })

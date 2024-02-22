@@ -126,10 +126,10 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO> & Pa
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
-        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         amountToDebit: z.number().min(1, "Failed to Debit"),
         frequency: z.string().min(1, "This Field is Required"),
-        CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
     })
 
 
@@ -146,7 +146,7 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO> & Pa
         if (formData?.beneficiaries?.length > 0) {
             const debitAmount = formData.beneficiaries.reduce((totalAmount, beneficiary) => {
                 const { package: pck } = beneficiary;
-                return pck ? totalAmount + pck.amount : totalAmount;
+                return pck ? totalAmount + pck?.amount : totalAmount;
             }, 0);
             setData("amountToDebit", debitAmount)
         }
@@ -167,7 +167,7 @@ function Makefamilysubpayment(props: IFormWithDataProps<familySubsciberDTO> & Pa
         }
         if (formData?.familyPackage && formData?.familyPackage.bank) {
             if (typeof formData?.familyPackage.bank == 'object') {
-                setData('bank', formData?.familyPackage.bank.id)
+                setData('bank', formData?.familyPackage?.bank?.id)
             }
         }
         setOriginalAmoutToDebit()

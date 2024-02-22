@@ -34,8 +34,6 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
     })
 
- 
-
     useEffect(() => {
         if (data.discount == 0) setOriginalAmoutToDebit()
         if (data.discount > 0) {

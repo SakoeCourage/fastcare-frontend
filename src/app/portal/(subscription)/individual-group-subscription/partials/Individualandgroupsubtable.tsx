@@ -43,7 +43,7 @@ function Individualandgroupsubtable(props: Partial<ISelectData>) {
         {
             accessorKey: "firstName",
             header: "Full Name",
-            cell: ({ row }) => <Tableinitials address={row.original.phoneOne} name={`${row.original.firstName}${row.original.lastName}`} />
+            cell: ({ row }) => <Tableinitials address={row.original.phoneOne} name={`${row.original.firstName.trim()} ${row.original.lastName.trim()}`} />
 
         },
 
@@ -83,7 +83,7 @@ function Individualandgroupsubtable(props: Partial<ISelectData>) {
                 if (axios.isCancel(err)) {
                     // toastnotify("Fetch Canc");
                 } else {
-                    toastnotify("An Error Occured Fetching Subscriber Data")
+                    // toastnotify("Failed Passport Image")
                 }
 
             })
@@ -108,7 +108,7 @@ function Individualandgroupsubtable(props: Partial<ISelectData>) {
             </Modal>
 
             <DataTable
-                dataSourceUrl='/individual-subscribers?pageSize=10&page=1&created_At=desc'
+                dataSourceUrl='/individual-subscribers?pageSize=10&page=1&sort=createdAt_desc'
                 onAction={() => setSubscriberData({} as IndividualSubDTO)}
                 filterable='firstName'
                 actionName='Add Subscriber'

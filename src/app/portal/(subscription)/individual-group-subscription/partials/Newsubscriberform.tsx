@@ -26,7 +26,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
     const { groups, facilities, banks, packages } = { ...rest }
     const { setDialogData } = DialogService()
     const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {
-            discount: 0
+            discount: 0,
+            momoNetwork: "",
     })
 
     const isFile = (value: unknown): value is File => {
@@ -69,6 +70,10 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
 
     })
 
+    useEffect(() => {
+        console.log(data)
+    }, [data])
+    
 
     const handleOnsucess = () => {
         if (subscriber.id) {
@@ -136,24 +141,25 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
 
     useEffect(() => {
         if (subscriber?.id) {
-            handleFetchSubscriberData(subscriber.id)
+            handleFetchSubscriberData(subscriber?.id)
         }
     }, [])
 
 
     useEffect(() => {
-        if (subscriber == null) return
+        if ((subscriber === null) || (typeof subscriber === undefined)) return
         const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
         console.log(subscriber)
         try {
             setData({
-                ...rest, facility: fc?.id, package: pckg?.id, group: gr.id
+                ...rest, facility: fc?.id, package: pckg?.id, group: gr?.id
             })
         } catch (error) {
             console.log(error)
         }
 
-    }, [subscriber,packages,banks,facilities])
+    }, [subscriber])
+
 
  
     
@@ -172,6 +178,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         <Selectoption
                             value={data.idType}
                             error={errors?.idType}
+                            required
                             onValueChange={(v) => setData("idType", v)}
                             label='ID Type'
                             placeholder='Select ID Type'
@@ -184,6 +191,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         <Input
                             error={errors?.idNumber}
                             value={data.idNumber}
+                            required
                             onChange={(e) => setData('idNumber', e.target.value)}
                             label="ID Number"
                             name=""
@@ -361,7 +369,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         value={data.phoneTwo}
                         onChange={(value) => setData('phoneTwo', value)}
                         label="Phone two"
-                        required
+                        
                         placeholder="Enter Phone two"
                     />
                     <Input

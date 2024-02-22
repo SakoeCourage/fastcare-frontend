@@ -21,7 +21,7 @@ export interface IndividualSubDTO {
     emergencyPersonPhone: string;
     hasNHIS: boolean;
     NHISNumber: string;
-    momoNetwork: "MTN" | "VODAFONE" ;
+    momoNetwork: "MTN" | "VODAFONE" | "" ;
     momoNumber: string;
     createdAt: string;
     updatedAt: string;
