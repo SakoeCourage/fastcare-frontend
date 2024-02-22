@@ -29,7 +29,7 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         nationality: z.string().min(1, "This Field Is Required"),
         marritalStatus: z.string().min(1, "This Field Is Required"),
         email: z.string().email("This Field Should Be A Valid Email").email(),
-        phoneNumber: z.string().min(15, "This Field Is Required"),
+        phoneNumber: z.string().min(12, "This Field Is Required"),
         position: z.string().min(1, "This Field Is Required"),
     })
 

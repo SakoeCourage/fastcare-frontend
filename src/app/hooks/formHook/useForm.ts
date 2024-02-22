@@ -46,7 +46,7 @@ const useForm = <T extends Record<string, any>>(
     };
 
     const isIActionResponseError = (error: IActionResponseError): error is IActionResponseError => {
-        return error.message !== null;
+        return error?.message !== null;
     }
 
     const checkIfShouldValidate: (param: RequestOptions<T> | undefined) => boolean

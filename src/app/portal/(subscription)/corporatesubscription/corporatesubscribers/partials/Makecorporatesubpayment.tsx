@@ -28,10 +28,10 @@ function MakeCorporatesubpayment(props: IFormWithDataProps<corporateSubscriberDT
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
-        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         amountToDebit: z.number().min(1, "Failed to Debit"),
         frequency: z.string().min(1, "This Field is Required"),
-        CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional(),
+        CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
     })
 
  

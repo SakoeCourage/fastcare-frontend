@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { IndividualSubDTO, groupDTO, facilityDTO, packageDTO, bankDTO } from 'app/app/types/entitiesDTO'
 import Image from 'next/image';
 import Selectoption from 'app/app/components/form-components/selectoption';
@@ -125,7 +125,10 @@ interface IIndvidualpaymentprops {
 }
 
 function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
-    const { formData, setData, errors, processing, packages, banks, facilities, canDelete, onDelete, onSubmit, onCancel } = props
+    const { formData, setData, errors, processing, canDelete, onDelete, onSubmit, onCancel } = props
+    const [packages, setPackages] = useState<IPaginatedData<packageDTO> | null>(null)
+    const [banks, setBanks] = useState<IPaginatedData<bankDTO> | null>(null)
+    const [facilities, setFacilities] = useState<IPaginatedData<facilityDTO> | null>(null)
 
 
     const calculateAmountToDebit = () => {
@@ -149,7 +152,7 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
             amount = calculateAmountToDebit()
         }
         return amount
-    }, [formData.discount, formData.package, packages])
+    }, [formData.discount, formData.package, props.packages])
 
     useEffect(() => {
         if (formData?.bank) {
@@ -158,6 +161,14 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
             }
         }
     }, [formData])
+
+    useEffect(() => {
+        setPackages(props.packages)
+        setBanks(props.banks)
+        setFacilities(props.facilities)
+        console.log(props)
+    }, [props?.banks, props?.facilities, props?.packages])
+
 
 
 
