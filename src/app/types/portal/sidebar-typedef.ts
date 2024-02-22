@@ -10,6 +10,7 @@ export const isSbWithLinksGuard = (ssbi: routesTypesDef): ssbi is sbitemWithLink
 
 export type singleSbItem = {
     title: string;
+    miniTitle: string;
     icon: string;
     link: string;
     links?: undefined
@@ -19,6 +20,7 @@ export type singleSbItem = {
 export type sbitemWithLinks = {
     title: string;
     icon: string;
+    miniTitle: string;
     links: {
         title: string;
         link: string;

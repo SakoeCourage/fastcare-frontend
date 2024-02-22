@@ -49,7 +49,7 @@ function Paymentstable() {
     return (
         <div>
             <DataTable
-                dataSourceUrl='/payments?sort=createdAt_desc'
+                dataSourceUrl='/payments?pageSize=10&page=1'
                 sortableColumns={[{
                     column: "dateOfPayment",
                     accessor: "sort",
@@ -60,7 +60,6 @@ function Paymentstable() {
                 }]}
                 columns={columns}
                 filterable="mandateId"
-                actionName='New Payment'
                 extendedFilter={{
                     enable: true,
                     filters: [

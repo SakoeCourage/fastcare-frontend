@@ -11,6 +11,7 @@ import { useSidebar } from "../providers/Sidebarserviceprovider";
 import { motion, AnimatePresence } from "framer-motion"
 import { routesTypesDef, isSingleSbItemGuard, isSbWithLinksGuard, singleSbItem } from "../types/portal/sidebar-typedef";
 import { AccessByPermission, getAllRequiredAbilitiesPerRoute, getAllSidebarSectionAbilities } from "../accescontrol/accesscontrol";
+import classNames from "classnames";
 
 interface params extends singleSbItem { toggleSidebar: () => void }
 function Sidebarlink(props: params) {
@@ -21,11 +22,19 @@ function Sidebarlink(props: params) {
     return <Link
         onClick={props.toggleSidebar}
         href={props.link}
-        className={pathname.startsWith(props.link) ? 'route-active' : 'route-inactive'} >
+        className={
+            classNames({
+                'route-active': pathname.startsWith(props.link),
+                'route-inactive': !pathname.startsWith(props.link),
+                "flex-col !gap-0": mini,
+                "flex-row": !mini
+            })
+        } >
         <nav className={`route-icon overflow-hidden  p-[0.4rem] rounded-full max-h-[2rem] max-w-[2rem] h-full w-full aspect-square flex items-center justify-center ${mini && "mx-auto"}`}>
             <Icon fontSize={40} className=" h-full w-full" icon={props.icon} />
         </nav>
         <span className={`route-title ${mini ? 'hidden' : "transition-fadeIn"} `}>{props.title}</span>
+        <nav className={`${mini ? 'block' : 'hidden'} text-[#bae6fd] truncate text-center px-0 w-full text-[0.65rem] font-semibold`}>{props.miniTitle}</nav>
     </Link>
 }
 
