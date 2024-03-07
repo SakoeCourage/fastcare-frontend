@@ -96,29 +96,36 @@ export function extractQueryParams(url: string): Record<string, string> | undefi
 }
 
 
-export function getInitials(name:string) {
+export function getInitials(name: string) {
   const parts = name.split(' ');
-  
+
   if (parts.length === 1) {
-      return parts[0][0];
+    return parts[0][0];
   }
-  
+
   return parts[0][0] + parts[1][0];
 }
 
-export function converBase64StringToFile(bs64string: string, filename:string): File {
+export function converBase64StringToFile(bs64string: string, filename: string): File {
   let file: File | null = null;
   if (typeof bs64string === "string") {
-      const inputString = bs64string as string;
-      const base64Data = inputString.split(",")[1];
-      const startMarker = 'data:';
-      const endMarker = ';base64';
-      const startIndex = inputString.indexOf(startMarker) + startMarker.length; 
-      const endIndex = inputString.indexOf(endMarker); 
-      const extension = inputString.substring(startIndex, endIndex);
-      const base64Buffer = Buffer.from(base64Data, 'base64');
-      const blob = new Blob([base64Buffer]);
-      file = new File([blob], filename, { type: extension });
+    const inputString = bs64string as string;
+    const base64Data = inputString.split(",")[1];
+    const startMarker = 'data:';
+    const endMarker = ';base64';
+    const startIndex = inputString.indexOf(startMarker) + startMarker.length;
+    const endIndex = inputString.indexOf(endMarker);
+    const extension = inputString.substring(startIndex, endIndex);
+    const base64Buffer = Buffer.from(base64Data, 'base64');
+    const blob = new Blob([base64Buffer]);
+    file = new File([blob], filename, { type: extension });
   }
   return file
+}
+
+
+export function isValidGhanaCardNumber(input: string): boolean {
+  if (!input) return false
+  const pattern = /^GHA-(?!-)(\d|-)*$/;
+  return pattern.test(input);
 }

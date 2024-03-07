@@ -1,62 +1,72 @@
 "use client"
 import DataTable from 'app/app/components/datatable/datatable'
 import React from 'react'
-import { PremiumPaymentsListType } from '../premiumpaymentstypdef'
 import { ColumnDef } from '@tanstack/react-table'
 import Modal from 'app/app/components/ui/modal'
 import Premiumpaymentform from './Premiumpaymentform'
+import { PremiumPaymentSubscriberDTO } from 'app/app/types/entitiesDTO'
+import { formatcurrency } from 'app/app/lib/utils'
+import Tooltip from 'app/app/components/ui/tooltip'
+import IconifyIcon from 'app/app/components/ui/IconifyIcon'
+import { toastnotify } from 'app/app/providers/Toastserviceprovider'
+import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
 
-const columns: ColumnDef<PremiumPaymentsListType>[] = [
-    {
-        accessorKey: "mid",
-        header: "MID"
-    },
-    {
-        accessorKey: "subscriber",
-        header: "Subscriber"
-    },
-    {
-        accessorKey: "type",
-        header: "Type",
-    },
-    {
-        accessorKey: "LPD",
-        header: "LPD"
-    },
-    {
-        accessorKey: "DSLP",
-        header: "DSLP(Days)"
-    },
-    {
-        accessorKey: "status",
-        header: "Status"
-    },
-    {
-        accessorKey: "amountDue",
-        header: "Amount Due"
-    },
-    {
-        accessorKey: "moMoNumber",
-        header: "MoMo Number"
-    },
-    {
-        accessorKey: "",
-        header: "Action"
-    },
 
-]
 
-function Makepaymenttable() {
-    const [showForm, setShowForm] = React.useState<boolean>(false)
+function Makepaymenttable(props: Partial<ISelectData>) {
+    const [showPremiumPaymentForm, setshowPremiumPaymentForm] = React.useState<PremiumPaymentSubscriberDTO | null>(null)
+
+    const columns: ColumnDef<PremiumPaymentSubscriberDTO>[] = [
+        {
+            accessorKey: "membershipID",
+            header: "MID"
+        },
+        {
+            accessorKey: "name",
+            header: "subscriberName"
+        },
+        {
+            accessorKey: "subscriberType",
+            header: "Type",
+        },
+        {
+            accessorKey: "originalAmount",
+            header: "Amount Due",
+            cell: ({ row }) => formatcurrency(row.original.amountToDebit)
+        },
+        {
+            accessorKey: "paymentMode",
+            header: "Payment Mode"
+        },
+        {
+            accessorKey: "status",
+            header: "Status"
+        },
+        {
+            accessorKey: "",
+            header: "Action",
+            cell: ({ row }) => <Tooltip toolTipText='Make Premium Payment' ><IconifyIcon onClick={() => setshowPremiumPaymentForm(row.original)} className=' cursor-pointer bg-transparent' icon='fluent:open-24-filled' /></Tooltip>
+        },
+
+    ]
+
     return (
         <div>
-            <Modal size="md" open={showForm} closeModal={() => setShowForm(false)} title='Premium Payment'>
-                <Premiumpaymentform />
+            <Modal size="3xl" open={showPremiumPaymentForm != null} closeModal={() => setshowPremiumPaymentForm(null)} title='Premium Payment'>
+                <Premiumpaymentform
+                    onCancel={() => setshowPremiumPaymentForm(null)}
+                    onNewDataSucess={() => {
+                        setshowPremiumPaymentForm(null)
+                    }}
+                    formData={showPremiumPaymentForm}
+                    {...props}
+                />
             </Modal>
             <DataTable
-                onAction={() => setShowForm(true)}
-                filterable="subscriber"
-                filterablePlaceholder='Name or Membership ID'
+                hasAction={false}
+                filterable="accountNumber"
+                filterablePlaceholder='Search Name or Membership ID'
+                dataSourceUrl='/payments/all-subscribers?pageSize=10&page=1'
                 columns={columns}
             />
         </div>

@@ -20,7 +20,7 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
         address: z.string().min(1),
         contact: z.string().min(15),
         principalPerson: z.string().min(1),
-        principalPersonPhone: z.string().min(15),
+        principalPersonPhone: z.string().min(12),
         email: z.string().email().min(1),
     })
 

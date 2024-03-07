@@ -40,8 +40,6 @@ function index({ filters, path, handleUrlQuery }: { filters: filterParamTypes[],
     return activeFilters;
   }
 
-
-
   return (
     <div className=' min-w-full px-4'>
       <div className=' rounded-md border overflow-x-scroll hiddenscroll h-max border-gray-300 w-full flex items-center'>

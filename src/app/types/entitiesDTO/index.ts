@@ -15,4 +15,5 @@ export * from './corporatePackageDTO'
 export * from './agentDTO'
 export * from './callCommentDTO'
 export * from './paymentDataDTO'
-
+export * from './premiumPaymentDataDTO'
+export * from './premiumPaymentSubscriberDTO'

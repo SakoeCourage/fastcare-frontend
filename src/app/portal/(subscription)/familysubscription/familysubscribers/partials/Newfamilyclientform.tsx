@@ -19,9 +19,9 @@ function Newfamilyclientform(props: IFormWithDataProps<familySubsciberDTO>) {
     setValidation({
         name: z.string().min(1),
         address: z.string().min(1),
-        contact: z.string().min(15),
+        contact: z.string().min(12),
         principalPerson: z.string().min(1),
-        principalPersonPhone: z.string().min(15),
+        principalPersonPhone: z.string().min(12),
         email: z.string().email().min(1),
     })
 
@@ -29,11 +29,11 @@ function Newfamilyclientform(props: IFormWithDataProps<familySubsciberDTO>) {
     const handleFormDataSubmission = () => {
         if (formData) {
             patch('/family-subscribers/' + formData.id, { onSuccess: () => {
-                toastnotify("New Family Member Added","Success")
+                toastnotify("Family Data Updated","Success")
                 onNewDataSucess()} })
         } else {
             post('/family-subscribers', { onSuccess: () => {
-                toastnotify("Family Member Updated","Success")
+                toastnotify("New Family Data Added","Success")
                 onNewDataSucess()} })
         }
     }

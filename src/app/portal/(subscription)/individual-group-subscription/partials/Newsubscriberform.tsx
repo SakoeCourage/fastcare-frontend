@@ -17,6 +17,7 @@ import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { isNullOrWhitespace } from 'app/app/lib/utils'
 import ContactInput from 'app/app/components/form-components/contactinput'
 import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
+import { isValidGhanaCardNumber } from 'app/app/lib/utils'
 
 interface IFectchSubscribers extends Partial<ISelectData> {
     handleFetchSubscriberData: (id: number | string | undefined) => void
@@ -39,7 +40,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         passportPicture: z.custom((value) => isFile(value), {
             message: 'Invalid file. Please provide a valid file.',
         }),
-        idNumber: z.string().min(1, "This Filed is required"),
+        idNumber: data.idType =='ECOWASCard' ? z.string().regex(/^GHA-(?!-)(\d|-)*$/,"Invalid Ecowas Card Number")  : z.string().min(3, "This Filed is required"),
         firstName: z.string().min(1, "This Field is required"),
         otherNames: z.string().optional().nullable(),
         lastName: z.string().min(1, "This Field is required"),
@@ -51,7 +52,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         gpsAddress: z.string().min(5, "This Field is required"),
         phoneOne: z.string().min(12, "This Field is required"),
         phoneTwo: z.string().nullable().optional(),
-        emergencyPerson: z.string().min(5, "This Field is required"),
+        emergencyPerson: z.string().min(1, "This Field is required"),
         emergencyPersonPhone: z.string().min(12, "This Field is required"),
         hasNHIS: z.boolean(),
         NHISNumber: (data.hasNHIS == true) ? z.string().min(5, "This Field is required") : z.string().optional().nullable(),
@@ -184,9 +185,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                             placeholder='Select ID Type'
                             options={[
                                 { key: "Passport", value: "Passport" },
-                                { key: "Voter ID", value: "Voter ID" },
-                                { key: "ECOWAS Card", value: "ECOWAS Card" },
-                                { key: "Driver License", value: "Driver License" },
+                                { key: "Voter ID", value: "VoterID" },
+                                { key: "ECOWAS Card", value: "ECOWASCard" },
+                                { key: "Driver License", value: "DriverLicense" },
                             ]} />
                         <Input
                             error={errors?.idNumber}

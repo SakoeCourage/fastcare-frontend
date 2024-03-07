@@ -50,7 +50,7 @@ const ContactInput = React.forwardRef<HTMLInputElement, Inputparams>(
                     </nav>}
                     <PhoneInput
                         disableDropdown={true}
-                        countryCodeEditable={false}
+                        countryCodeEditable={true}
                         placeholder={placeholder}
                         value={currentValue}
                         country={country ?? "gh"}

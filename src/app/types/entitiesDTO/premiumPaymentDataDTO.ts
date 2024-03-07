@@ -1,0 +1,31 @@
+import { PaymentMods } from "./familyPackageDTO"
+
+export interface PremiumPaymentDataDTO {
+    id: number,
+    dateOfPayment: string,
+    confirmed: boolean,
+    confirmedBy: string,
+    confirmedDate: Date | null,
+    paymentStatus: string,
+    paymentMode: PaymentMods,
+    amountWithOutDiscount: number | null,
+    phoneNumber: string | null,
+    amount: number | null,
+    subscriberType: string,
+    subscriberDbId: number,
+    subscriberPaymentDbId: number,
+    paymentReferenceCode: string,
+    subscriberName: string,
+    momTransactionId: string | null,
+    debitOrderTransactionId: string | null,
+    mandateId: string | null,
+    createdBy: string | null,
+    narration: string,
+    chequeNumber: string,
+    momoNumber: string,
+    accountNumber: string,
+    CAGDStaffID: string,
+    momoNetwork: string | null,
+    agentId: string | null,
+    bank: string | null
+}
