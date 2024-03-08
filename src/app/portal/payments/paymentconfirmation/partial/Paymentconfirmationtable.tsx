@@ -143,7 +143,7 @@ function Paymentconfirmationtable() {
                             filterType: "SelectFilter",
                             accessor: "agentId",
                             args: {
-                                options: saleExecutive.map((e) => { return ({ key: `${e.firstName} ${e.lastName}`, value: e.id.toString() }) }),
+                                options: saleExecutive ? saleExecutive?.map((e) => { return ({ key: `${e.firstName} ${e.lastName}`, value: e.id.toString() }) }): [],
                                 placeholder: "Sales Executives"
                             }
                         },
