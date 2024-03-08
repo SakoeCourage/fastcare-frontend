@@ -66,7 +66,7 @@ function Makepaymenttable(props: Partial<ISelectData>) {
                 hasAction={false}
                 filterable="accountNumber"
                 filterablePlaceholder='Search Name or Membership ID'
-                dataSourceUrl='/payments/all-subscribers?pageSize=10&page=1'
+                dataSourceUrl='/payments/all-subscribers?pageSize=10&page=1&sort=id_desc'
                 columns={columns}
             />
         </div>

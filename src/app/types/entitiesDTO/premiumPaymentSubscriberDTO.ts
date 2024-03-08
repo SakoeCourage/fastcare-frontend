@@ -1,5 +1,4 @@
 import { PaymentMods } from "./familyPackageDTO"
-
 export interface PremiumPaymentSubscriberDTO {
     id: number,
     name: string,

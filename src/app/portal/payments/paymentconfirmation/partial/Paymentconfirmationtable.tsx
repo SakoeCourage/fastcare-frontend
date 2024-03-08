@@ -135,7 +135,7 @@ function Paymentconfirmationtable() {
                 hasAction={false}
                 filterable="subscriberName"
                 filterablePlaceholder='Search Payment paymentReferenceCode'
-                dataSourceUrl='/payments/?pageSize=10&page=1'
+                dataSourceUrl='/payments/?pageSize=10&page=1&sort=id_desc'
                 extendedFilter={{
                     enable: true,
                     filters: [
