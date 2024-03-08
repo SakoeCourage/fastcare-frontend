@@ -23,6 +23,8 @@ export interface PremiumPaymentSubscriberDTO {
     CAGDStaffID: string,
     paymentReferenceCode: string,
     status: string,
-    bank: string | null,
-    narration?: string
+    bank: number | null,
+    narration?: string,
+    dbId: number,
+    amount: number, 
 }

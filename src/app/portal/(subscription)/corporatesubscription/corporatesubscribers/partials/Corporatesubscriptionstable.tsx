@@ -43,12 +43,12 @@ function Corporatesubscriptionstable(props: Partial<ISelectData>) {
         {
             accessorKey: "name",
             header: "Name",
-            cell: ({ row }) => <Tableinitials address={row.original.contact} name={row.original.name}/>
+            cell: ({ row }) => <Tableinitials address={row.original.contact} name={row.original.name} />
         },
         {
             accessorKey: "",
             header: "Beneficiaries",
-            cell: ({ row }) => <nav onClick={() => setShowCorporateBeneficiaryList(row.original as corporateSubscriberDTO)} role="navigation" className=' whitespace-nowrap  flex items-center gap-1 cursor-pointer'>
+            cell: ({ row }) => <nav onClick={() => {  setShowCorporateBeneficiaryList(row.original as corporateSubscriberDTO) }} role="navigation" className=' whitespace-nowrap  flex items-center gap-1 cursor-pointer'>
                 <nav className=' whitespace-nowrap flex rounded-full p-1 px-2 bg-white border text-blue-600 border-blue-400 items-center text-xs'>
                     <nav><span className='!text-xs'>{row.original.beneficiaries?.length}</span> View</nav>
                     <IconifyIcon fontSize="1.1rem" className=' whitespace-nowrap bg-transparent !p-0 !w-[1rem] !h-[1rem]' icon='material-symbols:chevron-right' />

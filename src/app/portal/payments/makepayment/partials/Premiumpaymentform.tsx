@@ -11,61 +11,65 @@ import z from 'zod';
 import { AvailablePaymentMethods, PaymentmethodCard, SlideUpAndDownAnimation } from 'app/app/portal/(subscription)/individual-group-subscription/partials/Makeindividualsubscriptionpayment'
 import { formatcurrency } from 'app/app/lib/utils'
 import ContactInput from 'app/app/components/form-components/contactinput'
+import { toastnotify } from 'app/app/providers/Toastserviceprovider'
 
 function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDTO> & Partial<ISelectData>) {
     const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
 
-    const { formData, onCancel, onNewDataSucess, processing } = props
-    const { data, setData, errors, setValidation, post, patch } = useForm<Partial<PremiumPaymentSubscriberDTO>>({
-        id: formData?.id,
+    const { formData, onCancel, onNewDataSucess } = props
+    const { data, setData, errors, setValidation, post, patch,processing } = useForm<Partial<PremiumPaymentSubscriberDTO>>({
+        dbId: formData?.id,
+        discount: formData?.discount,
+        paymentMode: formData?.paymentMode,
+        momoNumber: formData?.momoNumber,
+        amount: formData?.amountToDebit,
+        momoNetwork: formData?.momoNetwork,
+        bank: null,
+        accountNumber: "",
+        chequeNumber: "",
+        CAGDStaffID: "",
+        narration: ""
     })
 
     setValidation({
         paymentMode: z.string().min(1, "This Field is Required"),
+        narration: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         momoNumber: data.paymentMode == "MOMO" ? z.string().min(12, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
         accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        amountToDebit: z.number().min(1, "Failed to Debit"),
-        frequency: z.string().min(1, "This Field is Required"),
+        amount: z.number().min(1, "Failed to Debit"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
     })
 
-
-    // useEffect(() => {
-    //     if (data.discount == 0) setOriginalAmoutToDebit()
-    //     if (data.discount > 0) {
-    //         const amount = data.amountToDebit - (data.amountToDebit * (data.discount / 100))
-    //         setData("amountToDebit", amount)
-    //     }
-    // }, [data.discount])
-
-
+    useEffect(() => {
+        if (data.discount == 0) { setData("amount", formData?.amountToDebit) }
+        if (data.discount > 0) {
+            const amount = data.amount - (data.amount * (data.discount / 100))
+            setData("amount", amount)
+        }
+    }, [data.discount])
 
 
     const handleFormSubmission = () => {
-
+        post('/payments/premium-payment', {
+            onSuccess: (e) =>{ 
+                toastnotify("Premium Payment Made","Success");
+                onCancel();
+        }
+        })
     }
 
-    // useEffect(() => {
-    //     if (formData?.familyPackage) {
-    //         setData({ ...formData.familyPackage })
-    //     }
-    //     if (formData?.familyPackage && formData?.familyPackage.bank) {
-    //         if (typeof formData?.familyPackage.bank == 'object') {
-    //             setData('bank', formData?.familyPackage?.bank?.id)
-    //         }
-    //     }
-    //     setOriginalAmoutToDebit()
-    //     console.log(formData)
-    // }, [formData])
-
+    useEffect(() => {
+        console.log(formData)
+    }, [formData])
 
     useEffect(() => {
         setBanks(props.banks)
     }, [props.banks])
+
 
 
 
@@ -106,7 +110,7 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
                 <div className='  pt-2 px-5  mx-auto max-w-md w-full'>
                     <nav className=' py-4 pb-4 flex flex-col gap-1 border-b border-gray-300 w-full'>
                         <nav className=' font-semibold text-gray-600 '>{formData?.name}</nav>
-                        <nav className=' text-xs'>You are about add a subscription to the above subscriber</nav>
+                        <nav className=' text-xs'>You are about to make payment the above subscriber</nav>
                     </nav>
                     <nav className='my-2 grid grid-cols-1 gap-5 w-full pt-4'>
                         <nav className="flex items-center justify-between">
@@ -122,11 +126,10 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
                                 Amount To Debit:
                             </nav>
                             <nav className='font-semibold text-gray-600'>
-                                {formData.amountToDebit ? formatcurrency(formData.amountToDebit) : "..."}
+                                {data?.amount ? formatcurrency(data?.amount) : "..."}
                             </nav>
                         </nav>
                     </nav>
-                    <nav className=' py-4 border-b border-gray-300 text-xs'>Subscription will renew automatically at the end of the selected frequency</nav>
 
                     {
                         data.paymentMode != "Cash" &&
@@ -137,19 +140,6 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
 
 
                     <nav className='flex flex-col gap-3'>
-                        {/* {
-                            <motion.nav
-                                variants={SlideUpAndDownAnimation}
-                                initial='initial'
-                                animate='animate'
-                                exit='exit' className=' flex flex-col gap-3'>
-                                <Selectoption
-                                    label='Package'
-                                    placeholder='Package'
-                                    options={props.packages ? props.packages?.data?.map(p => { return ({ key: p.name, value: p.id, disabled:true }) }) : []}
-                                />
-                            </motion.nav>
-                        } */}
                         {
                             data.paymentMode == "MOMO" &&
                             <motion.nav
@@ -234,23 +224,20 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
                             label='Discount'
                             placeholder='Select Discount (%)'
                             options={[
-                                { key: "0%", value: 0 },
-                                { key: "5%", value: 5 },
-                                { key: "10%", value: 10 },
-                                { key: "15%", value: 15 },
-                                { key: "20%", value: 20 },
-                                { key: "25%", value: 25 },
+                                { disabled: true, key: "0%", value: 0 },
+                                { disabled: true, key: "5%", value: 5 },
+                                { disabled: true, key: "10%", value: 10 },
+                                { disabled: true, key: "15%", value: 15 },
+                                { disabled: true, key: "20%", value: 20 },
+                                { disabled: true, key: "25%", value: 25 },
                             ]} />
-                        <Selectoption required
-                            options={[
-                                { key: "Daily", value: "Daily" },
-                                { key: "Weekly", value: "Weekly" },
-                                { key: "Monthly", value: "Monthly" }
-                            ]}
-                            value={data.frequency}
-                            onValueChange={(v) => setData('frequency', v)}
-                            error={errors?.frequency}
-                            label='Frequency' placeholder='Select Frequency' />
+
+                        <Textarea
+                            error={errors?.narration}
+                            value={data.narration}
+                            onChange={(e) => setData('narration', e.target.value)}
+                            label='Narration'
+                            placeholder='Enter Narration' />
                     </nav>
                     <nav className='flex items-center justify-end flex-col gap-1 w-full mt-4 pb-2'>
                         <Button processing={processing} onClick={() => handleFormSubmission()} variant='primary' size='full'>

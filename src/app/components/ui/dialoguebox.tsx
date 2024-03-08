@@ -52,7 +52,7 @@ export interface IDialogue {
     onCancel?: () => void;
     onConfirm?: () => void;
     size?: keyof typeof sizes;
-    promptText?: string,
+    promptText?: string | React.ReactNode,
     title?: string;
     className?: string;
     variant?: Variants

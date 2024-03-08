@@ -23,6 +23,9 @@ function Corporatebeneficiarieslist(props: IBeneficiariesProps) {
     fetchCorporateData()
   }, [])
 
+
+  
+
   return (
     <div className=' p-5'>
       <nav className=' bg-gray-50/70 p-5 rounded-md gap-5 shadow-light grid grid-cols-1 md:grid-cols-2 '>

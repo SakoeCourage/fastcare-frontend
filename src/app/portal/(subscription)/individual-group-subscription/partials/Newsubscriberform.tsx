@@ -46,8 +46,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         lastName: z.string().min(1, "This Field is required"),
         dateOfBirth: z.string().min(1, "This Field is required"),
         gender: z.string().min(1, "This Field is required"),
-        occupation: z.string().min(1, "This Field is required"),
-        maritalStatus: z.string().min(1, "This Field is required"),
+        occupation: z.string().min(1,"This Field is required"),
+        maritalStatus:z.string().min(1,"This Field is required"),
         address: z.string().min(1, "This Field is required"),
         gpsAddress: z.string().min(5, "This Field is required"),
         phoneOne: z.string().min(12, "This Field is required"),
@@ -262,6 +262,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                     />
                     <Datepicker
                         value={data.dateOfBirth}
+                        required
                         error={errors?.dateOfBirth}
                         onChange={(v) => setData('dateOfBirth', v)}
                         label="Date of Birth"
@@ -271,6 +272,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                     <Selectoption
                         error={errors?.gender}
                         value={data.gender}
+                        required
                         onValueChange={(v) => setData('gender', v)}
                         label='Gender'
                         placeholder='Select Gender'
@@ -280,16 +282,17 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         ]} />
                     <Input
                         error={errors?.occupation}
+                        required
                         value={data.occupation}
                         onChange={(e) => setData('occupation', e.target.value)}
                         label="Occupation"
                         name=""
-                        required
                         placeholder="Enter Occupation"
                     />
                     <Selectoption
                         error={errors?.maritalStatus}
                         value={data.maritalStatus}
+                        required
                         onValueChange={(e) => setData('maritalStatus', e)}
                         label='Marital Status'
                         placeholder='Select Marital Status'

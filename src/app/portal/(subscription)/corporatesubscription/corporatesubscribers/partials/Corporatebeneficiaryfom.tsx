@@ -54,14 +54,16 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
     }
 
     useEffect(() => {
+        console.log(formData)
         if (formData && packages?.data?.length) {
             const { facility: fc, package: pck, createdBy, updatedBy, ...rest } = formData
-            setData({ ...rest, corporateId: prfId ?? "", package: pck.id ?? "", facility: fc.id ?? "" })
+            setData({ ...rest, corporateId: prfId ?? "", package: pck?.id ?? "", facility: fc?.id ?? "" })
         }
         if (!formData && prfId) {
             setData('corporateId', prfId)
         }
     }, [formData, packages])
+
 
     const getAmountToDebit = useMemo(() => {
         if (packages == null && typeof data.package != 'number') return 0
@@ -69,10 +71,13 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
         return _amount
     }, [packages, data.package])
 
+
     useEffect(() => {
         setFacilities(props?.facilities)
         setPackages(props?.packages)
     }, [props.packages, props.facilities])
+
+
 
 
 
