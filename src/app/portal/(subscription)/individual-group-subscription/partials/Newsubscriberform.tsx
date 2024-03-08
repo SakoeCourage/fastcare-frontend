@@ -90,9 +90,11 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
 
     const handleFormSubmission = () => {
         if (subscriber?.id) {
+            console.log("patching")
             patch("/individual-subscribers/" + subscriber.id, { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
         if (!subscriber?.id) {
+            console.log("posting")
             post("/individual-subscribers", { onSuccess: handleOnsucess, config: { asFormData: true }, onError: (err) => { console.log(err) } })
         }
     }
@@ -187,7 +189,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                                 { key: "Passport", value: "Passport" },
                                 { key: "Voter ID", value: "VoterID" },
                                 { key: "ECOWAS Card", value: "ECOWASCard" },
-                                { key: "Driver License", value: "DriverLicense" },
+                                { key: "Driver License", value: "Driver License" },
                             ]} />
                         <Input
                             error={errors?.idNumber}
