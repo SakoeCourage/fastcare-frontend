@@ -23,7 +23,7 @@ function Makepaymenttable(props: Partial<ISelectData>) {
         },
         {
             accessorKey: "name",
-            header: "subscriberName"
+            header: "Subscriber"
         },
         {
             accessorKey: "subscriberType",
@@ -33,10 +33,6 @@ function Makepaymenttable(props: Partial<ISelectData>) {
             accessorKey: "originalAmount",
             header: "Amount Due",
             cell: ({ row }) => formatcurrency(row.original.amountToDebit)
-        },
-        {
-            accessorKey: "paymentMode",
-            header: "Payment Mode"
         },
         {
             accessorKey: "status",
