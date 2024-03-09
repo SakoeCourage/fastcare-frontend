@@ -34,6 +34,10 @@ const useForm = <T extends Record<string, any>>(
         setErrors({});
     }
 
+    function addSpaceToCamelCase(input:string) {
+        return input.replace(/([a-z])([A-Z])/g, '$1 $2');
+    }
+
     const createFormDataFromDataObject = (): FormData => {
         const formDataObj = new FormData();
         for (const [key, value] of Object.entries(data)) {
@@ -79,7 +83,7 @@ const useForm = <T extends Record<string, any>>(
                     error.errors.reduce((acc, err) => ({ ...acc, [err.path[0] as keyof T]: err.message }), {}),
                 );
                 console.log(errors)
-                toastnotify("Failed to process " + error?.errors[0].path[0].toString().toLocaleUpperCase())
+                toastnotify("Failed to process " + addSpaceToCamelCase(error?.errors[0].path[0].toString()).toLocaleUpperCase())
             }
             if (error instanceof AxiosError) {
                 onError?.(error);
