@@ -1,5 +1,7 @@
+"use client"
 import IconifyIcon from 'app/app/components/ui/IconifyIcon';
 import React from 'react'
+
 const options = {
     "info": {
         iconBgColor: "#38bdf8",
@@ -32,11 +34,11 @@ interface NoticeCardProps {
     children: React.ReactNode;
     className?: string
 }
-const Noticecard: React.FC<NoticeCardProps> = ({ variant = "info", children,className }) => {
+const Noticecard: React.FC<NoticeCardProps> = ({ variant = "info", children, className }) => {
     return (
-        <div className={`flex bg-white border overflow-hidden rounded-md ${className}`}>
-            <div style={{ backgroundColor: options[variant].iconBgColor }} className=" basis-30 p-4 flex items-center justify-center bg-blue-300">
-                <IconifyIcon className='  text-white bg-transparent' icon={options[variant].icon} />
+        <div className={`flex flex-col md:flex-row bg-white border overflow-hidden rounded-md ${className}`}>
+            <div style={{ backgroundColor: options[variant].textBgColor }} className=" basis-30 p-4 flex items-center justify-center bg-blue-300">
+                <IconifyIcon className='   bg-transparent' style={{ color: options[variant].iconBgColor }} icon={options[variant].icon} />
             </div>
             <div
                 style={{ backgroundColor: options[variant].textBgColor, color: options[variant].textColor }}

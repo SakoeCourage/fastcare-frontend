@@ -20,10 +20,6 @@ export const columns: ColumnDef<paymentDataDTO>[] = [
         cell: ({ row }) => dateReformat(row.original.dateOfPayment)
     },
     {
-        accessorKey: "mandateId",
-        header: "Mandate ID"
-    },
-    {
         accessorKey: "subscriberName",
         header: "Subscriber Name"
     },
@@ -40,7 +36,7 @@ export const columns: ColumnDef<paymentDataDTO>[] = [
     {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => <Statusindicator status={row.original.confirmed ? "paid" : "pending"} />
+        cell: ({ row }) => row.original.confirmed ? "Confirmed" : "Not Confirmed"
     },
 
 ]
@@ -49,7 +45,8 @@ function Paymentstable() {
     return (
         <div>
             <DataTable
-                dataSourceUrl='/payments?pageSize=10&page=1'
+                filterablePlaceholder='Search Subscriber Name..'
+                dataSourceUrl='/payments/?pageSize=10&page=1&sort=id_desc'
                 sortableColumns={[{
                     column: "dateOfPayment",
                     accessor: "sort",
@@ -59,7 +56,7 @@ function Paymentstable() {
                     ]
                 }]}
                 columns={columns}
-                filterable="mandateId"
+                filterable="id"
                 extendedFilter={{
                     enable: true,
                     filters: [
@@ -79,15 +76,13 @@ function Paymentstable() {
                         },
                         {
                             filterType: "SelectFilter",
-                            accessor: "status",
+                            accessor: "confirmed",
                             args: {
-                                placeholder: "Status",
                                 options: [
-                                    { key: "Paid", value: "paid" },
-                                    { key: "Pending", value: "pending" },
-
+                                    { key: "Confirmed", value: "true" },
+                                    { key: "Not Confirmed", value: "false" }
                                 ],
-
+                                placeholder: "Payment Confirmation"
                             }
                         }
                     ]

@@ -29,7 +29,12 @@ function Corporatebeneficiaryform(props: IFormWithDataProps<corporateBeneficiary
         corporateId: z.number().min(1, "This Field Is Required"),
         name: z.string().min(1),
         dateOfBirth: z.string().min(1, "This Field Is Required"),
-        contact: z.string().min(12, "This Field Is Required"),
+        contact: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         facility: z.number().min(1, "This Field Is Required"),
         package: z.number().min(1, "This Field Is Required"),
     })

@@ -327,9 +327,8 @@ function Makeindividualsubscriptionpayment(props: IIndvidualpaymentprops) {
 
                         <Selectoption
                             error={errors?.discount}
-                            value={formData.discount}
+                            value={formData?.discount}
                             onValueChange={(v) => setData('discount', v)}
-                            required
                             label='Discount'
                             placeholder='Select Discount (%)'
                             options={[

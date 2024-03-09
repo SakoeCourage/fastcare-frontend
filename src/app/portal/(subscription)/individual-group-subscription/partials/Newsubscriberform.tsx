@@ -19,6 +19,23 @@ import ContactInput from 'app/app/components/form-components/contactinput'
 import { ISelectData } from 'app/app/fetch/getselectfieldsdata'
 import { isValidGhanaCardNumber } from 'app/app/lib/utils'
 
+export function PhoneNumberPrompt() {
+    return <Noticecard>
+        <ul className=' text-xs list-disc list-inside'>
+            <li>
+                Phone Numbers should have the preceeding country code i.e <i>233</i> without the leading zero
+            </li>
+            <li>
+                eg. 233 500 000 000
+            </li>
+            <li>
+                Spaces will be automatically added during input
+            </li>
+        </ul>
+    </Noticecard>
+}
+
+
 interface IFectchSubscribers extends Partial<ISelectData> {
     handleFetchSubscriberData: (id: number | string | undefined) => void
 }
@@ -27,8 +44,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
     const { groups, facilities, banks, packages } = { ...rest }
     const { setDialogData } = DialogService()
     const { data, setData, errors, post, patch, setValidation, processing, delete: del } = useForm<Partial<IndividualSubDTO>>(subscriber ? { ...subscriber } : {
-            discount: 0,
-            momoNetwork: "",
+
     })
 
     const isFile = (value: unknown): value is File => {
@@ -40,20 +56,31 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         passportPicture: z.custom((value) => isFile(value), {
             message: 'Invalid file. Please provide a valid file.',
         }),
-        idNumber: data.idType =='ECOWAS Card' ? z.string().regex(/^GHA-(?!-)(\d|-)*$/,"Invalid Ecowas Card Number")  : z.string().min(3, "This Filed is required"),
+        idNumber: data.idType == 'ECOWAS Card' ? z.string().regex(/^GHA-(?!-)(\d|-)*$/, "Invalid Ecowas Card Number") : z.string().min(3, "This Filed is required"),
         firstName: z.string().min(1, "This Field is required"),
         otherNames: z.string().optional().nullable(),
         lastName: z.string().min(1, "This Field is required"),
         dateOfBirth: z.string().min(1, "This Field is required"),
         gender: z.string().min(1, "This Field is required"),
-        occupation: z.string().min(1,"This Field is required"),
-        maritalStatus:z.string().min(1,"This Field is required"),
+        occupation: z.string().optional().nullable(),
+        maritalStatus: z.string().optional().nullable(),
         address: z.string().min(1, "This Field is required"),
         gpsAddress: z.string().min(5, "This Field is required"),
-        phoneOne: z.string().min(12, "This Field is required"),
-        phoneTwo: z.string().nullable().optional(),
+        phoneOne: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
+        phoneTwo: z.
+            string().nullable().optional(),
         emergencyPerson: z.string().min(1, "This Field is required"),
-        emergencyPersonPhone: z.string().min(12, "This Field is required"),
+        emergencyPersonPhone: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         hasNHIS: z.boolean(),
         NHISNumber: (data.hasNHIS == true) ? z.string().min(5, "This Field is required") : z.string().optional().nullable(),
         facility: z.number().min(1, "This Field is required"),
@@ -64,7 +91,6 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         momoNumber: data.paymentMode == "MOMO" ? z.string().min(12, "This Field is Required") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
-        discount: z.number().min(0, "This Field is Requred"),
         accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         frequency: z.string().min(1, "This Field is Required"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
@@ -74,7 +100,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
     useEffect(() => {
         console.log(data)
     }, [data])
-    
+
 
     const handleOnsucess = () => {
         if (subscriber.id) {
@@ -148,14 +174,25 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         }
     }, [])
 
+    const isEmptyObject = (obj: object) => {
+        return Object.keys(obj).length === 0;
+    };
 
     useEffect(() => {
-        if ((subscriber === null) || (typeof subscriber === undefined)) return
+        console.log(subscriber);
+        if ((subscriber === null) || (typeof subscriber === undefined) || isEmptyObject(subscriber)) {
+            setData({
+                discount: 0,
+                momoNetwork: "",
+                hasNHIS: false
+            })
+            return
+        }
         const { facility: fc, package: pckg, group: gr, ...rest } = subscriber;
         console.log(subscriber)
         try {
             setData({
-                ...rest, facility: fc?.id, package: pckg?.id, group: gr?.id
+                facility: fc?.id, package: pckg?.id, group: gr?.id, ...rest
             })
         } catch (error) {
             console.log(error)
@@ -164,8 +201,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
     }, [subscriber])
 
 
- 
-    
+
+
 
 
     return (
@@ -191,6 +228,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                                 { key: "ECOWAS Card", value: "ECOWAS Card" },
                                 { key: "Driver License", value: "Driver License" },
                             ]} />
+                        {data.idType == "ECOWAS Card" && !isValidGhanaCardNumber(data.idNumber) &&
+                            <nav className='text-xs text-red-500'>ECOWAS Card Number Must Begin With the format <i>GHA-</i> </nav>
+                        }
                         <Input
                             error={errors?.idNumber}
                             value={data.idNumber}
@@ -198,8 +238,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                             onChange={(e) => setData('idNumber', e.target.value)}
                             label="ID Number"
                             name=""
-                            placeholder="Enter ID Number"
+                            placeholder={data.idType == "ECOWAS Card" ? "GHA-000000000-0" : "Enter ID Number"}
                         />
+
                     </nav>
                 </div>
                 <div className=' grid grid-cols-2 gap-2 !bg-white  pt-2 pb-2 px-5 lg:py-5  border'>
@@ -284,7 +325,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         ]} />
                     <Input
                         error={errors?.occupation}
-                        required
+
                         value={data.occupation}
                         onChange={(e) => setData('occupation', e.target.value)}
                         label="Occupation"
@@ -294,7 +335,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                     <Selectoption
                         error={errors?.maritalStatus}
                         value={data.maritalStatus}
-                        required
+
                         onValueChange={(e) => setData('maritalStatus', e)}
                         label='Marital Status'
                         placeholder='Select Marital Status'
@@ -308,7 +349,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
 
                     <Selectoption
                         error={errors?.hasNHIS}
-                        value={data.hasNHIS}
+                        value={data?.hasNHIS}
                         onValueChange={(v) => setData('hasNHIS', v)}
                         label='Has NHIS'
                         required
@@ -323,7 +364,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         value={data.NHISNumber}
                         onChange={(e) => setData("NHISNumber", e.target.value)}
                         label='NHIS Number'
-                        required
+                        required={data.hasNHIS}
                         placeholder='NHIS Number'
                     />
                     <Selectoption
@@ -341,6 +382,9 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                 <nav className=' col-span-1 lg:col-span-2 flex items-center gap-3 py-1 px-4 bg-gray-200/30 sticky top-0 z-40 backdrop-blur-sm'>
                     <nav className=' aspect-square flex items-center text-sm justify-center h-6 w-6 rounded-full p-1 bg-gray-500/80 text-gray-50'>3</nav>
                     <nav className='font-semibold text-base text-gray-500'> Contact Information</nav>
+                </nav>
+                <nav className="p-2">
+                    <PhoneNumberPrompt />
                 </nav>
                 <div className=' w-full border  p-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid gap-5'>
                     <Input
@@ -366,7 +410,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         error={errors?.phoneOne}
                         value={data.phoneOne}
                         onChange={(v) => setData("phoneOne", v)}
-                        label="Phone one"
+                        label="Phone One"
                         required
                         placeholder="Enter Phone One"
                     />
@@ -374,8 +418,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                         error={errors?.phoneTwo}
                         value={data.phoneTwo}
                         onChange={(value) => setData('phoneTwo', value)}
-                        label="Phone two"
-                        
+                        label="Phone Two"
+
                         placeholder="Enter Phone two"
                     />
                     <Input

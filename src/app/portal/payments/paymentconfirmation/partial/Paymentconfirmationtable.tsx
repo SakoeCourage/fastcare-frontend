@@ -14,8 +14,8 @@ import { AxiosResponse } from 'axios'
 
 export function Statusindicator({ status }: { status: "Paid" | "Unpaid" }): React.JSX.Element {
     return <nav>
-        {status == "Paid" ? <nav className=" flex gap-1 whitespace-nowrap text-green-500 px-2 py-1 rounded-md  w-max  min-w-28 "> <span className="inline-block h-1 w-1 my-auto aspect-square rounded-full bg-green-500"></span> Paid</nav> :
-            <nav className=" flex gap-1 whitespace-nowrap text-red-500 px-2 py-1 rounded-md  w-max  min-w-28 "> <span className="inline-block h-1 w-1 my-auto aspect-square rounded-full bg-red-500"></span> Unpaid</nav>
+        {status == "Paid" ? <nav className=" flex gap-1 whitespace-nowrap text-green-500 px-2 py-1 rounded-md  w-max  min-w-28 "> <span className="inline-block h-1 w-1 my-auto aspect-square rounded-full bg-green-500"></span> Confirmed</nav> :
+            <nav className=" flex gap-1 whitespace-nowrap text-red-500 px-2 py-1 rounded-md  w-max  min-w-28 "> <span className="inline-block h-1 w-1 my-auto aspect-square rounded-full bg-red-500"></span>Not Confirmed</nav>
         }
     </nav>
 }
@@ -42,7 +42,17 @@ function Paymentconfirmationtable() {
         setDialogData({
             open: true,
             title: "Confirm Payment",
-            promptText: <nav>Confirm Payment for <b>{param.paymentReferenceCode}</b></nav>,
+            promptText: <nav className='text-center'>
+                <b>{param.subscriberName}</b>
+                <br />
+                <br />
+                <nav>Payment Amount</nav>
+                <b className='text-xs font-semibold text-gray-700'>{formatcurrency(param.amount)}</b>
+                <br />
+                <br />
+                <nav>Payment Reference Code</nav>
+                <b className='text-xs font-semibold text-gray-500'>{param.paymentReferenceCode}</b>
+            </nav>,
             okText: "Confirm",
             cancelText: "Decline"
         })
@@ -71,9 +81,9 @@ function Paymentconfirmationtable() {
             cell: ({ row }) => dateReformat(row.original.dateOfPayment)
         },
         {
-            accessorKey: "mandateId",
-            header: "Mandate ID",
-            cell: ({ row }) => row.original.mandateId ?? <nav className=' text-center'>...</nav>
+            accessorKey: "subscriberDbId",
+            header: "Subscriber ID",
+            cell: ({ row }) => row.original.subscriberDbId ?? <nav className=' text-center'>...</nav>
         },
         {
             accessorKey: "subscriberType",
@@ -96,7 +106,7 @@ function Paymentconfirmationtable() {
         {
             accessorKey: "paymentStatus",
             header: "Status",
-            cell: ({ row }) => <Statusindicator status={row.original.paymentStatus} />
+            cell: ({ row }) => <Statusindicator status={row.original.confirmed ? "Paid" : "Unpaid"} />
         },
         {
             accessorKey: "",
@@ -134,7 +144,7 @@ function Paymentconfirmationtable() {
                 columns={columns}
                 hasAction={false}
                 filterable="subscriberName"
-                filterablePlaceholder='Search Payment paymentReferenceCode'
+                filterablePlaceholder='Search Payment Subscriber Name'
                 dataSourceUrl='/payments/?pageSize=10&page=1&sort=id_desc'
                 extendedFilter={{
                     enable: true,
@@ -143,7 +153,7 @@ function Paymentconfirmationtable() {
                             filterType: "SelectFilter",
                             accessor: "agentId",
                             args: {
-                                options: saleExecutive ? saleExecutive?.map((e) => { return ({ key: `${e.firstName} ${e.lastName}`, value: e.id.toString() }) }): [],
+                                options: saleExecutive ? saleExecutive?.map((e) => { return ({ key: `${e.firstName} ${e.lastName}`, value: e.id.toString() }) }) : [],
                                 placeholder: "Sales Executives"
                             }
                         },
