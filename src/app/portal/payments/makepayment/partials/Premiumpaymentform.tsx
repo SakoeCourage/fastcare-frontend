@@ -17,13 +17,13 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
     const [banks, setBanks] = React.useState<IPaginatedData<bankDTO> | null>(null)
 
     const { formData, onCancel, onNewDataSucess } = props
-    const { data, setData, errors, setValidation, post, patch,processing } = useForm<Partial<PremiumPaymentSubscriberDTO>>({
+    const { data, setData, errors, setValidation, post, patch, processing } = useForm<Partial<PremiumPaymentSubscriberDTO>>({
         dbId: formData?.id,
-        discount: formData?.discount,
-        paymentMode: formData?.paymentMode,
-        momoNumber: formData?.momoNumber,
-        amount: formData?.amountToDebit,
-        momoNetwork: formData?.momoNetwork,
+        discount: 0,
+        paymentMode: null,
+        momoNumber: "",
+        amount: null,
+        momoNetwork: null,
         bank: null,
         accountNumber: "",
         chequeNumber: "",
@@ -35,36 +35,31 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
         paymentMode: z.string().min(1, "This Field is Required"),
         narration: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(12, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ? z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         discount: z.number().min(0, "This Field is Requred"),
         accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        amount: z.number().min(1, "Failed to Debit"),
+        amount: z.string().min(1, "Failed to Debit"),
         CAGDStaffID: data.paymentMode == "CAGD" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
     })
 
-    useEffect(() => {
-        if (data.discount == 0) { setData("amount", formData?.amountToDebit) }
-        if (data.discount > 0) {
-            const amount = data.amount - (data.amount * (data.discount / 100))
-            setData("amount", amount)
-        }
-    }, [data.discount])
+
 
 
     const handleFormSubmission = () => {
         post('/payments/premium-payment', {
-            onSuccess: (e) =>{ 
-                toastnotify("Premium Payment Made","Success");
+            onSuccess: (e) => {
+                toastnotify("Premium Payment Made", "Success");
                 onCancel();
-        }
+            }
         })
     }
-
-    useEffect(() => {
-        console.log(formData)
-    }, [formData])
 
     useEffect(() => {
         setBanks(props.banks)
@@ -81,7 +76,7 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
                         Select Payment Method
                     </nav>
                     <div className='grid grid-cols-1 gap-2'>
-                        {AvailablePaymentMethods.map((method, i) => <PaymentmethodCard
+                        {AvailablePaymentMethods.filter(pm=>!["CAGD","Standing Order"].includes(pm.name)).map((method, i) => <PaymentmethodCard
                             key={i}
                             isActive={(method.accessor == "MOMO") ? data.momoNetwork == method.value : data.paymentMode == method.accessor}
                             onChange={(v) => {
@@ -216,21 +211,13 @@ function Premiumpaymentform(props: IFormWithDataProps<PremiumPaymentSubscriberDT
 
                     </nav>
                     <nav className=' flex flex-col gap-3 pt-3 w-full'>
-                        <Selectoption
-                            error={errors?.discount}
-                            value={data.discount}
-                            onValueChange={(v) => setData('discount', v)}
-                            required
-                            label='Discount'
-                            placeholder='Select Discount (%)'
-                            options={[
-                                { disabled: true, key: "0%", value: 0 },
-                                { disabled: true, key: "5%", value: 5 },
-                                { disabled: true, key: "10%", value: 10 },
-                                { disabled: true, key: "15%", value: 15 },
-                                { disabled: true, key: "20%", value: 20 },
-                                { disabled: true, key: "25%", value: 25 },
-                            ]} />
+                        <Input
+                            error={errors.amount}
+                            value={data.amount}
+                            label='Amount'
+                            onChange={(e) => setData('amount', e.target.value)}
+                            placeholder='00.00'
+                        />
 
                         <Textarea
                             error={errors?.narration}
