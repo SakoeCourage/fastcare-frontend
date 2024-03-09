@@ -47,6 +47,7 @@ function Paymentstable() {
             <DataTable
                 filterablePlaceholder='Search Subscriber Name..'
                 dataSourceUrl='/payments/?pageSize=10&page=1&sort=id_desc'
+                hasAction={false}
                 sortableColumns={[{
                     column: "dateOfPayment",
                     accessor: "sort",

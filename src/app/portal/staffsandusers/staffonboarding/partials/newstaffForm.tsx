@@ -11,10 +11,11 @@ import { z } from "zod"
 import { nationalities } from 'app/app/lib/nationalities';
 import Select2options from 'app/app/components/form-components/select2options';
 import ContactInput from 'app/app/components/form-components/contactinput';
+import { PhoneNumberPrompt } from 'app/app/portal/(subscription)/individual-group-subscription/partials/Newsubscriberform';
 
 function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
     const { formData, onCancel, onNewDataSucess } = props
-    const { post, patch, data,processing, errors, setData, setValidation } = useForm<Partial<staffDTO>>(formData ? { ...formData } : {})
+    const { post, patch, data, processing, errors, setData, setValidation } = useForm<Partial<staffDTO>>(formData ? { ...formData } : {})
 
     setValidation({
         title: z.string().min(1, "This Field Is Required"),
@@ -29,7 +30,12 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
         nationality: z.string().min(1, "This Field Is Required"),
         marritalStatus: z.string().min(1, "This Field Is Required"),
         email: z.string().email("This Field Should Be A Valid Email").email(),
-        phoneNumber: z.string().min(12, "This Field Is Required"),
+        phoneNumber: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         position: z.string().min(1, "This Field Is Required"),
     })
 
@@ -42,6 +48,7 @@ function NewstaffForm(props: IFormWithDataProps<staffDTO>) {
     }
     return (
         <div className=' max-w-2xl w-full flex flex-col gap-5 p-5 mx-auto'>
+            <PhoneNumberPrompt/>
             <nav className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <Input
                     error={errors?.staffCode}

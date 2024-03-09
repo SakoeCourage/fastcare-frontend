@@ -171,9 +171,6 @@ function DataTable<TData, TValue, K extends keyof TData>({
                         hasAnySearch={getUrlParamValue('search') ? true : false}
                     />
                 </Render.When>
-            </Conditionalrender>
-
-            <Conditionalrender>
                 <Render.When isTrue={extendedFilter?.enable}>
                     <Extendedtablefilter handleUrlQuery={handleUrlQuery} path={path} filters={extendedFilter?.filters} />
                 </Render.When>
@@ -237,13 +234,15 @@ function DataTable<TData, TValue, K extends keyof TData>({
                 </TableBody>
             </Table>
 
-            {tData &&
-                !!table.getRowModel().rows?.length &&
-                enablePaginator &&
-                <DataTablePagination
-                    handleUrlQuery={handleUrlQuery}
-                    getUrlParamValue={getUrlParamValue}
-                    table={table} getDataAsync={fetchSourceData} tableData={tData} />}
+            <Conditionalrender>
+                <Render.When isTrue={tData && !!table.getRowModel().rows?.length && enablePaginator}>
+                    <DataTablePagination
+                        handleUrlQuery={handleUrlQuery}
+                        getUrlParamValue={getUrlParamValue}
+                        table={table} getDataAsync={fetchSourceData} tableData={tData} />
+                </Render.When>
+
+            </Conditionalrender>
         </div>
     )
 }

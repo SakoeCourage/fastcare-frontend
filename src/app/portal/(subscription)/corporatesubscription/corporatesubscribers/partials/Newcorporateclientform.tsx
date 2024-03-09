@@ -7,6 +7,7 @@ import useForm from 'app/app/hooks/formHook/useForm';
 import { z } from 'zod'
 import { corporateSubscriberDTO } from 'app/app/types/entitiesDTO';
 import ContactInput from 'app/app/components/form-components/contactinput';
+import { PhoneNumberPrompt } from '../../../individual-group-subscription/partials/Newsubscriberform';
 
 
 function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO>) {
@@ -18,9 +19,19 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
         name: z.string().min(1),
         idNumber: z.string().min(1),
         address: z.string().min(1),
-        contact: z.string().min(12),
+        contact: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         principalPerson: z.string().min(1),
-        principalPersonPhone: z.string().min(12),
+        principalPersonPhone: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         email: z.string().email().min(1),
     })
 
@@ -35,6 +46,7 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
 
     return (
         <div className=' max-w-2xl w-full flex flex-col gap-5 p-5 mx-auto'>
+            <PhoneNumberPrompt />
             <Input onChange={e => { setData('name', e.target.value) }} error={errors?.name} value={data.name} required name='' label='Name of Corporate' placeholder='Enter Name of Coporate' />
             <Input
                 onChange={e => { setData("idNumber", e.target.value) }} error={errors?.idNumber} value={data.idNumber}
@@ -64,7 +76,7 @@ function Newcorporateclientform(props: IFormWithDataProps<corporateSubscriberDTO
                     name='' label='Address' placeholder='Address' />
                 <Input
                     onChange={e => { setData('email', e.target.value) }} error={errors?.email} value={data.email}
-                    className=' ' required name='' label='Email' placeholder='Email' />
+                    className=' ' required name='' label='Email' placeholder='example@email.com' />
             </nav>
             <nav className='flex items-center justify-end gap-3'>
                 <Button onClick={() => onCancel()} variant='outline' size='sm'>

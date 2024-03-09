@@ -6,6 +6,7 @@ import { z } from 'zod'
 import { familySubsciberDTO } from 'app/app/types/entitiesDTO';
 import ContactInput from 'app/app/components/form-components/contactinput';
 import { toastnotify } from 'app/app/providers/Toastserviceprovider';
+import { PhoneNumberPrompt } from '../../../individual-group-subscription/partials/Newsubscriberform';
 
 
 
@@ -19,27 +20,44 @@ function Newfamilyclientform(props: IFormWithDataProps<familySubsciberDTO>) {
     setValidation({
         name: z.string().min(1),
         address: z.string().min(1),
-        contact: z.string().min(12),
+        contact: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         principalPerson: z.string().min(1),
-        principalPersonPhone: z.string().min(12),
+        principalPersonPhone: z
+            .string()
+            .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+            .min(12, "Invalid Phone Number")
+            .max(12, "Invalid Phone Number")
+        ,
         email: z.string().email().min(1),
     })
 
 
     const handleFormDataSubmission = () => {
         if (formData) {
-            patch('/family-subscribers/' + formData.id, { onSuccess: () => {
-                toastnotify("Family Data Updated","Success")
-                onNewDataSucess()} })
+            patch('/family-subscribers/' + formData.id, {
+                onSuccess: () => {
+                    toastnotify("Family Data Updated", "Success")
+                    onNewDataSucess()
+                }
+            })
         } else {
-            post('/family-subscribers', { onSuccess: () => {
-                toastnotify("New Family Data Added","Success")
-                onNewDataSucess()} })
+            post('/family-subscribers', {
+                onSuccess: () => {
+                    toastnotify("New Family Data Added", "Success")
+                    onNewDataSucess()
+                }
+            })
         }
     }
 
     return (
         <div className=' max-w-2xl w-full flex flex-col gap-5 p-5 mx-auto'>
+            <PhoneNumberPrompt />
             <Input onChange={e => { setData('name', e.target.value) }} error={errors?.name} value={data.name} required name='' label='Name of Family' placeholder='Enter Name of Family' />
             <nav className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
                 <Input
@@ -66,7 +84,7 @@ function Newfamilyclientform(props: IFormWithDataProps<familySubsciberDTO>) {
                     name='' label='Address' placeholder='Address' />
                 <Input
                     onChange={e => { setData('email', e.target.value) }} error={errors?.email} value={data.email}
-                    className=' col-span-1 lg:col-span-2' required name='' label='Email' placeholder='Email' />
+                    className=' col-span-1 lg:col-span-2' required name='' label='Email' placeholder='example@email.com' />
 
             </nav>
 

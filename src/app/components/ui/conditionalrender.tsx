@@ -5,21 +5,19 @@ interface IRenderinterface {
 }
 
 function Conditionalrender(props: IRenderinterface) {
-    let satisfiedCondition: React.ReactNode | null = null;
+    let satisfiedConditions: React.ReactNode[] = [];
     let otherwise: React.ReactNode | null = null;
-    
+
     Children.forEach(props.children, (child) => {
         const children = child as React.ReactElement<any>;
-        if (children?.type === Render.When && satisfiedCondition === null) {
-            if (children.props.isTrue) {
-                satisfiedCondition = children.props.children;
-            }
-        } else if (children?.type === Render.Else && satisfiedCondition === null) {
+        if (children?.type === Render.When && children.props.isTrue) {
+            satisfiedConditions.push(children.props.children);
+        } else if (children?.type === Render.Else && satisfiedConditions.length === 0) {
             otherwise = children.props.children;
         }
     });
 
-    return satisfiedCondition || otherwise;
+    return satisfiedConditions.length > 0 ? satisfiedConditions : otherwise;
 }
 
 export default Conditionalrender;
