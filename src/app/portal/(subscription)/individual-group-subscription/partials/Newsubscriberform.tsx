@@ -88,7 +88,12 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         group: z.number().min(1, "This Field is required").optional().nullable(),
         paymentMode: z.string().min(1, "This Field is Required"),
         momoNetwork: data.paymentMode == "MOMO" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
-        momoNumber: data.paymentMode == "MOMO" ? z.string().min(12, "This Field is Required") : z.string().optional().nullable(),
+        momoNumber: data.paymentMode == "MOMO" ?
+         z
+        .string()
+        .regex(/^233(?!0)\d+$/, "Invalid Phone Number")
+        .min(12, "Invalid Phone Number")
+        .max(12, "Invalid Phone Number") : z.string().optional().nullable(),
         chequeNumber: data.paymentMode == "Cheque" ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
         bank: ["Cheque", "Standing Order"].includes(data.paymentMode) ? z.number().min(1, "This Field is Required") : z.number().optional().nullable(),
         accountNumber: ["Standing Order"].includes(data.paymentMode) ? z.string().min(1, "This Field is Required") : z.string().optional().nullable(),
