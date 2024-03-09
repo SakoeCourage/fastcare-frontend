@@ -40,7 +40,7 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
         passportPicture: z.custom((value) => isFile(value), {
             message: 'Invalid file. Please provide a valid file.',
         }),
-        idNumber: data.idType =='ECOWASCard' ? z.string().regex(/^GHA-(?!-)(\d|-)*$/,"Invalid Ecowas Card Number")  : z.string().min(3, "This Filed is required"),
+        idNumber: data.idType =='ECOWAS Card' ? z.string().regex(/^GHA-(?!-)(\d|-)*$/,"Invalid Ecowas Card Number")  : z.string().min(3, "This Filed is required"),
         firstName: z.string().min(1, "This Field is required"),
         otherNames: z.string().optional().nullable(),
         lastName: z.string().min(1, "This Field is required"),
@@ -187,8 +187,8 @@ function Newsubscriberform({ formData: subscriber, onNewDataSucess, onCancel, ha
                             placeholder='Select ID Type'
                             options={[
                                 { key: "Passport", value: "Passport" },
-                                { key: "Voter ID", value: "VoterID" },
-                                { key: "ECOWAS Card", value: "ECOWASCard" },
+                                { key: "Voter ID", value: "Voter ID" },
+                                { key: "ECOWAS Card", value: "ECOWAS Card" },
                                 { key: "Driver License", value: "Driver License" },
                             ]} />
                         <Input
