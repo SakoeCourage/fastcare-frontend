@@ -17,7 +17,7 @@ export const columns: ColumnDef<paymentDataDTO>[] = [
     {
         accessorKey: "dateOfPayment",
         header: "Date of Payment",
-        cell: ({ row }) => dateReformat(row.original.dateOfPayment)
+        cell: ({ row }) => dateReformat(row.original.dateOfPayment,"YYYY-MM-DD")
     },
     {
         accessorKey: "subscriberName",
@@ -62,16 +62,18 @@ function Paymentstable() {
                     filters: [
                         {
                             filterType: "DateFilter",
-                            accessor: "start_date",
+                            accessor: "startDate",
                             args: {
                                 placeholder: "Start Date",
+                                formatString: "YYYY-MM-DD"
                             }
                         },
                         {
                             filterType: "DateFilter",
-                            accessor: "end_date",
+                            accessor: "endDate",
                             args: {
                                 placeholder: "End Date",
+                                formatString: "YYYY-MM-DD"
                             }
                         },
                         {

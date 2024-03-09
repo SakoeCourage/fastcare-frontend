@@ -27,9 +27,9 @@ export function formatcurrency(amount: number): string | undefined {
 }
 
 
-export function dateReformat(date: string | Date): string | undefined {
+export function dateReformat(date: string | Date, formatedString: string = 'YYYY/MM/DD'): string | undefined {
   if (date) {
-    return (dayjs(date).format('YYYY/MM/DD'))
+    return (dayjs(date).format(formatedString))
   }
 }
 

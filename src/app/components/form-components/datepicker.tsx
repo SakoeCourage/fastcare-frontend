@@ -28,18 +28,19 @@ export type IdatePickerParams = {
   onChange?: (v: string | undefined) => void
   name?: string,
   value?: string,
+  formatString?: string | null
   error?: string
 } & CalendarProps
 
 
-export default function Datepicker({ label, value, name, required, placeholder, error, onChange, className, ...rest }: IdatePickerParams) {
+export default function Datepicker({ label, value, name, required, placeholder, error, onChange, formatString, className, ...rest }: IdatePickerParams) {
   const [date, setDate] = React.useState<Date | undefined>()
 
   const handleOnDateChage = (v: Date) => {
-    onChange && onChange(dateReformat(v as Date));
+    onChange && onChange(dateReformat(v as Date,formatString));
     setDate(v)
   }
-  
+
   React.useEffect(() => {
     if (value == "" || value == null) {
       setDate(undefined)
@@ -77,7 +78,7 @@ export default function Datepicker({ label, value, name, required, placeholder, 
               )}
             >
               <CalendarIcon className="mr-2 h-5 w-4" />
-              {date ? <span className=" whitespace-nowrap truncate">{dateReformat(date)}</span> : <span className=" whitespace-nowrap truncate">{placeholder ?? "Pick a date"} </span>}
+              {date ? <span className=" whitespace-nowrap truncate">{dateReformat(date,formatString)}</span> : <span className=" whitespace-nowrap truncate">{placeholder ?? "Pick a date"} </span>}
             </Button>
           </div>
 
@@ -87,9 +88,9 @@ export default function Datepicker({ label, value, name, required, placeholder, 
         <Calendar
           value={date}
           onChange={handleOnDateChage}
-          
+
           {...rest}
-          
+
         />
 
       </PopoverContent>
