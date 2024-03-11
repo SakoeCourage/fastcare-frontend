@@ -5,7 +5,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import Modal from 'app/app/components/ui/modal'
 import Premiumpaymentform from './Premiumpaymentform'
 import { PremiumPaymentSubscriberDTO } from 'app/app/types/entitiesDTO'
-import { formatcurrency } from 'app/app/lib/utils'
+import { formatcurrency, formatnumber } from 'app/app/lib/utils'
 import Tooltip from 'app/app/components/ui/tooltip'
 import IconifyIcon from 'app/app/components/ui/IconifyIcon'
 import { toastnotify } from 'app/app/providers/Toastserviceprovider'
@@ -30,9 +30,14 @@ function Makepaymenttable(props: Partial<ISelectData>) {
             header: "Type",
         },
         {
-            accessorKey: "originalAmount",
-            header: "Amount Due",
-            cell: ({ row }) => formatcurrency(row.original.amountToDebit)
+            accessorKey: "amountDue",
+            header: "Amount Due(GH)",
+            cell: ({ row }) => row.original.amountDue? formatnumber(row.original.amountDue): `...`
+        },
+        {
+            accessorKey: "daysSinceLastPayment",
+            header: "DSLP",
+            cell: ({ row }) => row.original.daysSinceLastPayment ?? `...`
         },
         {
             accessorKey: "status",
